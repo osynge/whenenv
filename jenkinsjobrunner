@@ -40,6 +40,7 @@ def runJob (jobname):
     mappings = {
        "vmcatcher-scientific-6-prod" : ["transfer/vmcatcher-scientific-6-prod.sh"],
        "vmcatcher-scientific-6-trunk" : ["transfer/vmcatcher-scientific-6-trunk.sh"],
+       "vmcatcher-scientific-6-trunk-test" :["transfer/vmcatcher-scientific-6-trunk-test.sh"],
     }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
