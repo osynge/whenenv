@@ -55,6 +55,8 @@ def runJob (jobname):
             "transfer/smimeX509validation-scientific-6-prod-part-02.sh"],
         "grid-virt-sort-scientific-6-prod" : [ "transfer/grid-virt-sort-scientific-6-prod.sh" ],
         "hepixvmitrust-scientific-6-prod" : [ "transfer/hepixvmitrust-scientific-6-prod.sh" ],
+        "vmcaster-scientific-6-trunk" : [ "transfer/vmcaster-scientific-6-trunk-part-01.sh" ,
+            "transfer/vmcaster-scientific-6-trunk-part-02.sh"],
     }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
