@@ -46,7 +46,7 @@ def runJob (jobname):
         return 1
     for jobpart in mappings[jobname]:
         log.info("running jobpart '%s' " % (jobpart) )
-        cmd = ". %s/%s\n" % (sys.argv[0],jobpart)
+        cmd = ". %s/%s" % (sys.argv[0],jobpart)
         processRc,stdout,stderr = subphandling(cmd,timeout = 360)
         log.info(" '%s' " % (processRc) )
         if processRc != 0:
