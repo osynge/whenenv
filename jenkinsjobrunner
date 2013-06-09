@@ -38,7 +38,7 @@ def subphandling(cmd,timeout = 10):
 def runJob (jobname):
     log = logging.getLogger("runJob")
     mappings = {
-       "vmcatcher-scientific-6-prod" : ["transfer/vmcatcher-scientific-6-prod.sh"],
+       "vmcatcher-scientific-6-prod" : ["vmcatcher-scientific-6-prod.sh"],
        "vmcatcher-scientific-6-trunk" : ["transfer/vmcatcher-scientific-6-trunk.sh"],
     }
     if not jobname in mappings.keys():
@@ -46,7 +46,7 @@ def runJob (jobname):
         return 1
     for jobpart in mappings[jobname]:
         log.info("running jobpart '%s' " % (jobpart) )
-        cmd = ". %s\n" % (jobpart)
+        cmd = ". %s/transfer/%s\n" % (sys.argv[0],jobpart)
         processRc,stdout,stderr = subphandling(cmd,timeout = 360)
         log.info(" '%s' " % (processRc) )
         if processRc != 0:
