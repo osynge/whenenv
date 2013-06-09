@@ -1,0 +1,5 @@
+Attempts to make all jobs look like
+
+rm -rf yokel_jenkins
+git clone git://git.fritz.box/yokel_jenkins.git yokel_jenkins
+python yokel_jenkins/jenkinsjobrunner

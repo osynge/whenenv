@@ -46,6 +46,8 @@ def runJob (jobname):
             "transfer/vmcatcher-debian-wheezy-prod-part-02.sh",
             "transfer/vmcatcher-debian-wheezy-prod-part-03.sh",
             "transfer/vmcatcher-debian-wheezy-prod-part-04.sh"]
+       "vmcatcher_eventHndlExpl_ON-scientific-6-prod" : ["transfer/vmcatcher_eventHndlExpl_ON-scientific-6-prod-part-01.sh",
+            "transfer/vmcatcher_eventHndlExpl_ON-scientific-6-prod-part-02.sh"]
     }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
