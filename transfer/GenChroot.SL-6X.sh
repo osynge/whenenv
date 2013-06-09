@@ -1,3 +1,8 @@
+hostname -f
+#unset http_proxy
+#yum clean all
+yum update -y
+yum upgrade -y
 #export http_proxy=http://squid:3128
 export CROOT_DIR="/tmp/foo/diskless"
 rm -f sl6.cpio.bz2
