@@ -46,8 +46,7 @@ def runJob (jobname):
         return 1
     for jobpart in mappings[jobname]:
         log.info("running jobpart '%s' " % (jobpart) )
-        script = "%s/%s" % (os.path.dirname(os.path.realpath(__file__),jobpart)
-        
+        script = "%s/%s" % (os.path.dirname(os.path.realpath(__file__),jobpart))
         cmd = "/bin/ls %s" % (script)
         processRc,stdout,stderr = subphandling(cmd,timeout = 360)
         log.info(" '%s' " % (processRc) )
