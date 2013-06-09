@@ -48,7 +48,7 @@ def runJob (jobname):
         log.info("running jobpart '%s' " % (jobpart) )
         script = "%s/%s" % (sys.argv[0],jobpart)
         
-        cmd = "ls %s" % (script)
+        cmd = "/bin/ls %s" % (script)
         processRc,stdout,stderr = subphandling(cmd,timeout = 360)
         log.info(" '%s' " % (processRc) )
         if processRc != 0:
