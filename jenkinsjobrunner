@@ -17,8 +17,10 @@ def subphandling(cmd,timeout = 10):
         counter += 1
         time.sleep(1)
         cout,cerr = process.communicate()
-        self.log.info(cout)
-        self.log.warning(cerr)
+        stdout += cout
+        stderr += stderr
+        log.info(cout)
+        log.warning(cerr)
         process.poll()
         processRc = process.returncode
         if processRc != None:
