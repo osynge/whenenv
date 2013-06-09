@@ -51,6 +51,8 @@ def runJob (jobname):
         "vmcatcher_eventHndlExpl_ON-scientific-6-trunk" : ["transfer/vmcatcher_eventHndlExpl_ON-scientific-6-trunk.sh"],
         "smimeX509validation-scientific-6-trunk" :["transfer/smimeX509validation-scientific-6-trunk-part-01.sh",
             "transfer/smimeX509validation-scientific-6-trunk-part-02.sh"],
+        "smimeX509validation-scientific-6-prod" : ["transfer/smimeX509validation-scientific-6-prod-part-01.sh",
+            "transfer/smimeX509validation-scientific-6-prod-part-02.sh"],
     }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
