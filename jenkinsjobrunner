@@ -38,6 +38,7 @@ def subphandling(cmd,timeout = 10):
 def runJob (jobname):
     log = logging.getLogger("runJob")
     mappings = {
+        "GenChroot.SL-6X" : ["transfer/GenChroot.SL-6X.sh"],
         "vmcatcher-scientific-6-prod" : ["transfer/vmcatcher-scientific-6-prod.sh"],
         "vmcatcher-scientific-6-trunk" : ["transfer/vmcatcher-scientific-6-trunk.sh"],
         "vmcatcher-scientific-6-trunk-test" :["transfer/vmcatcher-scientific-6-trunk-test.sh"],
