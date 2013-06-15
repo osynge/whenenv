@@ -1,10 +1,14 @@
+set -x	
+
 chroot chroot
 id
 hostname -f
 rm -f artifacts.tgz
-GITLOCATION="git@github.com:osynge/deb-grid-virt-sort.git"
+GITLOCATION="git://github.com/osynge/deb-grid-virt-sort.git"
 rm -rf build
-git clone ${GITLOCATION} build
+cmd="git clone ${GITLOCATION} build"
+echo $cmd
+$cmd
 cd build
 git checkout upstream
 git pull
