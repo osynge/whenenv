@@ -11,5 +11,5 @@ dir_deb="${ROOTDIR}/${RELEASE_TYPE}/source/${FLAVOR}/${VERSION}/packages/"
 mkdir -p ${dir_deb}
 
 ls build/*
-/usr/bin/rsync -v --ignore-existing build/ \
+/usr/bin/rsync -v --ignore-existing build/* \
     ${dir_deb}
