@@ -1,8 +1,7 @@
 chroot chroot
-
 id
 hostname -f
-
+rm -f artifacts.tgz
 GITLOCATION="git://github.com/hepix-virtualisation/smimeX509validation.git"
 rm -rf build
 git clone ${GITLOCATION} build
