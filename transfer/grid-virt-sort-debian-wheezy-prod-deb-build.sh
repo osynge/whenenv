@@ -21,5 +21,5 @@ echo `git-buildpackage`
 cd ${dirStart}
 rm -f artifacts.tgz
 rm -fr   build/gitclone/ build/*.build
-tar -zcvf artifacts.tgz build/*.deb build/*.dsc
+tar -zcvf artifacts.tgz build/*
 
