@@ -16,4 +16,4 @@ git checkout pristine-tar
 git pull
 git checkout master
 git pull
-git-buildpackage
+echo `git-buildpackage`
