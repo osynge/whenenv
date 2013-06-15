@@ -59,6 +59,11 @@ def runJob (jobname):
         "vmcaster-scientific-6-trunk" : [ "transfer/vmcaster-scientific-6-trunk-part-01.sh" ,
             "transfer/vmcaster-scientific-6-trunk-part-02.sh"],
         "dirvacua-scientific-6-trunk" : ["transfer/dirvacua-scientific-6-trunk.sh"],
+        "smimeX509validation-debian-wheezy-prod" : ["transfer/smimeX509validation-debian-wheezy-prod-part-01.sh",
+            "transfer/smimeX509validation-debian-wheezy-prod-part-02.sh",
+            "transfer/smimeX509validation-debian-wheezy-prod-part-03.sh",
+            "transfer/smimeX509validation-debian-wheezy-prod-part-04.sh",
+            "transfer/smimeX509validation-debian-wheezy-prod-part-05.sh"],
     }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
