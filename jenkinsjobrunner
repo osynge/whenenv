@@ -72,6 +72,7 @@ def runJob (jobname):
         "grid-virt-sort-debian-wheezy-prod-deb" : ["transfer/chroot-debian-wheezy-buildup.sh",
             "transfer/chroot-debian-wheezy-freshen.sh",
             "transfer/grid-virt-sort-debian-wheezy-prod-deb-dependencies.sh",
+            "transfer/grid-virt-sort-debian-wheezy-prod-deb-build.sh",
             "transfer/chroot-debian-wheezy-teardown.sh"],
         }
     if not jobname in mappings.keys():
