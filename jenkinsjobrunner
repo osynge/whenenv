@@ -43,10 +43,10 @@ def runJob (jobname):
         "vmcatcher-scientific-6-trunk" : ["transfer/vmcatcher-scientific-6-trunk.sh"],
         "vmcatcher-scientific-6-trunk-test" :["transfer/vmcatcher-scientific-6-trunk-test.sh"],
         "vmcatcher-scientific-6-prod-test" : ["transfer/vmcatcher-scientific-6-prod-test.sh"],
-        "vmcatcher-debian-wheezy-prod" :["transfer/vmcatcher-debian-wheezy-prod-part-01.sh",
+        "vmcatcher-debian-wheezy-prod" :["transfer/smimeX509validation-debian-wheezy-chroot-buildup.sh",
             "transfer/vmcatcher-debian-wheezy-prod-part-02.sh",
             "transfer/vmcatcher-debian-wheezy-prod-part-03.sh",
-            "transfer/vmcatcher-debian-wheezy-prod-part-04.sh"],
+            "transfer/smimeX509validation-debian-wheezy-chroot-teardown.sh"],
         "vmcatcher_eventHndlExpl_ON-scientific-6-prod" : ["transfer/vmcatcher_eventHndlExpl_ON-scientific-6-prod-part-01.sh",
             "transfer/vmcatcher_eventHndlExpl_ON-scientific-6-prod-part-02.sh"],
         "vmcatcher_eventHndlExpl_ON-scientific-6-trunk" : ["transfer/vmcatcher_eventHndlExpl_ON-scientific-6-trunk.sh"],
@@ -59,12 +59,18 @@ def runJob (jobname):
         "vmcaster-scientific-6-trunk" : [ "transfer/vmcaster-scientific-6-trunk-part-01.sh" ,
             "transfer/vmcaster-scientific-6-trunk-part-02.sh"],
         "dirvacua-scientific-6-trunk" : ["transfer/dirvacua-scientific-6-trunk.sh"],
-        "smimeX509validation-debian-wheezy-prod" : ["transfer/smimeX509validation-debian-wheezy-prod-part-01.sh",
+        "smimeX509validation-debian-wheezy-prod" : ["transfer/smimeX509validation-debian-wheezy-chroot-buildup.sh",
             "transfer/smimeX509validation-debian-wheezy-prod-part-02.sh",
             "transfer/smimeX509validation-debian-wheezy-prod-part-03.sh",
             "transfer/smimeX509validation-debian-wheezy-prod-part-04.sh",
-            "transfer/smimeX509validation-debian-wheezy-prod-part-05.sh"],
-    }
+            "transfer/smimeX509validation-debian-wheezy-chroot-teardown.sh"],
+        "grid-virt-sort-debian-wheezy-prod" : ["transfer/smimeX509validation-debian-wheezy-chroot-buildup.sh",
+            "transfer/grid-virt-sort-debian-wheezy-prod-part-01.sh",
+            "transfer/grid-virt-sort-debian-wheezy-prod-part-02.sh",
+            "transfer/grid-virt-sort-debian-wheezy-prod-part-03.sh",
+            "transfer/grid-virt-sort-debian-wheezy-prod-part-04.sh",
+            "transfer/smimeX509validation-debian-wheezy-chroot-teardown.sh"],
+        }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
         return 1
