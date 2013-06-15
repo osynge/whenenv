@@ -2,7 +2,7 @@ set -x
 
 chroot chroot
 id
-hostname -fS
+hostname -f
 dirStart=`pwd`
 rm -f artifacts.tgz *.dsc *.deb 
 GITLOCATION="git://github.com/osynge/deb-grid-virt-sort.git"
