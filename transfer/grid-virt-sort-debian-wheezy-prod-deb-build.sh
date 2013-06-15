@@ -20,5 +20,6 @@ git pull
 echo `git-buildpackage`
 cd ${dirStart}
 rm -f artifacts.tgz
-tar -zcvf artifacts.tgz build/*.deb *.dsc
+rm -fr   build/gitclone/ build/*.build
+tar -zcvf artifacts.tgz build/*.deb build/*.dsc
 
