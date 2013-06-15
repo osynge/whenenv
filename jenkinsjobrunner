@@ -46,7 +46,7 @@ def runJob (jobname):
         "vmcatcher-debian-wheezy-prod" :["transfer/chroot-debian-wheezy-buildup.sh",
             "transfer/vmcatcher-debian-wheezy-prod-part-02.sh",
             "transfer/vmcatcher-debian-wheezy-prod-part-03.sh",
-            "transfer/smimeX509validation-debian-wheezy-chroot-teardown.sh"],
+            "transfer/chroot-debian-wheezy-teardown.sh"],
         "vmcatcher_eventHndlExpl_ON-scientific-6-prod" : ["transfer/vmcatcher_eventHndlExpl_ON-scientific-6-prod-part-01.sh",
             "transfer/vmcatcher_eventHndlExpl_ON-scientific-6-prod-part-02.sh"],
         "vmcatcher_eventHndlExpl_ON-scientific-6-trunk" : ["transfer/vmcatcher_eventHndlExpl_ON-scientific-6-trunk.sh"],
@@ -63,13 +63,13 @@ def runJob (jobname):
             "transfer/smimeX509validation-debian-wheezy-prod-part-02.sh",
             "transfer/smimeX509validation-debian-wheezy-prod-part-03.sh",
             "transfer/smimeX509validation-debian-wheezy-prod-part-04.sh",
-            "transfer/smimeX509validation-debian-wheezy-chroot-teardown.sh"],
+            "transfer/chroot-debian-wheezy-teardown.sh"],
         "grid-virt-sort-debian-wheezy-prod" : ["transfer/chroot-debian-wheezy-buildup.sh",
             "transfer/grid-virt-sort-debian-wheezy-prod-part-01.sh",
             "transfer/grid-virt-sort-debian-wheezy-prod-part-02.sh",
             "transfer/grid-virt-sort-debian-wheezy-prod-part-03.sh",
             "transfer/grid-virt-sort-debian-wheezy-prod-part-04.sh",
-            "transfer/smimeX509validation-debian-wheezy-chroot-teardown.sh"],
+            "transfer/chroot-debian-wheezy-teardown.sh"],
         }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
