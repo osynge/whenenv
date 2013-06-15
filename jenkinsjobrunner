@@ -65,7 +65,7 @@ def runJob (jobname):
             "transfer/smimeX509validation-debian-wheezy-prod-part-04.sh",
             "transfer/chroot-debian-wheezy-teardown.sh"],
         "grid-virt-sort-debian-wheezy-prod" : ["transfer/chroot-debian-wheezy-buildup.sh",
-            "transfer/grid-virt-sort-debian-wheezy-prod-part-01.sh",
+            "transfer/chroot-debian-wheezy-buildup.sh",
             "transfer/grid-virt-sort-debian-wheezy-prod-part-02.sh",
             "transfer/grid-virt-sort-debian-wheezy-prod-part-03.sh",
             "transfer/grid-virt-sort-debian-wheezy-prod-part-04.sh",
