@@ -2,8 +2,8 @@ set -x
 
 chroot chroot
 id
-hostname -f
-rm -f artifacts.tgz
+hostname -fS
+rm -f artifacts.tgz *.dsc *.deb 
 GITLOCATION="git://github.com/osynge/deb-grid-virt-sort.git"
 rm -rf build
 cmd="git clone ${GITLOCATION} build"
@@ -17,3 +17,6 @@ git pull
 git checkout master
 git pull
 echo `git-buildpackage`
+rm -f artifacts.tgz
+tar -zcvf artifacts.tgz *.deb *.dsc
+
