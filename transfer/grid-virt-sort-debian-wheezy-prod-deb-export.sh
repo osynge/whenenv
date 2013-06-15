@@ -1,3 +1,4 @@
+set -x
 rm -rf build
 tar -zxvf artifacts.tgz
 rm -f artifacts.tgz
