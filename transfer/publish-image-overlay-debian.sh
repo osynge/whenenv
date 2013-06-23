@@ -1,6 +1,6 @@
 set -x
 rm -rf vm_overlays
-rm -f *.cpio.bz2
+rm -f ./*.cpio.bz2
 dirStart=`pwd`
 git clone git://git.fritz.box/vm_overlays.git vm_overlays
 cd vm_overlays
@@ -38,5 +38,5 @@ su exporter -c"vmcaster \
    --select-image bba0d5e8-3c70-49e0-8479-a42278aea120 \
    --verbose    --verbose"
 
-rm -f *.cpio.bz2
+rm -f ./*.cpio.bz2
 
