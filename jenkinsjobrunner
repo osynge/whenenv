@@ -75,6 +75,8 @@ def runJob (jobname):
             "transfer/grid-virt-sort-debian-wheezy-prod-deb-build.sh",
             "transfer/grid-virt-sort-debian-wheezy-prod-deb-export.sh",
             "transfer/chroot-debian-wheezy-teardown.sh"],
+        "vmcaster-scientific-6-prod" : ["transfer/vmcaster-scientific-6-prod-part-01.sh",
+            "transfer/vmcaster-scientific-6-prod-part-02.sh"]
         }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
