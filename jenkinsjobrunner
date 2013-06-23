@@ -98,6 +98,8 @@ def runJob (jobname):
             "transfer/dirvacua-debian-wheezy-prod-part-03.sh",
             "transfer/dirvacua-debian-wheezy-prod-part-04.sh",
             "transfer/dirvacua-debian-wheezy-prod-part-05.sh"],
+        "dirvacua-scientific-6-prod" : ["transfer/dirvacua-scientific-6-prod.sh",
+            "transfer/chroot-scientific-6-teardown.sh"],
         }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
