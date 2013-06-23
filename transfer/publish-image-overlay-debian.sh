@@ -4,7 +4,7 @@ dirStart=`pwd`
 git clone git://git.fritz.box/vm_overlays.git vm_overlays
 cd vm_overlays
 
-branches=`git branch  -a | grep remote | sed -e 's/.*remotes\/origin\///'`
+branches=`git branch  -a | grep -v  "\->" | grep remote | sed -e 's/.*remotes\/origin\///'`
 for this in $branches ; do
 cd ${dirStart}/vm_overlays
 git checkout origin/$this
