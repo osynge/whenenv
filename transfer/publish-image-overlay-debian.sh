@@ -7,7 +7,7 @@ cd vm_overlays
 branches=`git branch  -a | grep -v  "\->" | grep remote | sed -e 's/.*remotes\/origin\///'`
 for this in $branches ; do
 cd ${dirStart}/vm_overlays
-git checkout origin/$this
+git checkout -b origin/$this
 cd content
 find . -print |cpio -o -Hnewc |bzip2 -9 -z -q -f > ${dirStart}/${this}.cpio.bz2
 done
