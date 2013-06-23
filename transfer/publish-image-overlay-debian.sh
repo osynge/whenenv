@@ -11,7 +11,8 @@ git checkout origin/$this
 cd content
 find . -print |cpio -o -Hnewc |bzip2 -9 -z -q -f > ${dirStart}/${this}.cpio.bz2
 done
-
+cd ${dirStart}
+ls *.cpio.bz2
 
 su exporter -c"vmcaster \
    --database sqlite:////var/lib/vmcaster/local.db \
