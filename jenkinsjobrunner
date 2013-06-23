@@ -101,6 +101,7 @@ def runJob (jobname):
         "dirvacua-scientific-6-prod" : ["transfer/dirvacua-scientific-6-prod.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
         "chroot-imagelist-update" : ["transfer/chroot-imagelist-update.sh"],
+        "chroot-scientific-6-repo" : ["transfer/chroot-scientific-6-repo.sh"],
         }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
