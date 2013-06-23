@@ -1,3 +1,4 @@
+set -x
 rm -rf vm_overlays
 dirStart=`pwd`
 git clone git://git.fritz.box/vm_overlays.git vm_overlays
