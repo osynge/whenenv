@@ -83,6 +83,7 @@ def runJob (jobname):
             "transfer/vmcaster-debian-wheezy-prod-part-04.sh",
             "transfer/vmcaster-debian-wheezy-prod-part-05.sh"],
         "hepixvmitrust-scientific-6-trunk" : ["transfer/hepixvmitrust-scientific-6-trunk.sh"],
+        "repo-scientific" : ["transfer/repo-scientific.sh"],
         }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
