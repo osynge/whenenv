@@ -13,7 +13,8 @@ done
 
 for this in $branches ; do
 cd ${dirStart}/vm_overlays
-git checkout -b origin/$this
+git branch $this origin/$this
+git checkout $this
 cd content
 find . -print |cpio -o -Hnewc |bzip2 -9 -z -q -f > ${dirStart}/${this}.cpio.bz2
 done
