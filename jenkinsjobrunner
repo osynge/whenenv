@@ -96,7 +96,9 @@ def runJob (jobname):
             "transfer/hepixvmitrust-debian-wheezy-prod-part-02.sh",
             "transfer/hepixvmitrust-debian-wheezy-prod-part-03.sh",
             "transfer/hepixvmitrust-debian-wheezy-prod-part-04.sh"],
-        "grid-virt-sort-scientific-6-trunk" : ["transfer/grid-virt-sort-scientific-6-trunk.sh"],
+        "grid-virt-sort-scientific-6-trunk" : ["transfer/chroot-scientific-6-buildup-trunk.sh",
+            "transfer/grid-virt-sort-scientific-6-trunk.sh"
+            "transfer/chroot-scientific-6-teardown.sh"],
         "GenChroot.debian-wheezy" : ["transfer/GenChroot.debian-wheezy-part-01.sh",
             "transfer/GenChroot.debian-wheezy-part-02.sh",
             "transfer/GenChroot.debian-wheezy-part-03.sh",
