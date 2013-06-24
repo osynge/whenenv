@@ -3,7 +3,7 @@ export CROOT_DIR="/root/sl6"
 python /root/chrootbuilder \
   --input /var/cache/vmcatcher/endorsed/aa42ca85-179b-4873-b12e-32d549bf02b6 \
   --dest  ${CROOT_DIR} \
-  --overlay /var/cache/vmcatcher/endorsed/6b9384e5-5923-4d47-aaab-0fde0c52f8b8 \
+  --overlay /var/cache/vmcatcher/endorsed/bba0d5e8-3c70-49e0-8479-a42278aea120 \
   --build
 #chroot ${CROOT_DIR}
 CHROOT_SCRIPT=${CROOT_DIR}/script
