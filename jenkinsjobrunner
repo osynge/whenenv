@@ -112,7 +112,7 @@ def runJob (jobname):
             "transfer/hepixvmitrust-debian-wheezy-prod-part-03.sh",
             "transfer/hepixvmitrust-debian-wheezy-prod-part-04.sh"],
         "grid-virt-sort-scientific-6-trunk" : ["transfer/chroot-scientific-6-buildup-trunk.sh",
-            "transfer/grid-virt-sort-scientific-6-trunk.sh"
+            "transfer/grid-virt-sort-scientific-6-trunk.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
         "GenChroot.debian-wheezy" : ["transfer/GenChroot.debian-wheezy-part-01.sh",
             "transfer/GenChroot.debian-wheezy-part-02.sh",
@@ -123,7 +123,8 @@ def runJob (jobname):
             "transfer/dirvacua-debian-wheezy-prod-part-03.sh",
             "transfer/dirvacua-debian-wheezy-prod-part-04.sh",
             "transfer/dirvacua-debian-wheezy-prod-part-05.sh"],
-        "dirvacua-scientific-6-prod" : ["transfer/dirvacua-scientific-6-prod.sh",
+        "dirvacua-scientific-6-prod" : ["transfer/chroot-scientific-6-buildup-prod.sh",
+            "transfer/dirvacua-scientific-6-prod.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
         "chroot-imagelist-update" : ["transfer/chroot-imagelist-update.sh"],
         "chroot-scientific-6-repo" : ["transfer/chroot-scientific-6-repo.sh"],
