@@ -1,3 +1,4 @@
+set -x
 export CROOT_DIR="/root/sl6"
 python /root/chrootbuilder \
 --input \
