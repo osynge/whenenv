@@ -129,6 +129,7 @@ def runJob (jobname):
         "chroot-imagelist-update" : ["transfer/chroot-imagelist-update.sh"],
         "chroot-scientific-6-repo" : ["transfer/chroot-scientific-6-repo.sh"],
         "publish-image-overlay" : ["transfer/publish-image-overlay-debian.sh"],
+        "docbook-production" : ["transfer/docbook-production.sh"],
         }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
