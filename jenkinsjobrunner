@@ -239,8 +239,7 @@ class runnershell:
                     'Fetched',
                     'Unpacking',
                     'Setting',
-                    'Processing triggers for '
-                    '\r\n'],
+                    'Processing triggers for '],
                     timeout=500)
                 self.log.info("aptitude insstall=%s" % (index))
                 if index == 0:
