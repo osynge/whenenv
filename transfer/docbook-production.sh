@@ -9,6 +9,9 @@ fi
 
 
 hostname -f
+if [ "X${CHROOT}" != "X" ] ; then
+chroot ${CHROOT}
+fi
 
 
 SVNLOCATION="https://svnsrv.desy.de/public/grid-virt/org.hepix.virtulization.docs/trunk"
