@@ -194,8 +194,18 @@ class runnershell:
             p = pexpect.spawn(cmd)
             p.send("PS1=%s\n" % (prompt)) 
             p.send(cmd)
-            done = False
             
+            done = False
+            while done == False:
+                
+                index = p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=500)
+                self.log.info("result ddd=%s`" % (index))
+                if index == 0:
+                    done = True
+                if index == 1:
+                    done = True
+            print p.exitstatus
+                
         for package in depnedacylist:
             self.log.info("ssssssssssssssssssssssssssssssssss")
             cmd = "/usr/sbin/chroot chroot /usr/bin/aptitude install -y -q %s\n" % (package)
@@ -208,6 +218,7 @@ class runnershell:
                 index = p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=500)
                 self.log.info("echo `aptitude insstall=%s`" % (index))
                 if index == 0:
+                
                     done = True
                 if index == 3:
                     imput = p.before
