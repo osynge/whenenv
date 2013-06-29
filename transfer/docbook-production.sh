@@ -6,10 +6,11 @@ if [ $[${rc}] != 0 ] ; then
     exit ${rc}
 fi
 }
-
+echo CHROOT=${CHROOT}
 
 hostname -f
 if [ "X${CHROOT}" != "X" ] ; then
+echo CHROOT=${CHROOT}
 chroot ${CHROOT}
 fi
 
