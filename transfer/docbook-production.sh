@@ -1,3 +1,10 @@
+function senstive{
+if [ "x0" != "x${rc}" ] ; then
+exit ${rc}
+fi
+}
+
+
 hostname -f
 
 
@@ -12,10 +19,7 @@ pwd
 #exit 1
 cd build
 make html
-rc=$?
-if [ "x0" != "x${rc}" ] ; then
-exit ${rc}
-fi
+senstive $?
 make pdf
 cd ..
 rm -f artifacts.tgz
