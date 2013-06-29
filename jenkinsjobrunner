@@ -224,7 +224,7 @@ class runnershell:
             if exitstatus == None:
                 p.wait()
                 exitstatus = p.exitstatus
-            p.wait()
+            
                 
         for package in depnedacylist:
             self.log.info("ssssssssssssssssssssssssssssssssss")
