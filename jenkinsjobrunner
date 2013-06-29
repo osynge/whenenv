@@ -233,7 +233,7 @@ class runnershell:
         
         commandstack = []
         for line in fp:
-            commandstack.append(line)
+            self.p.send(newcommandline)
             
         commandstack.append("echo ${%s}=${?}\n" % (bashvar_one))
         self.p.send("echo ${%s}=${?}\n" % (bashvar_one))
@@ -249,10 +249,12 @@ class runnershell:
         while self.souldloop == True:
             index = self.p.expect ([prompt,'%s.*\r\n' % (match_one),pexpect.EOF, pexpect.TIMEOUT, '\r\n','\n'],timeout=5)
             self.log.info("index=%s" % (index))
+            if index == 0:
+                if timeouts < 20:
+                    newcommandline = commandstack.pop(0)
+                    print newcommandline
+                    self.p.send(newcommandline)
             if index == 1:
-                newcommandline = commandstack.pop(0)
-            if index == 1:
-                self.p.send(newcommandline)
                 timeouts = 0
                 after = self.p.after.split('\n')
                 SplitLine = after[0].strip().split('=')
@@ -435,13 +437,21 @@ def runJob (jobname):
         "chroot-scientific-6-repo" : ["transfer/chroot-scientific-6-repo.sh"],
         "publish-image-overlay" : ["transfer/publish-image-overlay-debian.sh"],
         "docbook-production" : [{"script" : "transfer/chroot-debian-wheezy-buildup.sh"},
+            {   "script" : "transfer/docbook-production-deps.sh",
+                "shell" : { "type" : "chroot",
+                    "command" : { "template" : "chroot %CHROOT%",
+                    "envimeroment" : ["CHROOT"]
+                    }
+                    }
+            },
             {   "script" : "transfer/docbook-production.sh",
                 "shell" : { "type" : "chroot",
                     "command" : { "template" : "chroot %CHROOT%",
                     "envimeroment" : ["CHROOT"]
                     }
                     }
-            }],
+            },
+            ],
         }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )

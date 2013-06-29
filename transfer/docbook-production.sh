@@ -12,9 +12,6 @@ SVNLOCATION="https://svnsrv.desy.de/public/grid-virt/org.hepix.virtulization.doc
 rm -rf build
 #svn co ${SVNLOCATION}/${TAG} build
 pwd
-apt-get install make -y
-echo here
-apt-get install subversion fop xsltproc make  docbook-xml   docbook-xsl  -y
 ycheckrc svn co ${SVNLOCATION} build
 #exit 1
 cd build
