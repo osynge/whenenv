@@ -217,6 +217,8 @@ class runnershell:
                 if index == 1:
                     packagesmissing.append(package)
                     done = True
+                if index == 3:
+                    done = True
             print p.exitstatus
                 
         for package in depnedacylist:
@@ -339,8 +341,8 @@ class runnershell:
         nextlinecount = 3
         timeouts = 0
         while self.souldloop == True:
-            index = self.p.expect ([prompt,'%s=.*\r\n' % (match_one),pexpect.EOF, pexpect.TIMEOUT, '\r\n','\n'],timeout=500)
-            self.log.info("indexxx=%s" % (index))
+            index = self.p.expect ([prompt,'%s=.*\r\n' % (match_one),pexpect.EOF, pexpect.TIMEOUT, 'Unpacking', '\r\n','\n'],timeout=500)
+            self.log.debug("indexxx=%s" % (index))
             if index == 0:
                 timeouts = 0
             if index == 1:
