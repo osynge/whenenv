@@ -245,7 +245,7 @@ class runnershell:
         timeouts = 0
         while self.souldloop == True:
             index = self.p.expect ([prompt,'%s.*\r\n' % (match_one),pexpect.EOF, pexpect.TIMEOUT, '\r\n','\n'],timeout=5)
-            self.log.info("index=%s" % (index)
+            self.log.info("index=%s" % (index))
             if index == 1:
                 newcommandline = commandstack.pop(0)
                 self.p.send(newcommandline)
