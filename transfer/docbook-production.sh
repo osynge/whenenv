@@ -1,13 +1,9 @@
-function is_int() { return $(test "$@" -eq "$@" > /dev/null 2>&1); } 
-function run () {
+function ycheckrc () {
 echo $@
 $@
 rc=$?
-if $(is_int "${rc}");
-then
-   if [ $[${rc}] != 0 ] ; then
-        exit ${rc}
-   fi
+if [ $[${rc}] != 0 ] ; then
+    exit ${rc}
 fi
 }
 
@@ -21,15 +17,15 @@ rm -rf build
 #svn co ${SVNLOCATION}/${TAG} build
 pwd
 
-run svn co ${SVNLOCATION} build
+ycheckrc svn co ${SVNLOCATION} build
 #exit 1
 cd build
-run make html
+ycheckrc make html
 
-run make pdf
+ycheckrc make pdf
 
 cd ..
 rm -f artifacts.tgz
-run tar -zcvf artifacts.tgz build/*.pdf build/Book
+ycheckrc tar -zcvf artifacts.tgz build/*.pdf build/Book
 frog="foo"
 export frog
