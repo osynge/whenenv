@@ -235,13 +235,17 @@ class runnershell:
                     "%s is already the newest version." % (package),
                     "additional disk space will be used", 
                     pexpect.EOF, 
-                    pexpect.TIMEOUT, 
+                    pexpect.TIMEOUT,
+                    'Reading package lists',
+                    'The following NEW packages will be installed',
+                    'Get:',
+                    'Selecting previously unselected package',
                     'Fetched',
                     'Unpacking',
                     'Setting',
                     'Processing triggers for '],
                     timeout=500)
-                self.log.info("aptitude insstall=%s" % (index))
+                self.log.debug("aptitude insstall=%s" % (index))
                 if index == 0:
                     p.send("Y\n")
                     
