@@ -265,11 +265,10 @@ class runnershell:
                     p.send("Y\n")
                 if index == 1:
                     p.send(cmd)
-            p.send("exit 0\n")
-            exitstatus = p.exitstatus
-            if exitstatus == None:
+            if p.isalive(self) == True:
+                p.send("exit 0\n")
                 p.wait()
-                exitstatus = p.exitstatus
+                
                     
         
         
