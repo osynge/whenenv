@@ -1,7 +1,13 @@
-function senstive{
-rc=$1
-if [ "x0" != "x${rc}" ] ; then
-exit ${rc}
+function is_int() { return $(test "$@" -eq "$@" > /dev/null 2>&1); } 
+function run () {
+echo $@
+$@
+rc=$?
+if $(is_int "${rc}");
+then
+   if [ $[${rc}] != 0 ] ; then
+        exit ${rc}
+   fi
 fi
 }
 
@@ -9,23 +15,21 @@ fi
 hostname -f
 
 
-
 SVNLOCATION="https://svnsrv.desy.de/public/grid-virt/org.hepix.virtulization.docs/trunk"
 #TAG=`svn ls ${SVNLOCATION} | org_desy_grid_virt_sort_release.py | tail -n 1`
 rm -rf build
 #svn co ${SVNLOCATION}/${TAG} build
 pwd
-svn co ${SVNLOCATION} build
-pwd
+
+run svn co ${SVNLOCATION} build
 #exit 1
 cd build
-make html
-senstive $?
-make pdf
-senstive $?
+run make html
+
+run make pdf
+
 cd ..
 rm -f artifacts.tgz
-tar -zcvf artifacts.tgz build/*.pdf build/Book
-
+run tar -zcvf artifacts.tgz build/*.pdf build/Book
 frog="foo"
 export frog

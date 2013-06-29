@@ -214,8 +214,8 @@ class runnershell:
         index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
         self.p.send("%s=%s\n" % (bashvar_two,match_two))
         index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
-        self.p.send("set -x\n")
-        index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
+        #self.p.send("set -x\n")
+        #index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
         for line in fp:
             self.p.send(line)
         self.p.send("echo ${%s}=${?}\n" % (bashvar_one))
@@ -226,10 +226,6 @@ class runnershell:
         state = 0
         returnCode = None
         while self.souldloop == True:
-            exitstatus = self.p.exitstatus
-            if exitstatus != None:
-                output["rc"] = exitstatus
-                return output
             index = self.p.expect ([prompt,'%s.*\r\n' % (match_one),pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=200)
             if index == 1:
                 after = self.p.after.split('\n')
@@ -242,7 +238,12 @@ class runnershell:
                 break
             if index == 2:
                 self.log.error("Unexpected EOF")
-                return None
+                exitstatus = self.p.exitstatus
+                if exitstatus != None:
+                    output["rc"] = exitstatus
+                    self.log.error("Quit")
+                    return output
+                
             if index == 3:
                 self.log.error("TimeOut")
                 return None
