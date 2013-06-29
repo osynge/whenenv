@@ -286,7 +286,7 @@ class runnershell:
                     continue
                 if key in knownKeys:
                     if env[key] != value:
-                        self.log.info("ignoring variable change %s=%s','%s" % (key,env[key] , value))
+                        self.log.info("Ignoring variable change %s=%s','%s" % (key,env[key] , value))
                     continue
                 
                 foundEnv[key] = value

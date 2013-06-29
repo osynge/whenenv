@@ -12,6 +12,10 @@ pwd
 #exit 1
 cd build
 make html
+rc=$?
+if [ "x0" != "x${rc}" ] ; then
+exit ${rc}
+fi
 make pdf
 cd ..
 rm -f artifacts.tgz
