@@ -21,6 +21,7 @@ cd build
 make html
 senstive $?
 make pdf
+senstive $?
 cd ..
 rm -f artifacts.tgz
 tar -zcvf artifacts.tgz build/*.pdf build/Book
