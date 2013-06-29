@@ -265,7 +265,7 @@ class runnershell:
                     p.send("Y\n")
                 if index == 1:
                     p.send(cmd)
-            if p.isalive(self) == True:
+            if p.isalive() == True:
                 p.send("exit 0\n")
                 p.wait()
                 
