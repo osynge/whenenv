@@ -179,7 +179,10 @@ class runnershell:
         command = "/bin/bash"
         
         if "shell" in jobpart.keys():
-            command = "%s %s /bin/bash"  % ("/usr/sbin/chroot" , inputenv["CHROOT"])
+            chootdir = "chroot"
+            if "CHROOT" in inputenv.keys():
+                chootdir = inputenv["CHROOT"]
+            command = "%s %s /bin/bash"  % ("/usr/sbin/chroot" , chootdir)
 
         #chroot /workspace/docbook-production/chroot/ /bin/bash
 
