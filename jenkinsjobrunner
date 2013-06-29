@@ -251,6 +251,7 @@ class runnershell:
             self.log.info("index=%s" % (index))
             if index == 1:
                 newcommandline = commandstack.pop(0)
+            if index == 1:
                 self.p.send(newcommandline)
                 timeouts = 0
                 after = self.p.after.split('\n')
