@@ -194,9 +194,9 @@ class runnershell:
         index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
         for package in depnedacylist:
             self.log.info("ssssssssssssssssssssssssssssssssss")
-            cmd = "aptitude install -y -q %s\n" % (package)
+            cmd = "/usr/bin/aptitude install -y -q %s\n" % (package)
             self.log.info(cmd)
-            send(cmd)
+            p.send(cmd)
             done = False
             while done == False:
                 index = p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=500)
