@@ -171,7 +171,7 @@ class runnershell:
        
         
     def executabingo(self,jobpart,env = {}):
-        inputenv = os.environ()
+        inputenv = os.environ
         inputenv.update(env)
         output = {"rc" :  255 , "env" : {}}
         knownKeys = set(inputenv)
