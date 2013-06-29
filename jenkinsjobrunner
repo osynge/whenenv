@@ -227,8 +227,12 @@ class runnershell:
         index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
         #self.p.send("set -x\n")
         #index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
+        
+        commandstack = []
         for line in fp:
-            self.p.send(line)
+            commandstack.append(line)
+            
+        commandstack.append("echo ${%s}=${?}\n" % (bashvar_one))
         self.p.send("echo ${%s}=${?}\n" % (bashvar_one))
         
         self.p.send("\n")
@@ -236,9 +240,16 @@ class runnershell:
         ready = False
         state = 0
         returnCode = None
+        
+        nextlinecount = 3
+        timeouts = 0
         while self.souldloop == True:
-            index = self.p.expect ([prompt,'%s.*\r\n' % (match_one),pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=500)
+            index = self.p.expect ([prompt,'%s.*\r\n' % (match_one),pexpect.EOF, pexpect.TIMEOUT, '\r\n','\n'],timeout=5)
+            self.log.info("index=%s" % (index)
             if index == 1:
+                newcommandline = commandstack.pop(0)
+                self.p.send(newcommandline)
+                timeouts = 0
                 after = self.p.after.split('\n')
                 SplitLine = after[0].strip().split('=')
                 if len(SplitLine) < 2:
@@ -248,22 +259,39 @@ class runnershell:
                 self.log.debug("scriptrc=%s" % (returnCode))
                 break
             if index == 2:
+                
                 self.log.error("Unexpected EOF")
                 exitstatus = self.p.exitstatus
                 if exitstatus != None:
                     output["rc"] = exitstatus
-                    self.log.error("Quit")
-                    return output
+                else:
+                    output["rc"] = 255
+                self.log.error("Quit")
+                return output
+                    
                 
             if index == 3:
                 self.log.error("TimeOut")
-                
+                self.p.send("\n")
+                timeouts = timeouts +1
+                if timeouts > 100:
+                    self.log.error("timedout")
+                    return output
             if index == 4:
+                timeouts = 0
                 imput = self.p.before
                 striped = imput.strip()
                 if len(striped) > 0:
                     self.log.info(imput.strip())
-        
+            
+            if index == 5:
+                self.log.info("index=%s" % (index)
+                timeouts = 0
+                imput = self.p.before
+                striped = imput.strip()
+                if len(striped) > 0:
+                    self.log.info(imput.strip())
+            
         self.p.send("export\n")
         self.p.send("echo ${%s}=${?}\n" % (bashvar_two))
         self.souldloop = True
