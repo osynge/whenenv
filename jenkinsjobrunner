@@ -5,6 +5,12 @@ import subprocess
 import datetime
 import time
 import optparse
+
+import string
+import uuid
+import re
+import base64
+
 def subphandling(cmd,timeout = 10):   
     log = logging.getLogger("sub")
     process = subprocess.Popen([cmd], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -33,7 +39,266 @@ def subphandling(cmd,timeout = 10):
             break
     return (processRc,stdout,stderr)
 
+#!/usr/bin/env python
 
+"""This spawns a sub-shell (bash) and gives the user interactive control. The
+entire shell session is logged to a file called script.log. This behaves much
+like the classic BSD command 'script'.
+
+./script.py [-a] [-c command] {logfilename}
+
+    logfilename : This is the name of the log file. Default is script.log.
+    -a : Append to log file. Default is to overwrite log file.
+    -c : spawn command. Default is to spawn the sh shell.
+
+Example:
+
+    This will start a bash shell and append to the log named my_session.log:
+
+        ./script.py -a -c bash my_session.log
+
+"""
+
+import os, sys, time, getopt
+import signal, fcntl, termios, struct
+import traceback
+import pexpect
+
+global_pexpect_instance = None # Used by signal handler
+
+def exit_with_usage():
+
+    print globals()['__doc__']
+    os._exit(1)
+
+def oldmain():
+
+    ######################################################################
+    # Parse the options, arguments, get ready, etc.
+    ######################################################################
+    try:
+        optlist, args = getopt.getopt(sys.argv[1:], 'h?ac:', ['help','h','?'])
+    except Exception, e:
+        print str(e)
+        exit_with_usage()
+    options = dict(optlist)
+    if len(args) > 1:
+        exit_with_usage()
+        
+    if [elem for elem in options if elem in ['-h','--h','-?','--?','--help']]:
+        print "Help:"
+        exit_with_usage()
+
+    if len(args) == 1:
+        script_filename = args[0]
+    else:
+        script_filename = "script.log"
+    if '-a' in options:
+        fout = file (script_filename, "ab")
+    else:
+        fout = file (script_filename, "wb")
+    if '-c' in options:
+        command = options['-c']
+    else:
+        command = "sh"
+
+    # Begin log with date/time in the form CCCCyymm.hhmmss
+    fout.write ('# %4d%02d%02d.%02d%02d%02d \n' % time.localtime()[:-3])
+    
+    ######################################################################
+    # Start the interactive session
+    ######################################################################
+    p = pexpect.spawn(command)
+    p.logfile = fout
+    global global_pexpect_instance
+    global_pexpect_instance = p
+    signal.signal(signal.SIGWINCH, sigwinch_passthrough)
+
+    print "Script recording started. Type ^] (ASCII 29) to escape from the script shell."
+    p.interact(chr(29))
+    fout.close()
+    return 0
+
+def sigwinch_passthrough (sig, data):
+
+    # Check for buggy platforms (see pexpect.setwinsize()).
+    if 'TIOCGWINSZ' in dir(termios):
+        TIOCGWINSZ = termios.TIOCGWINSZ
+    else:
+        TIOCGWINSZ = 1074295912 # assume
+    s = struct.pack ("HHHH", 0, 0, 0, 0)
+    a = struct.unpack ('HHHH', fcntl.ioctl(sys.stdout.fileno(), TIOCGWINSZ , s))
+    global global_pexpect_instance
+    global_pexpect_instance.setwinsize(a[0],a[1])
+
+
+
+
+def jumpstrart():
+    #if __name__ == "__main__":
+    try:
+        main()
+    except SystemExit, e:
+        raise e
+    except Exception, e:
+        print "ERROR"
+        print 'sssssss',str(e)
+        traceback.print_exc()
+        os._exit(1)
+
+class runnershell:
+    def __init__(self, shell="/bin/bash"):
+        self.log = logging.getLogger("runnershell")
+        self.shell = shell
+        
+        
+        
+    def do_something(self,prefix):
+        #imput = self.p.read()
+        imput = self.p.before
+        striped = imput.strip()
+        if len(striped) > 0:
+            self.log.info("%s=%s" % (prefix,imput.strip()))
+        
+    def endofline(self):
+        #imput = self.p.read()
+        imput = self.p.before
+        striped = imput.strip()
+        if len(striped) > 0:
+            self.log.info("endofline=%s" % (imput.strip()))
+        #infomration = self.p.read()
+
+       
+        
+    def executabingo(self,jobpart,env = os.environ):
+        knownKeys = env.keys()
+        cmd = jobpart["shell"]
+        requires = set(jobpart["requires"]) 
+        command = ". %s ; export" % ("")
+        #command = "sh /home/oms101/home/programming/git/yokel_jenkins/transfer/docbook-production.sh "
+        command = "/bin/bash"
+        
+        
+        self.p = pexpect.spawn(command)
+        #script_filename = "foo"
+        #if os.path.isfile(script_filename):
+        #    fout = file (script_filename, "ab")
+        #else:
+        #    fout = file (script_filename, "wb")
+        #self.p.logfile = fout
+        #self.p.send( "echo set -x\n")
+        self.p.send("stty -echo\n")
+        
+        
+        self.souldloop = True
+        while self.souldloop == True:
+            
+            index = self.p.expect (['\$', pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
+            if index == 0:
+                break
+            if index == 3:
+                self.do_something('start')
+        script = "%s/%s" % (os.path.dirname(os.path.realpath(__file__)),jobpart["shell"])
+        fp = open(script)
+        transtbl = string.maketrans(
+          'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
+          'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
+        )
+
+        match_one =  uuid.uuid1()
+        bashvar_one = base64.b32encode(str(match_one).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
+        match_two =  uuid.uuid1()
+        bashvar_two = base64.b32encode(str(match_two).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
+        match_prompt = uuid.uuid1()
+        
+        
+        
+        self.p.send("%s=%s\n" % (bashvar_one,match_one))
+        self.p.send("%s=%s\n" % (bashvar_two,match_two))
+        
+        prompt = str(match_prompt)
+        
+        self.p.send("PS1=%s\n" % (prompt)) 
+        self.p.send("set -x\n")
+        for line in fp:
+            self.p.send(line)
+        self.p.send("echo ${%s}=${?}\n" % (bashvar_one))
+        
+        self.p.send("\n")
+        self.souldloop = True
+        ready = False
+        state = 0
+        returnCode = None
+        while self.souldloop == True:
+            exitstatus = self.p.exitstatus
+            if exitstatus != None:
+                returnCode = exitstatus
+                break
+            index = self.p.expect ([prompt,'%s.*\r\n' % (match_one),pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=200)
+            if index == 1:
+                after = self.p.after.split('\n')
+                SplitLine = after[0].strip().split('=')
+                print len(SplitLine)
+                if len(SplitLine) < 2:
+                    self.log.error("Failed retriving RC")
+                    return None
+                returnCode = int(SplitLine[1])
+                self.log.info("exxxecutabingo=%s" % (returnCode))
+                break
+            if index == 2:
+                self.log.error("Unexpected EOF")
+                return None
+            if index == 3:
+                self.log.error("TimeOut")
+                return None
+            if index == 4:
+                imput = self.p.before
+                striped = imput.strip()
+                if len(striped) > 0:
+                    self.log.info(imput.strip())
+        if returnCode != 0:
+            self.log.warning("Exited=%s" % (exitstatus))
+            return None
+        
+        self.p.send("export\n")
+        self.p.send("echo ${%s}=${?}\n" % (bashvar_two))
+        self.souldloop = True
+        foundEnv = {}
+        while self.souldloop == True:
+            exitstatus = self.p.exitstatus
+            if exitstatus != None:
+                self.log.info("exitstatus=%s" % (exitstatus))
+                self.log.info(self.p.env)
+                break
+            index = self.p.expect ([prompt,'%s.*\r\n' % (match_two),pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=200)
+            if index == 1:
+                after = self.p.after.split('\n')
+                self.log.info("sdfsdfsdf=%s,%s" % (after[0].strip(),index))
+                break
+            
+            if index == 4:
+                imput = self.p.before
+                striped = imput.strip()
+                if len (striped) == 0:
+                    continue
+                if "declare -x " != (striped[:11]):
+                    continue
+                regdelexp = re.compile('=')
+                shellline = striped[11:]
+                matches = regdelexp.search(shellline)
+                if matches == None:
+                    continue
+                key = shellline[:matches.start()]
+                if key in knownKeys:
+                    continue
+                value = shellline[matches.end():][1:-1]
+                foundEnv[key] = value
+        
+        exitstatus = self.p.exitstatus
+        if exitstatus != None:
+            self.p.send("exit\n")
+        
+        return {"rc" :  returnCode , "env" : foundEnv}
 
 def runJob (jobname):
     log = logging.getLogger("runJob")
@@ -129,20 +394,28 @@ def runJob (jobname):
         "chroot-imagelist-update" : ["transfer/chroot-imagelist-update.sh"],
         "chroot-scientific-6-repo" : ["transfer/chroot-scientific-6-repo.sh"],
         "publish-image-overlay" : ["transfer/publish-image-overlay-debian.sh"],
-        "docbook-production" : ["transfer/docbook-production.sh"],
+        "docbook-production" : [{ "shell" : "transfer/docbook-production.sh", "requires" : ["chroot"]}],
         }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
         return 1
     for jobpart in mappings[jobname]:
-        log.info("running jobpart '%s' " % (jobpart) )
-        script = "%s/%s" % (os.path.dirname(os.path.realpath(__file__)),jobpart)
-        cmd = ". %s" % (script)
-        processRc,stdout,stderr = subphandling(cmd,timeout = 360)
-        log.info(" '%s' " % (processRc) )
-        if processRc != 0:
-            log.error("cmd '%s' returned '%s'." % (cmd,processRc) )
-            return processRc
+        if type(jobpart) == str:
+            log.info("running jobpart '%s' " % (jobpart) )
+            script = "%s/%s" % (os.path.dirname(os.path.realpath(__file__)),jobpart)
+            cmd = ". %s" % (script)
+            processRc,stdout,stderr = subphandling(cmd,timeout = 360)
+            log.info(" '%s' " % (processRc) )
+            if processRc != 0:
+                log.error("cmd '%s' returned '%s'." % (cmd,processRc) )
+                return processRc
+        if type(jobpart) == dict:
+            foo = runnershell()
+            cmd = jobpart["shell"]
+            requires = set(jobpart["requires"])
+            print "cmd=%s" % (cmd)
+            log.info("running jobpart '%s' " % (cmd))
+            print foo.executabingo(jobpart)
     return 0
         
         
@@ -218,7 +491,7 @@ def main():
     if 'JOB_NAME' in os.environ:
         jobname=os.environ['JOB_NAME']
     else:
-        log.error("No Enviroment variable set")
+        log.error("No JOB_NAME Enviroment variable set")
         sys.exit(2)
     log.info("JOB_NAME=%s" % jobname )
     
