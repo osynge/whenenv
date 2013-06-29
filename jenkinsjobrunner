@@ -219,7 +219,7 @@ class runnershell:
                     done = True
                 if index == 3:
                     done = True
-            print p.exitstatus
+            p.wait()
                 
         for package in depnedacylist:
             self.log.info("ssssssssssssssssssssssssssssssssss")
