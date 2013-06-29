@@ -188,8 +188,14 @@ class runnershell:
         #self.p.logfile = fout
         match_prompt = uuid.uuid1()
         prompt = str(match_prompt)
-        
-        
+        for package in depnedacylist:
+            self.log.info("todo=%s" % (package))
+            cmd = "/usr/sbin/chroot chroot /usr/bin/dpkg -L %s\n" % (package)
+            p = pexpect.spawn(cmd)
+            p.send("PS1=%s\n" % (prompt)) 
+            p.send(cmd)
+            done = False
+            
         for package in depnedacylist:
             self.log.info("ssssssssssssssssssssssssssssssssss")
             cmd = "/usr/sbin/chroot chroot /usr/bin/aptitude install -y -q %s\n" % (package)
@@ -290,7 +296,7 @@ class runnershell:
         commandstack = []
         for line in fp:
             self.p.send(line)
-            
+           
         
         self.p.send("echo ${%s}=${?}\n" % (bashvar_one))
         
@@ -498,7 +504,7 @@ def runJob (jobname):
                     "command" : { "template" : "chroot %CHROOT%",
                         "envimeroment" : ["CHROOT"]
                         },
-                    "dependancies" :{ "Debian" : ["make"] },
+                    "dependancies" :{ "Debian" : ["make","subversion","fop", "xsltproc","docbook-xml","docbook-xsl" ] },
                     }
             },
             ],
