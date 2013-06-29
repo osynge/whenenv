@@ -172,8 +172,8 @@ class runnershell:
         
     def executabingo(self,jobpart,env = {}):
         output = {"rc" :  255 , "env" : {}}
-        knownKeys = set(os.environ.keys()).union(set(env.keys()))
-        env_ignored = set(["PATH","SHLVL","OLDPWD"])
+        knownKeys = set(os.environ.keys()))
+        env_ignored = set(["PATH","SHLVL","OLDPWD",]).union(set(env.keys()))
         cmd = jobpart["shell"]
         if "requires" in jobpart.keys():
             requires = set(jobpart["requires"]) 
