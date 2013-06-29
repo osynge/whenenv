@@ -417,7 +417,7 @@ def runJob (jobname):
             log.info("Job Enviroment='%s'" % (enviroment) )
             if resetMap["rc"] != 0:
                 log.error("cmd '%s' returned '%s'." % (cmd,resetMap["rc"])
-                return processRc
+                return resetMap["rc"]
     return 0
         
         
