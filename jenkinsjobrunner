@@ -540,6 +540,7 @@ def runJob (jobname):
                     "dependancies" :{ "Debian" : ["make", "subversion", "fop", "xsltproc","docbook-xml","docbook-xsl" ] },
                     }
             },
+            {   "script" : "transfer/chroot-debian-wheezy-teardown.sh"},
             ],
         }
     if not jobname in mappings.keys():
