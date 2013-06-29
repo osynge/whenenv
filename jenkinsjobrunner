@@ -175,7 +175,8 @@ class runnershell:
         knownKeys = env.keys()
         env_ignored = set(["PATH","SHLVL","OLDPWD"])
         cmd = jobpart["shell"]
-        requires = set(jobpart["requires"]) 
+        if "requires" in jobpart.keys():
+            requires = set(jobpart["requires"]) 
         command = ". %s ; export" % ("")
         #command = "sh /home/oms101/home/programming/git/yokel_jenkins/transfer/docbook-production.sh "
         command = "/bin/bash"
