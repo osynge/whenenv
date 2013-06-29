@@ -237,7 +237,7 @@ class runnershell:
         state = 0
         returnCode = None
         while self.souldloop == True:
-            index = self.p.expect ([prompt,'%s.*\r\n' % (match_one),pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=200)
+            index = self.p.expect ([prompt,'%s.*\r\n' % (match_one),pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=500)
             if index == 1:
                 after = self.p.after.split('\n')
                 SplitLine = after[0].strip().split('=')
@@ -257,7 +257,7 @@ class runnershell:
                 
             if index == 3:
                 self.log.error("TimeOut")
-                return output
+                
             if index == 4:
                 imput = self.p.before
                 striped = imput.strip()
