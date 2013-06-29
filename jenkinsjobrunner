@@ -181,7 +181,7 @@ class runnershell:
             return True
         chootdir = "chroot"
         command = "%s %s /bin/bash"  % ("/usr/sbin/chroot" , chootdir)
-        self.p = pexpect.spawn(command)
+        p = pexpect.spawn(command)
         #script_filename = "foo"
         #if os.path.isfile(script_filename):
         #    fout = file (script_filename, "ab")
@@ -190,30 +190,30 @@ class runnershell:
         #self.p.logfile = fout
         match_prompt = uuid.uuid1()
         prompt = str(match_prompt)
-        self.p.send("PS1=%s\n" % (prompt)) 
+        p.send("PS1=%s\n" % (prompt)) 
         index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
         for package in depnedacylist:
             self.log.info("ssssssssssssssssssssssssssssssssss")
             cmd = "aptitude install -y -q %s\n" % (package)
             self.log.info(cmd)
-            self.p.send(cmd)
+            send(cmd)
             done = False
             while done == False:
-                index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=500)
+                index = p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=500)
                 self.log.info("echo `aptitude insstall=%s`" % (index))
                 if index == 0:
                     done = True
                 if index == 3:
-                    imput = self.p.before
+                    imput = p.before
                     striped = imput.strip()
                     if len(striped) > 0:
                         self.log.info(imput.strip())
 
                 if index == 1:
-                    imput = self.p.before
+                    imput = p.before
                     self.log.info("send=%s" % (index))
-                    self.p.send("echo $PWD\n")
-                    self.p.send("\n")
+                    p.send("echo $PWD\n")
+                    p.send("\n")
         
     def executabingo(self,jobpart,env = {}):
         inputenv = os.environ
