@@ -260,6 +260,7 @@ class runnershell:
                     p.send("Y\n")
                 if index == 1:
                     p.send(cmd)
+            p.wait()
                     
         
         

@@ -7,7 +7,7 @@ if [ $[${rc}] != 0 ] ; then
 fi
 }
 find chroot | grep artifacts.tgz
-ycheckrc mv chroot/build/artifacts.tgz .
+ycheckrc mv chroot/artifacts.tgz .
 
 python /root/chrootbuilder \
   --dest  chroot \
