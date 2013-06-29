@@ -285,7 +285,6 @@ class runnershell:
                     self.log.info(imput.strip())
             
             if index == 5:
-                self.log.info("index=%s" % (index)
                 timeouts = 0
                 imput = self.p.before
                 striped = imput.strip()
