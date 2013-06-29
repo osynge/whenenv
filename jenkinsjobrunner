@@ -411,7 +411,7 @@ def runJob (jobname):
         if type(jobpart) == dict:
             foo = runnershell()
             cmd = jobpart["shell"]
-            requires = set(jobpart["requires"])
+            #requires = set(jobpart["requires"])
             log.info("running jobpart '%s' " % (cmd))
             resetMap = foo.executabingo(jobpart)
             enviroment.update(resetMap["env"])
