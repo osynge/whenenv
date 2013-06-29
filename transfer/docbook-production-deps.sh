@@ -1,2 +1,2 @@
-apt-get install make -y
-apt-get install subversion fop xsltproc make  docbook-xml   docbook-xsl  -y
+apt-get install -q -y make 
+apt-get install -q -y subversion fop xsltproc make  docbook-xml   docbook-xsl 
