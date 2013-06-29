@@ -1,4 +1,5 @@
 function senstive{
+rc=$1
 if [ "x0" != "x${rc}" ] ; then
 exit ${rc}
 fi
