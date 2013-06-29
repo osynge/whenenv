@@ -176,12 +176,11 @@ class runnershell:
         output = {"rc" :  255 , "env" : {}}
         knownKeys = set(inputenv)
         env_ignored = set(["PATH","SHLVL","OLDPWD",]).union(set(env.keys()))
-        cmd = jobpart["shell"]
-        if "requires" in jobpart.keys():
-            requires = set(jobpart["requires"]) 
-        command = ". %s ; export" % ("")
-        #command = "sh /home/oms101/home/programming/git/yokel_jenkins/transfer/docbook-production.sh "
         command = "/bin/bash"
+        
+        if "shell" in jobpart.keys():
+            command = "/usr/sbin/chroot" + inputenv["CHROOT"]
+
         
         
         self.p = pexpect.spawn(command)
@@ -206,7 +205,7 @@ class runnershell:
         
         
         # Now load script
-        script = "%s/%s" % (os.path.dirname(os.path.realpath(__file__)),jobpart["shell"])
+        script = "%s/%s" % (os.path.dirname(os.path.realpath(__file__)),jobpart["script"])
         fp = open(script)
         transtbl = string.maketrans(
           'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
@@ -403,7 +402,13 @@ def runJob (jobname):
         "chroot-imagelist-update" : ["transfer/chroot-imagelist-update.sh"],
         "chroot-scientific-6-repo" : ["transfer/chroot-scientific-6-repo.sh"],
         "publish-image-overlay" : ["transfer/publish-image-overlay-debian.sh"],
-        "docbook-production" : [{"shell" : "transfer/chroot-debian-wheezy-buildup.sh"},{ "shell" : "transfer/docbook-production.sh", "requires" : ["chroot"]}],
+        "docbook-production" : [{"script" : "transfer/chroot-debian-wheezy-buildup.sh"},
+            {   "script" : "transfer/docbook-production.
+                "shell" : { "type" : "chroot",
+                    "command" : { "template" : "chroot %CHROOT%",
+                    "envimeroment" = ["CHROOT"}]
+                    }
+            }],
         }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
