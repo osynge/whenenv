@@ -179,9 +179,10 @@ class runnershell:
         command = "/bin/bash"
         
         if "shell" in jobpart.keys():
-            command = "%s %s"  % ("/usr/sbin/chroot" , inputenv["CHROOT"])
+            command = "%s %s /bin/bash"  % ("/usr/sbin/chroot" , inputenv["CHROOT"])
 
-        
+        #chroot /workspace/docbook-production/chroot/ /bin/bash
+
         
         self.p = pexpect.spawn(command)
         #script_filename = "foo"
