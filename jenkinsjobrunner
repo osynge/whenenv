@@ -396,6 +396,7 @@ def runJob (jobname):
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
         return 1
+    enviroment = {}
     for jobpart in mappings[jobname]:
         if type(jobpart) == str:
             log.info("running jobpart '%s' " % (jobpart) )
@@ -410,9 +411,13 @@ def runJob (jobname):
             foo = runnershell()
             cmd = jobpart["shell"]
             requires = set(jobpart["requires"])
-            print "cmd=%s" % (cmd)
             log.info("running jobpart '%s' " % (cmd))
-            print foo.executabingo(jobpart)
+            resetMap = foo.executabingo(jobpart)
+            enviroment.update(resetMap["env"])
+            log.info("Job Enviroment='%s'" % (enviroment) )
+            if resetMap["rc"] != 0:
+                log.error("cmd '%s' returned '%s'." % (cmd,processRc) )
+                return processRc
     return 0
         
         
