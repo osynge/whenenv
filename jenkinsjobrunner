@@ -181,7 +181,7 @@ class runnershell:
             return True
         chootdir = "chroot"
         command = "%s %s /bin/bash"  % ("/usr/sbin/chroot" , chootdir)
-        p = pexpect.spawn(command)
+        
         #script_filename = "foo"
         #if os.path.isfile(script_filename):
         #    fout = file (script_filename, "ab")
@@ -190,12 +190,14 @@ class runnershell:
         #self.p.logfile = fout
         match_prompt = uuid.uuid1()
         prompt = str(match_prompt)
-        p.send("PS1=%s\n" % (prompt)) 
-        index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
+        
+        
         for package in depnedacylist:
             self.log.info("ssssssssssssssssssssssssssssssssss")
-            cmd = "/usr/bin/aptitude install -y -q %s\n" % (package)
+            cmd = "/usr/sbin/chroot chroot /usr/bin/aptitude install -y -q %s\n" % (package)
             self.log.info(cmd)
+            p = pexpect.spawn(command)
+            p.send("PS1=%s\n" % (prompt)) 
             p.send(cmd)
             done = False
             while done == False:
