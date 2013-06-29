@@ -179,8 +179,6 @@ class runnershell:
                     depnedacylist = list(jobpart["shell"]["dependancies"]["Debian"])
         if len(depnedacylist) == 0:
             return True
-        chootdir = "chroot"
-        command = "%s %s /bin/bash"  % ("/usr/sbin/chroot" , chootdir)
         
         #script_filename = "foo"
         #if os.path.isfile(script_filename):
@@ -196,7 +194,7 @@ class runnershell:
             self.log.info("ssssssssssssssssssssssssssssssssss")
             cmd = "/usr/sbin/chroot chroot /usr/bin/aptitude install -y -q %s\n" % (package)
             self.log.info(cmd)
-            p = pexpect.spawn(command)
+            p = pexpect.spawn(cmd)
             p.send("PS1=%s\n" % (prompt)) 
             p.send(cmd)
             done = False
@@ -218,6 +216,7 @@ class runnershell:
                     p.send("\n")
         
     def executabingo(self,jobpart,env = {}):
+        self.packages(jobpart)
         inputenv = os.environ
         inputenv.update(env)
         output = {"rc" :  255 , "env" : {}}
@@ -305,7 +304,7 @@ class runnershell:
         timeouts = 0
         while self.souldloop == True:
             index = self.p.expect ([prompt,'%s=.*\r\n' % (match_one),pexpect.EOF, pexpect.TIMEOUT, '\r\n','\n'],timeout=5)
-            self.log.info("index=%s" % (index))
+            self.log.info("indexxx=%s" % (index))
             if index == 0:
                 timeouts = 0
             if index == 1:
