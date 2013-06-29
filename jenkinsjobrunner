@@ -446,10 +446,10 @@ class runnershell:
                 
                 foundEnv[key] = value
         
+        if self.p.isalive() == True:
+            self.p.send("exit 0\n")
+            self.p.wait()
         exitstatus = self.p.exitstatus
-        if exitstatus != None:
-            self.p.send("exit\n")
-        
         return {"rc" :  returnCode , "env" : foundEnv}
 
 def runJob (jobname):
