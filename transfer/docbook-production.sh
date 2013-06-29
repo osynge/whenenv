@@ -12,7 +12,7 @@ SVNLOCATION="https://svnsrv.desy.de/public/grid-virt/org.hepix.virtulization.doc
 rm -rf build
 #svn co ${SVNLOCATION}/${TAG} build
 pwd
-
+apt-get install svn
 ycheckrc svn co ${SVNLOCATION} build
 #exit 1
 cd build
