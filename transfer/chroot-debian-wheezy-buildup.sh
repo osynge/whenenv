@@ -11,5 +11,5 @@ python /root/chrootbuilder \
   --overlay /root/overlay.cpio.bz2 \
   --build
 
-CHROOT="/root/chrootbuilder"
+CHROOT="chroot"
 export CHROOT
