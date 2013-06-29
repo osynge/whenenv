@@ -171,7 +171,9 @@ class runnershell:
        
         
     def executabingo(self,jobpart,env = os.environ):
+        output = {"rc" :  255 , "env" : {}}
         knownKeys = env.keys()
+        env_ignored = set(["PATH","SHLVL","OLDPWD"])
         cmd = jobpart["shell"]
         requires = set(jobpart["requires"]) 
         command = ". %s ; export" % ("")
@@ -186,18 +188,13 @@ class runnershell:
         #else:
         #    fout = file (script_filename, "wb")
         #self.p.logfile = fout
-        #self.p.send( "echo set -x\n")
+        match_prompt = uuid.uuid1()
+        prompt = str(match_prompt)
+        self.p.send("PS1=%s\n" % (prompt)) 
+        index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
         self.p.send("stty -echo\n")
+        index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
         
-        
-        self.souldloop = True
-        while self.souldloop == True:
-            
-            index = self.p.expect (['\$', pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
-            if index == 0:
-                break
-            if index == 3:
-                self.do_something('start')
         script = "%s/%s" % (os.path.dirname(os.path.realpath(__file__)),jobpart["shell"])
         fp = open(script)
         transtbl = string.maketrans(
@@ -209,17 +206,16 @@ class runnershell:
         bashvar_one = base64.b32encode(str(match_one).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
         match_two =  uuid.uuid1()
         bashvar_two = base64.b32encode(str(match_two).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
-        match_prompt = uuid.uuid1()
+        
         
         
         
         self.p.send("%s=%s\n" % (bashvar_one,match_one))
+        index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
         self.p.send("%s=%s\n" % (bashvar_two,match_two))
-        
-        prompt = str(match_prompt)
-        
-        self.p.send("PS1=%s\n" % (prompt)) 
+        index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
         self.p.send("set -x\n")
+        index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
         for line in fp:
             self.p.send(line)
         self.p.send("echo ${%s}=${?}\n" % (bashvar_one))
@@ -232,18 +228,17 @@ class runnershell:
         while self.souldloop == True:
             exitstatus = self.p.exitstatus
             if exitstatus != None:
-                returnCode = exitstatus
-                break
+                output["rc"] = exitstatus
+                return output
             index = self.p.expect ([prompt,'%s.*\r\n' % (match_one),pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=200)
             if index == 1:
                 after = self.p.after.split('\n')
                 SplitLine = after[0].strip().split('=')
-                print len(SplitLine)
                 if len(SplitLine) < 2:
                     self.log.error("Failed retriving RC")
                     return None
                 returnCode = int(SplitLine[1])
-                self.log.info("exxxecutabingo=%s" % (returnCode))
+                self.log.debug("scriptrc=%s" % (returnCode))
                 break
             if index == 2:
                 self.log.error("Unexpected EOF")
@@ -256,9 +251,6 @@ class runnershell:
                 striped = imput.strip()
                 if len(striped) > 0:
                     self.log.info(imput.strip())
-        if returnCode != 0:
-            self.log.warning("Exited=%s" % (exitstatus))
-            return None
         
         self.p.send("export\n")
         self.p.send("echo ${%s}=${?}\n" % (bashvar_two))
@@ -289,9 +281,14 @@ class runnershell:
                 if matches == None:
                     continue
                 key = shellline[:matches.start()]
-                if key in knownKeys:
-                    continue
                 value = shellline[matches.end():][1:-1]
+                if key in env_ignored:
+                    continue
+                if key in knownKeys:
+                    if env[key] != value:
+                        self.log.info("ignoring variable change %s=%s','%s" % (key,env[key] , value))
+                    continue
+                
                 foundEnv[key] = value
         
         exitstatus = self.p.exitstatus
