@@ -179,7 +179,7 @@ class runnershell:
         command = "/bin/bash"
         
         if "shell" in jobpart.keys():
-            command = "/usr/sbin/chroot" + inputenv["CHROOT"]
+            command = "%s %s"  % ("/usr/sbin/chroot" , inputenv["CHROOT"])
 
         
         
@@ -242,7 +242,7 @@ class runnershell:
                 SplitLine = after[0].strip().split('=')
                 if len(SplitLine) < 2:
                     self.log.error("Failed retriving RC")
-                    return None
+                    return output
                 returnCode = int(SplitLine[1])
                 self.log.debug("scriptrc=%s" % (returnCode))
                 break
@@ -256,7 +256,7 @@ class runnershell:
                 
             if index == 3:
                 self.log.error("TimeOut")
-                return None
+                return output
             if index == 4:
                 imput = self.p.before
                 striped = imput.strip()
@@ -403,10 +403,11 @@ def runJob (jobname):
         "chroot-scientific-6-repo" : ["transfer/chroot-scientific-6-repo.sh"],
         "publish-image-overlay" : ["transfer/publish-image-overlay-debian.sh"],
         "docbook-production" : [{"script" : "transfer/chroot-debian-wheezy-buildup.sh"},
-            {   "script" : "transfer/docbook-production.
+            {   "script" : "transfer/docbook-production.sh",
                 "shell" : { "type" : "chroot",
                     "command" : { "template" : "chroot %CHROOT%",
-                    "envimeroment" = ["CHROOT"}]
+                    "envimeroment" : ["CHROOT"]
+                    }
                     }
             }],
         }
@@ -426,12 +427,13 @@ def runJob (jobname):
                 return processRc
         if type(jobpart) == dict:
             foo = runnershell()
-            cmd = jobpart["shell"]
+            cmd = jobpart["script"]
             #requires = set(jobpart["requires"])
             log.info("running jobpart '%s' " % (cmd))
             resetMap = foo.executabingo(jobpart,enviroment)
-            enviroment.update(resetMap["env"])
-            log.info("Job Enviroment='%s'" % (enviroment) )
+            if resetMap["env"] != 0:
+                enviroment.update(resetMap["env"])
+                log.info("Job Enviroment='%s'" % (enviroment) )
             if resetMap["rc"] != 0:
                 log.error("cmd '%s' returned '%s'." % (cmd,resetMap["rc"]))
                 return resetMap["rc"]
