@@ -219,6 +219,11 @@ class runnershell:
                     done = True
                 if index == 3:
                     done = True
+            p.send("exit 0\n")
+            exitstatus = p.exitstatus
+            if exitstatus == None:
+                p.wait()
+                exitstatus = p.exitstatus
             p.wait()
                 
         for package in depnedacylist:
@@ -260,7 +265,11 @@ class runnershell:
                     p.send("Y\n")
                 if index == 1:
                     p.send(cmd)
-            p.wait()
+            p.send("exit 0\n")
+            exitstatus = p.exitstatus
+            if exitstatus == None:
+                p.wait()
+                exitstatus = p.exitstatus
                     
         
         
