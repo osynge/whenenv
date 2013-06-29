@@ -170,7 +170,7 @@ class runnershell:
 
        
         
-    def executabingo(self,jobpart,env = os.environ):
+    def executabingo(self,jobpart,env = {}):
         output = {"rc" :  255 , "env" : {}}
         knownKeys = env.keys()
         env_ignored = set(["PATH","SHLVL","OLDPWD"])
@@ -196,6 +196,14 @@ class runnershell:
         self.p.send("stty -echo\n")
         index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
         
+        # Now load enviroment
+        
+        for enviroment in env.keys():
+            self.p.send('%s="%s"\n' % (enviroment,env[enviroment]))
+            index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
+        
+        
+        # Now load script
         script = "%s/%s" % (os.path.dirname(os.path.realpath(__file__)),jobpart["shell"])
         fp = open(script)
         transtbl = string.maketrans(
@@ -414,7 +422,7 @@ def runJob (jobname):
             cmd = jobpart["shell"]
             #requires = set(jobpart["requires"])
             log.info("running jobpart '%s' " % (cmd))
-            resetMap = foo.executabingo(jobpart)
+            resetMap = foo.executabingo(jobpart,enviroment)
             enviroment.update(resetMap["env"])
             log.info("Job Enviroment='%s'" % (enviroment) )
             if resetMap["rc"] != 0:
