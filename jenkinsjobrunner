@@ -207,6 +207,31 @@ class runnershell:
             self.p.send('%s="%s"\n' % (enviroment,env[enviroment]))
             index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
         
+        # Now load build deps
+        
+        if "shell" in jobpart.keys():
+            
+            if "dependancies" in jobpart["shell"].keys():
+                if "Debian" in jobpart["shell"]["dependancies"].keys():
+                    depnedacylist = list(jobpart["shell"]["dependancies"]["Debian"])
+                    for package in depnedacylist:
+                        cmd = "aptitude install -y -q %s\n" % (package)
+                        self.p.send(cmd)
+                        index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
+                        if index == 0:
+                            continue
+                        if index == 3:
+                            imput = self.p.before
+                            striped = imput.strip()
+                            if len(striped) > 0:
+                                self.log.info(imput.strip())
+                        
+                        
+            chootdir = "chroot"
+            if "CHROOT" in inputenv.keys():
+                chootdir = inputenv["CHROOT"]
+            command = "%s %s /bin/bash"  % ("/usr/sbin/chroot" , chootdir)
+
         
         # Now load script
         script = "%s/%s" % (os.path.dirname(os.path.realpath(__file__)),jobpart["script"])
@@ -436,19 +461,13 @@ def runJob (jobname):
         "chroot-imagelist-update" : ["transfer/chroot-imagelist-update.sh"],
         "chroot-scientific-6-repo" : ["transfer/chroot-scientific-6-repo.sh"],
         "publish-image-overlay" : ["transfer/publish-image-overlay-debian.sh"],
-        "docbook-production" : [{"script" : "transfer/chroot-debian-wheezy-buildup.sh"},
-            {   "script" : "transfer/docbook-production-deps.sh",
-                "shell" : { "type" : "chroot",
-                    "command" : { "template" : "chroot %CHROOT%",
-                    "envimeroment" : ["CHROOT"]
-                    }
-                    }
-            },
+        "docbook-production" : [
             {   "script" : "transfer/docbook-production.sh",
                 "shell" : { "type" : "chroot",
                     "command" : { "template" : "chroot %CHROOT%",
-                    "envimeroment" : ["CHROOT"]
-                    }
+                        "envimeroment" : ["CHROOT"]
+                        },
+                    "dependancies" :{ "Debian" : ["make"] },
                     }
             },
             ],
