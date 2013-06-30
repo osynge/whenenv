@@ -474,10 +474,7 @@ def runJob (jobname):
         "vmcatcher-scientific-6-prod-test" : ["transfer/chroot-scientific-6-buildup-prod.sh",
             "transfer/vmcatcher-scientific-6-prod-test.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
-        "vmcatcher-debian-wheezy-prod" :["transfer/chroot-debian-wheezy-buildup.sh",
-            "transfer/vmcatcher-debian-wheezy-prod-part-02.sh",
-            "transfer/vmcatcher-debian-wheezy-prod-part-03.sh",
-            "transfer/chroot-debian-wheezy-teardown.sh"],
+        
         "vmcatcher_eventHndlExpl_ON-scientific-6-prod" : ["transfer/chroot-scientific-6-buildup-prod.sh",
             "transfer/vmcatcher_eventHndlExpl_ON-scientific-6-prod-part-01.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
@@ -562,6 +559,17 @@ def runJob (jobname):
                         "envimeroment" : ["CHROOT"]
                         },
                     "dependancies" :{ "Debian" : ["make", "subversion","openjdk-6-jre-lib","libservlet2.5-java", "openjdk-6-jre","openjdk-6-jre-headless", "fop", "xsltproc","docbook-xml","docbook-xsl" ] },
+                    }
+            },
+            {   "script" : "transfer/chroot-debian-wheezy-teardown.sh"},
+            ],
+        "vmcatcher-debian-wheezy-prod" : [{  "script" : "transfer/chroot-debian-wheezy-buildup.sh"},
+            {   "script" : "transfer/transfer/vmcatcher-debian-wheezy-prod-part-03.sh",
+                "shell" : { "type" : "chroot",
+                    "command" : { "template" : "chroot %CHROOT%",
+                        "envimeroment" : ["CHROOT"]
+                        },
+                    "dependancies" :{ "Debian" : ["git", "python","rpm","make", "python-setuptools","python-m2crypto", ] },
                     }
             },
             {   "script" : "transfer/chroot-debian-wheezy-teardown.sh"},
