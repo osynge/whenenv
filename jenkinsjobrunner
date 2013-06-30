@@ -242,7 +242,7 @@ class runnershell:
                     pexpect.TIMEOUT,
                     'Reading package lists',
                     'The following NEW packages will be installed',
-                    'Get:',
+                    'Get:.*\r\n',
                     'Selecting previously unselected package',
                     'Fetched',
                     'Unpacking',
