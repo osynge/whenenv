@@ -6,9 +6,8 @@ if [ $[${rc}] != 0 ] ; then
     exit ${rc}
 fi
 }
-find chroot | grep artifacts.tgz
-ycheckrc mv chroot/artifacts.tgz .
+ycheckrc mv ${CHROOT}/artifacts.tgz .
 
 ycheckrc python /root/chrootbuilder \
-  --dest  /workspace/document-production/chroot  \
+  --dest  ${CHROOT}  \
   --clean
