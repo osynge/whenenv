@@ -227,7 +227,7 @@ class runnershell:
                 
         for package in depnedacylist:
             #self.log.info("ssssssssssssssssssssssssssssssssss")
-            cmd = "/usr/sbin/chroot /workspace/document-production/chroot /usr/bin/apt-get install -y %s\n" % (package)
+            cmd = "/usr/sbin/chroot /workspace/document-production/chroot /usr/bin/apt-get install -y --force-yes %s\n" % (package)
             self.log.info(cmd)
             p = pexpect.spawn(cmd)
             p.send("PS1=%s\n" % (prompt)) 
