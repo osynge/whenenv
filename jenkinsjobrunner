@@ -210,7 +210,7 @@ class runnershell:
                     pexpect.EOF, 
                     pexpect.TIMEOUT, 
                     '\r\n'],timeout=500)
-                self.log.info("result ddxd=%s`" % (index))
+                self.log.debug("result ddxd=%s`" % (index))
                 if index == 0:
                     done = True
                     alreadyinstalled.append(package)
@@ -560,7 +560,7 @@ def runJob (jobname):
                     "command" : { "template" : "chroot %CHROOT%",
                         "envimeroment" : ["CHROOT"]
                         },
-                    "dependancies" :{ "Debian" : ["make", "subversion","openjdk-6-jdk", "fop", "xsltproc","docbook-xml","docbook-xsl" ] },
+                    "dependancies" :{ "Debian" : ["make", "subversion","openjdk-6-jre-lib", "fop", "xsltproc","docbook-xml","docbook-xsl" ] },
                     }
             },
             {   "script" : "transfer/chroot-debian-wheezy-teardown.sh"},
