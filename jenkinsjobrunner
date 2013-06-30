@@ -448,6 +448,10 @@ class runnershell:
         
         if self.p.isalive() == True:
             self.p.send("exit 0\n")
+        if self.p.isalive() == True:
+            index = self.p.expect ([prompt,pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=2)
+            
+        if self.p.isalive() == True:
             self.p.wait()
         exitstatus = self.p.exitstatus
         return {"rc" :  returnCode , "env" : foundEnv}
