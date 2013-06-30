@@ -208,8 +208,7 @@ class runnershell:
                     "dpkg-query: no packages found matching %s" % (package),
                     prompt, 
                     pexpect.EOF, 
-                    pexpect.TIMEOUT, 
-                    '\r\n'],timeout=500)
+                    pexpect.TIMEOUT],timeout=500)
                 self.log.debug("result ddxd=%s`" % (index))
                 if index == 0:
                     done = True
@@ -248,9 +247,9 @@ class runnershell:
                     'Fetched',
                     'Unpacking',
                     'Setting',
-                    'Processing triggers for '],
+                    'Processing triggers for ', '\r\n'],
                     timeout=500)
-                self.log.debug("aptitude insstall=%s" % (index))
+                self.log.info("whatsDaProb=%s" % (index))
                 if index == 0:
                     p.send("Y\n")
                     
