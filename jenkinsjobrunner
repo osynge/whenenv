@@ -219,12 +219,12 @@ class runnershell:
                     done = True
                 if index == 3:
                     done = True
-            p.send("exit 0\n")
+           
             exitstatus = p.exitstatus
-            if exitstatus == None:
+            if p.isalive() == True:
+                p.send("exit 0\n")
+            if p.isalive() == True:
                 p.wait()
-                exitstatus = p.exitstatus
-            
                 
         for package in depnedacylist:
             #self.log.info("ssssssssssssssssssssssssssssssssss")
