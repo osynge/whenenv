@@ -560,7 +560,7 @@ def runJob (jobname):
                     "command" : { "template" : "chroot %CHROOT%",
                         "envimeroment" : ["CHROOT"]
                         },
-                    "dependancies" :{ "Debian" : ["make", "subversion","openjdk-6-jre-lib", "fop", "xsltproc","docbook-xml","docbook-xsl" ] },
+                    "dependancies" :{ "Debian" : ["make", "subversion","openjdk-6-jre-lib","openjdk-6-jre-headless", "fop", "xsltproc","docbook-xml","docbook-xsl" ] },
                     }
             },
             {   "script" : "transfer/chroot-debian-wheezy-teardown.sh"},
