@@ -10,5 +10,5 @@ find chroot | grep artifacts.tgz
 ycheckrc mv chroot/artifacts.tgz .
 
 ycheckrc python /root/chrootbuilder \
-  --dest  chroot \
+  --dest  /workspace/document-production/chroot  \
   --clean

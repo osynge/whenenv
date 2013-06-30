@@ -7,7 +7,7 @@ fi
 python /root/chrootbuilder \
   --input \
   /var/cache/vmcatcher/endorsed/${UUID} \
-  --dest  chroot \
+  --dest  /workspace/document-production/chroot \
   --overlay /root/overlay.cpio.bz2 \
   --build
 
