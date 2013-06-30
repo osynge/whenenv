@@ -365,10 +365,10 @@ class runnershell:
             if index == 1:
                 timeouts = 0
                 after = self.p.after.split('\n')
-                print self.p.after
-                print dir(self.p.after)
+                #print self.p.after
+                #print dir(self.p.after)
                 SplitLine = after[0].strip().split('=')
-                print SplitLine
+                #print SplitLine
                 if len(SplitLine) < 2:
                     self.log.error("Failed retriving RC")
                     return output
