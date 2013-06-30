@@ -26,3 +26,4 @@ rm -f artifacts.tgz
 ycheckrc tar -zcvf artifacts.tgz build/*.pdf build/Book
 frog="foo"
 export frog
+/etc/init.d/dbus stop
