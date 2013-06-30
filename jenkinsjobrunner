@@ -575,7 +575,7 @@ def runJob (jobname):
                     "command" : { "template" : "chroot %CHROOT%",
                         "envimeroment" : ["CHROOT"]
                         },
-                    "dependancies" :{ "Debian" : ["git", "python","git-buildpackage","devscripts", "python-all", ] },
+                    "dependancies" :{ "Debian" : ["git", "python","git-buildpackage","devscripts", "python-all",  "python-setuptools","python-m2crypto",] },
                     }
             },
             {   "script" : "transfer/chroot-debian-wheezy-teardown.sh"},
