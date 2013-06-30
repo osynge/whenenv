@@ -16,7 +16,7 @@ yum install git  org_desy_grid_virt_sort_release \
   python-setuptools \
   rpm-build \
   -y
-GITLOCATION="oms101@git//var/lib/git/chrootbuilder.git"
+GITLOCATION="git://git.fritz.box/chrootbuilder.git"
 rm -rf build
 git clone \${GITLOCATION} build
 cd build
