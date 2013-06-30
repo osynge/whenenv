@@ -504,12 +504,6 @@ def runJob (jobname):
             "transfer/grid-virt-sort-debian-wheezy-prod-part-02.sh",
             "transfer/grid-virt-sort-debian-wheezy-prod-part-03.sh",
             "transfer/chroot-debian-wheezy-teardown.sh"],
-        "grid-virt-sort-debian-wheezy-prod-deb" : ["transfer/chroot-debian-wheezy-buildup.sh",
-            "transfer/chroot-debian-wheezy-freshen.sh",
-            "transfer/grid-virt-sort-debian-wheezy-prod-deb-dependencies.sh",
-            "transfer/grid-virt-sort-debian-wheezy-prod-deb-build.sh",
-            "transfer/grid-virt-sort-debian-wheezy-prod-deb-export.sh",
-            "transfer/chroot-debian-wheezy-teardown.sh"],
         "vmcaster-scientific-6-prod" : ["transfer/chroot-scientific-6-buildup-prod.sh",
             "transfer/vmcaster-scientific-6-prod-part-02.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
@@ -576,6 +570,17 @@ def runJob (jobname):
                         "envimeroment" : ["CHROOT"]
                         },
                     "dependancies" :{ "Debian" : ["git", "python","rpm","make", "python-setuptools","python-m2crypto", ] },
+                    }
+            },
+            {   "script" : "transfer/chroot-debian-wheezy-teardown.sh"},
+            ],
+        "grid-virt-sort-debian-wheezy-prod-deb": [{  "script" : "transfer/chroot-debian-wheezy-buildup.sh"},
+            {   "script" : "transfer/smimeX509validation-debian-wheezy-prod-part-04.sh",
+                "shell" : { "type" : "chroot",
+                    "command" : { "template" : "chroot %CHROOT%",
+                        "envimeroment" : ["CHROOT"]
+                        },
+                    "dependancies" :{ "Debian" : ["git", "python","git-buildpackage","devscripts", "python-all", ] },
                     }
             },
             {   "script" : "transfer/chroot-debian-wheezy-teardown.sh"},
