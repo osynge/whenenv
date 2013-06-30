@@ -227,7 +227,7 @@ class runnershell:
             
                 
         for package in depnedacylist:
-            self.log.info("ssssssssssssssssssssssssssssssssss")
+            #self.log.info("ssssssssssssssssssssssssssssssssss")
             cmd = "/usr/sbin/chroot chroot /usr/bin/apt-get install -y %s\n" % (package)
             self.log.info(cmd)
             p = pexpect.spawn(cmd)
