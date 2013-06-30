@@ -268,6 +268,8 @@ class runnershell:
                 p.send("exit 0\n")
             if p.isalive() == True:
                 p.wait()
+            exitstatus = p.exitstatus
+            self.log.error("exit status=%s, cmd=%s" % (exitstatus,cmd))
                 
                     
         
