@@ -9,6 +9,6 @@ fi
 find chroot | grep artifacts.tgz
 ycheckrc mv chroot/artifacts.tgz .
 
-python /root/chrootbuilder \
+ycheckrc python /root/chrootbuilder \
   --dest  chroot \
   --clean
