@@ -564,7 +564,7 @@ def runJob (jobname):
             {   "script" : "transfer/chroot-debian-wheezy-teardown.sh"},
             ],
         "vmcatcher-debian-wheezy-prod" : [{  "script" : "transfer/chroot-debian-wheezy-buildup.sh"},
-            {   "script" : "transfer/transfer/vmcatcher-debian-wheezy-prod-part-03.sh",
+            {   "script" : "transfer/vmcatcher-debian-wheezy-prod-part-03.sh",
                 "shell" : { "type" : "chroot",
                     "command" : { "template" : "chroot %CHROOT%",
                         "envimeroment" : ["CHROOT"]
