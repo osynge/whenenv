@@ -111,8 +111,20 @@ def lsb_release():
     if processRc != 0:
         log.error("'%s' returned an error" % (cmd))
         return None
+    magicLines = ["Distributor ID",
+        "Description",
+        "Release",
+        "Codename"]
+    output = {}
     for line in stdout.split('\n'):
-        log.info(line)
+        splitline = line.strip().split(':')
+        if len(splitline) <= 1:
+            continue
+        if splitline[0] == in magicLines:
+            value = splitline[1].strip()
+            output[splitline[0]] = value
+    log.info(output)
+    
     return None
 
 
