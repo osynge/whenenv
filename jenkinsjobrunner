@@ -189,6 +189,47 @@ class ChrootPackageInstaller:
                 self.log.info("already installed:%s" % (package))
             else:
                 self.log.info("not installed:%s" % (package))
+                needtoInstall.append(package)
+        for package in needtoInstall:
+            self.p.flush()
+            self.p.send("yum install %s\n" % (package))
+            done = False
+            while done == False:
+                index = self.p.expect ([self.prompt,
+                        '\r\n', 
+                        pexpect.EOF, 
+                        pexpect.TIMEOUT],timeout=500)
+                if index == 0:
+                    done = True
+                elif index == 1:
+                    self.log.info(self.p.before)
+                else:
+                    self.log.error("Somethign went wrong entering chroot")
+                    self.p = None
+                    return False
+            # so now the command has executed
+            self.p.flush()
+            # We now need to see teh RC
+            self.p.send("echo $?")
+            rc = ""
+            done = False
+            while done == False:
+                index = self.p.expect ([self.prompt,
+                        '\r\n', 
+                        pexpect.EOF, 
+                        pexpect.TIMEOUT],timeout=500)
+                if index == 0:
+                    done = True
+                elif index == 1:
+                    
+                    rc += self.p.before
+                else:
+                    self.log.error("Somethign went wrong entering chroot")
+                    self.p = None
+                    return False
+            self.log.error("rc=%s" % (rc))
+            
+            
             
         
         
