@@ -298,7 +298,9 @@ class runnershell:
         reuslts = {}
         self.p.flush()
         self.p.send("export\n")
-        self.p.send("echo ${%s}=${?}\n" % (bashvar_two))
+        match_end = uuid.uuid1()
+        end = str(match_prompt)
+        self.p.send("echo ${%s}=${?}\n" % (end))
         self.souldloop = True
         foundEnv = {}
         while self.souldloop == True:
@@ -307,7 +309,7 @@ class runnershell:
                 self.log.info("exitstatus=%s" % (exitstatus))
                 self.log.info(self.p.env)
                 break
-            index = self.p.expect ([prompt,'%s.*\r\n' % (match_two),pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=200)
+            index = self.p.expect ([prompt,'%s.*\r\n' % (end),pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=200)
             if index == 1:
                 after = self.p.after.split('\n')
                 self.log.info("sdfsdfsdf=%s,%s" % (after[0].strip(),index))
