@@ -335,12 +335,13 @@ class runnershell:
                     if len(splitline) < 2:
                         continue
                     key = splitline[0]
-                    
                     value = splitline[1]
                     if key in env_ignored:
                         continue
                     foundEnv[key] = value
             elif index == 1:
+                break
+            elif index == 2:
                 break
             elif index == 3:
                 self.log.info("timeout")
