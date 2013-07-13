@@ -388,11 +388,13 @@ class runnershell:
             self.log.info("indexxx=%s" % (index))
             
             if index == 0:
-                self.log.info("Got script RC")
                 secondIndex = self.p.expect ([bashvar_one,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=5)
                 
                 if secondIndex == 0:
-                    output = int(self.p.before)
+                    cleaned = self.p.before.strip()
+                    
+                    self.log.info("Got script RC value=%s" % (cleaned))
+                    output = int(cleaned)
                     break 
                 else:
                     self.log.error("Failed retriving RC")
@@ -416,7 +418,7 @@ class runnershell:
                     
                 
             if index == 3:
-                self.log.error("TimeOut")
+                self.log.debug("TimeOut")
                 
                 timeouts = timeouts +1
                 if timeouts > 100:
