@@ -353,7 +353,7 @@ class runnershell:
             self.p.send(line)
         self.p.send("\necho ${%s}=${?}\n" % (bashvar_one))
         self.souldloop = True
-        self.souldloop = True
+        
         ready = False
         state = 0
         returnCode = None
@@ -361,11 +361,12 @@ class runnershell:
         nextlinecount = 3
         timeouts = 0
         while self.souldloop == True:
-            index = self.p.expect ([self.prompt,'%s=.*\r\n' % (match_one),pexpect.EOF, pexpect.TIMEOUT, 'Unpacking', '\r\n','\n'],timeout=500)
+            index = self.p.expect (['%s=.*\r\n' % (match_one),self.prompt,pexpect.EOF, pexpect.TIMEOUT, 'Unpacking', '\r\n','\n'],timeout=500)
             self.log.debug("indexxx=%s" % (index))
-            if index == 0:
-                timeouts = 0
+            
             if index == 1:
+                timeouts = 0
+            if index == 0:
                 timeouts = 0
                 after = self.p.after.split('\n')
                 #print self.p.after
