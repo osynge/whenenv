@@ -363,7 +363,7 @@ class runnershell:
         self.p.flush()
         for line in fp:
             self.p.send(line)
-        self.p.send("\necho ${%s}=${?}\n" % (bashvar_one))
+        self.p.send("\necho %s=${?}\n" % (bashvar_one))
         self.souldloop = True
         
         ready = False
