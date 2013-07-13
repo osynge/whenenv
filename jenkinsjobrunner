@@ -298,8 +298,7 @@ class runnershell:
         reuslts = {}
         self.p.flush()
         self.p.send("export\n")
-        match_end = uuid.uuid1()
-        end = str(match_prompt)
+        end = str( uuid.uuid1())
         self.p.send("echo ${%s}=${?}\n" % (end))
         self.souldloop = True
         foundEnv = {}
