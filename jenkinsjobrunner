@@ -265,8 +265,8 @@ class runnershell:
         
         self.p.send("export PS1\n")
         self.p.flush()
-        self.p.send("echo PS1='${PS1}'\n")
-        match = "PS1='%s.*'\r\n" % (self.prompt)
+        self.p.send("echo PS1=${PS1}\n")
+        match = "PS1=%s.*?\r\n" % (self.prompt)
         self.log.info("Seting PS1=%s" % (self.prompt))
         index = self.p.expect ([match,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
         
@@ -372,7 +372,7 @@ class runnershell:
         sent = 'echo %s${?}%s\n' % (bashvar_one,bashvar_one)
         self.log.info("sent='%s'" % (sent))
         self.p.send(sent)
-        match = '%s.*?%s\r\n' % (bashvar_one,bashvar_one)
+        match = '.*?%s\r\n' % (bashvar_one,bashvar_one)
         self.log.info("match='%s'" % (match))
         self.souldloop = True
         
@@ -383,24 +383,18 @@ class runnershell:
         nextlinecount = 3
         timeouts = 0
         while self.souldloop == True:
-            index = self.p.expect ([match,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=5)
+            index = self.p.expect ([bashvar_one,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=5)
             self.log.info("indexxx=%s" % (index))
             
             if index == 0:
                 self.log.info("Got script RC")
-                timeouts = 0
-                match = self.p.after.split(bashvar_one)
-                self.log.info("indexxx=%s" % (match))
-                #print self.p.after
-                #print dir(self.p.after)
-                SplitLine = after[0].strip().split('=')
-                #print SplitLine
-                if len(SplitLine) < 2:
+                secondIndex = self.p.expect ([bashvar_one,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=5)
+                
+                if secondIndex == 0:
+                    output = int(self.p.before)
+                    break 
+                elif
                     self.log.error("Failed retriving RC")
-                    return output
-                returnCode = int(SplitLine[1])
-                self.log.debug("scriptrc=%s" % (returnCode))
-                break
             if index == 1:
                 imput = self.p.before
                 striped = imput.strip()
