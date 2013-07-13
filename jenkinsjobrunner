@@ -610,16 +610,15 @@ class jobPartRun:
         if not "script" in jobpart.keys():
             sel.log.error("no script specified")
             return output
-            
-        if not "CHROOT" in inputenv.keys():
-            sel.log.error("no CHROOT")
-            return output
-        
+
         chootdir = inputenv["CHROOT"]
         command = "/bin/bash"
         allfliages =  jobpart["flags"]
         self.log.error("flags=%s" % (allfliages))
         if "chroot" in allfliages:
+            if not "CHROOT" in inputenv.keys():
+                self.log.error("no CHROOT")
+                return output
             command = "%s %s /bin/bash"  % ("/usr/sbin/chroot" , chootdir)
         
         #chroot /workspace/docbook-production/chroot/ /bin/bash
