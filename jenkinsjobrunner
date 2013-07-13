@@ -817,6 +817,8 @@ def runJob (jobname):
             foo = jobPartRun()
             #requires = set(jobpart["requires"])
             log.info("running jobpart '%s' " % (jobpart))
+            if not "flags" in jobpart.keys():
+                jobpart["flags"] = []
             resetMap = foo.executabingo(jobpart,enviroment)
             if resetMap["env"] != 0:
                 enviroment.update(resetMap["env"])
