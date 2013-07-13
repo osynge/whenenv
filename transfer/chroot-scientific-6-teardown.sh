@@ -1,4 +1,5 @@
-if [ "X" == "X${CHROOT}" ] then 
+if [ "X" == "X${CHROOT}" ]
+then 
     echo "No CHROOT set"
     exit 1
 fi
