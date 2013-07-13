@@ -554,7 +554,7 @@ class jobPartRun:
             cmd = "/usr/sbin/chroot /workspace/document-production/chroot /usr/bin/apt-get install -y --force-yes %s\n" % (package)
             self.log.info(cmd)
             p = pexpect.spawn(cmd)
-            p.send("PS1=%s\n" % (prompt)) 
+            p.send("PS1=%s\n" % (self.prompt)) 
             p.send(cmd)
             done = False
             while done == False:
