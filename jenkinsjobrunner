@@ -290,8 +290,11 @@ class runnershell:
         return exitstatus
 
     def setEnv(self,env):
+        
         for enviroment in env.keys():
-            self.p.send('%s="%s"\n' % (enviroment,env[enviroment]))
+            cmd = '%s="%s"\n' % (enviroment,env[enviroment])
+            self.log.info(cmd)
+            self.p.send(cmd)
             self.p.flush()
         return True
 
