@@ -745,8 +745,9 @@ def runJob (jobname):
                     "command" : { "template" : "chroot %CHROOT%",
                         "envimeroment" : ["CHROOT"]
                         },
-                    "dependancies" :{ "Scientific" : ["git", "python","rpm","make","python-setuptools","m2crypto" ] },
+                    "dependancies" :{ "Scientific" : ["hepixvmitrust","git", "python","rpm","make","python-setuptools","m2crypto" ] },
                     }
+                "artifacts" : ["artifacts.tgz"],
             },
             {"script" : "transfer/chroot-scientific-6-teardown.sh"}],
         }
