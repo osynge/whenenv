@@ -308,7 +308,7 @@ class runnershell:
         self.p.send("export\n")
         end = str( uuid.uuid1())
         self.p.send('echo ${%s}="${?}"\n' % (end))
-        match = 'declare -x .*='
+        match = 'declare -x .*=".*"'
         self.souldloop = True
         foundEnv = {}
         while self.souldloop == True:
