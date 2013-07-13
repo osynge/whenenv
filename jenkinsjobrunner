@@ -270,6 +270,27 @@ class runnershell:
         if len(striped) > 0:
             self.log.info("endofline=%s" % (imput.strip()))
         #infomration = self.p.read()
+    
+    
+    def getArtifacts(self,jobpart,env):
+        if not "artifacts" in jobpart.keys():
+            self.log.info("No artifacts in chroot script so no chroot artifacts")
+            return True
+            RawartifactsList = list(jobpart["artifacts"])
+        if not "CHROOT" in env.keys():
+            self.log.info("No CHROOT variable, so no chroot artifacts")
+            return True
+        prefix =  env["CHROOT"]
+        RawartifactsList = list(jobpart["artifacts"])
+        rc = 0
+        for artifact in RawartifactsList:
+            directory = os.path.dirname(artifact)
+            src = "%s/%s" %( prefix,artifact)
+            dest = "artifact"
+            self.log.info("directory=%s,src=%s,dest=%s" % (directory,src,dest))
+            shutil.copyfile(src, dst)
+        return True
+            
     def packagesDebain(self,jobpart,env):
         depnedacylist = []
         if "shell" in jobpart.keys():
@@ -777,6 +798,9 @@ def runJob (jobname):
             if resetMap["rc"] != 0:
                 log.error("cmd '%s' returned '%s'." % (cmd,resetMap["rc"]))
                 return resetMap["rc"]
+            rc = foo.getArtifacts(jobpart,enviroment)
+            if rc != True:
+                return rc
     return 0
         
         
