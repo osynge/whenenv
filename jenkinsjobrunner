@@ -634,10 +634,11 @@ class jobPartRun:
         # Now load script
         script = "%s/%s" % (os.path.dirname(os.path.realpath(__file__)),jobpart["script"])
         initialEnv = sr.getEnv()
+        self.log.info("initialEnv '%s'" % (initialEnv))
         rc = sr.runscript(script)
         afterEnv = sr.getEnv()
         keysInitial = set(initialEnv.keys())
-        self.log.info("keysInitial '%s'" % (keysInitial))
+        
         keysFinal = set(afterEnv.keys())
         keysnew = keysFinal.difference(keysInitial)
         foundEnv = {}
