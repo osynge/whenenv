@@ -230,7 +230,9 @@ class ChrootPackageInstaller:
                     self.log.error("Somethign went wrong entering chroot")
                     self.p = None
                     return False
-            self.log.error("rc=%s" % (rc))
+            if rc != '0':
+                self.log.error("rc=%s" % (rc))
+                return False
             
             
             
@@ -733,7 +735,7 @@ def runJob (jobname):
                     "command" : { "template" : "chroot %CHROOT%",
                         "envimeroment" : ["CHROOT"]
                         },
-                    "dependancies" :{ "Scientific" : ["git", "python","rpm","make","python-setuptools","python-m2crypto" ] },
+                    "dependancies" :{ "Scientific" : ["git", "python","rpm","make","python-setuptools","m2crypto" ] },
                     }
             },
             {"script" : "transfer/chroot-scientific-6-teardown.sh"}],
