@@ -854,9 +854,9 @@ def runJob (jobname):
                 return resetMap["rc"]
             else:
                 if "artifacts" in jobpart:
-                rc = foo.getArtifacts(jobpart,enviroment)
-                if rc != True:
-                    return rc
+                    rc = foo.getArtifacts(jobpart,enviroment)
+                    if rc != True:
+                        return rc
     return 0
         
         
