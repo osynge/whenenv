@@ -859,7 +859,7 @@ def runJob (jobname):
             resetMap = foo.executabingo(jobpart,enviroment)
             if resetMap["env"] != 0:
                 enviroment.update(resetMap["env"])
-                log.info("Job Enviroment='%s'" % (enviroment) )
+                log.debug("Job Enviroment='%s'" % (enviroment) )
             if resetMap["rc"] != 0:
                 log.error("cmd '%s' returned '%s'." % (jobpart,resetMap["rc"]))
                 return resetMap["rc"]
