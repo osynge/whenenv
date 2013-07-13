@@ -318,7 +318,9 @@ class runnershell:
                 break
             index = self.p.expect ([match,self.prompt,pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=2)
             if index == 0:
+                
                 imput = self.p.before
+                self.log.info("index=%s=%s" % (index,imput))
                 striped = imput.strip()
                 if len (striped) == 0:
                     continue
