@@ -865,35 +865,33 @@ def runJob (jobname):
         return 1
     enviroment = {}
     for jobpart in mappings[jobname]:
+        jobDetails = {}
         if type(jobpart) == str:
+            
             log.info("running jobpart '%s' " % (jobpart) )
-            script = "%s/%s" % (os.path.dirname(os.path.realpath(__file__)),jobpart)
-            cmd = ". %s" % (script)
-            processRc,stdout,stderr = subphandling(cmd,timeout = 360)
-            log.info(" '%s' " % (processRc) )
-            if processRc != 0:
-                log.error("cmd '%s' returned '%s'." % (cmd,processRc) )
-                return processRc
+            jobDetails["script"] : jobpart }
         if type(jobpart) == dict:
-            foo = jobPartRun()
-            #requires = set(jobpart["requires"])
-            log.info("running jobpart '%s' " % (jobpart))
-            if not "flags" in jobpart.keys():
-                jobpart["flags"] = []
-            resetMap = foo.executabingo(jobpart,enviroment)
-            if resetMap["env"] != 0:
-                enviroment.update(resetMap["env"])
-                log.debug("Job Enviroment='%s'" % (enviroment) )
-            if resetMap["rc"] != 0:
-                log.error("cmd '%s' returned '%s'." % (jobpart,resetMap["rc"]))
-                return resetMap["rc"]
+            jobDetails.update(jobpart)
+
+        foo = jobPartRun()
+        #requires = set(jobpart["requires"])
+        log.info("running jobpart '%s' " % (jobpart))
+        if not "flags" in jobpart.keys():
+            jobpart["flags"] = []
+        resetMap = foo.executabingo(jobpart,enviroment)
+        if resetMap["env"] != 0:
+            enviroment.update(resetMap["env"])
+            log.debug("Job Enviroment='%s'" % (enviroment) )
+        if resetMap["rc"] != 0:
+            log.error("cmd '%s' returned '%s'." % (jobpart,resetMap["rc"]))
+            return resetMap["rc"]
+        else:
+            if "artifacts" in jobpart.keys():
+                rc = foo.getArtifacts(jobpart,enviroment)
+                if rc != True:
+                    return rc
             else:
-                if "artifacts" in jobpart.keys():
-                    rc = foo.getArtifacts(jobpart,enviroment)
-                    if rc != True:
-                        return rc
-                else:
-                    log.info("No artifacts '%s' " % (jobpart))
+                log.info("No artifacts '%s' " % (jobpart))
     return 0
         
         
