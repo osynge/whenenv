@@ -873,7 +873,7 @@ def runJob (jobname):
         if type(jobpart) == dict:
             jobDetails.update(jobpart)
 
-        foo = jobRun()
+        foo = jobPartRun()
         #requires = set(jobDetails["requires"])
         log.info("running jobDetails '%s' " % (jobDetails))
         if not "flags" in jobDetails.keys():
