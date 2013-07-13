@@ -393,7 +393,7 @@ class runnershell:
                 if secondIndex == 0:
                     output = int(self.p.before)
                     break 
-                elif
+                elif:
                     self.log.error("Failed retriving RC")
             if index == 1:
                 imput = self.p.before
