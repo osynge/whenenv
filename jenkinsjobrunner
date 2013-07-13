@@ -637,6 +637,7 @@ class jobPartRun:
         rc = sr.runscript(script)
         afterEnv = sr.getEnv()
         keysInitial = set(initialEnv.keys())
+        self.log.info("keysInitial '%s'" % (keysInitial))
         keysFinal = set(afterEnv.keys())
         keysnew = keysFinal.difference(keysInitial)
         foundEnv = {}
