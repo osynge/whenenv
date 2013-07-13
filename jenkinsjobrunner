@@ -268,8 +268,8 @@ class runnershell:
         index = self.p.expect ([self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
         self.p.send("export PS1\n")
         self.p.flush()
-        self.p.send("echo PS1=${PS1}\n")
-        match = "PS1=%s.*?\r\n" % (self.prompt)
+        self.p.send("echo PS1xxxx=${PS1}\n")
+        match = "PS1xxxx=%s.*?\r\n" % (self.prompt)
         self.log.info("Seting PS1=%s" % (self.prompt))
         done = False
         while done == False:
