@@ -665,18 +665,19 @@ class jobPartRun:
         #self.log.info("initialEnv '%s'" % (initialEnv))
         rc = sr.runscript(script)
         self.log.info("runscript rc '%s'" % (rc))
+        foundEnv = {}
         if rc == 0:
             afterEnv = sr.getEnv()
             #self.log.info("afterEnv '%s'" % (afterEnv))
             keysInitial = set(initialEnv.keys())        
             keysFinal = set(afterEnv.keys())
             keysnew = keysFinal.difference(keysInitial)
-            foundEnv = {}
             for key in keysnew:
                 value = afterEnv[key]
                 self.log.info("Exported '%s=%s'" % (key,value))
                 foundEnv[key] = value
         returnCode = sr.finalise()
+        
         return {"rc" :  rc , "env" : foundEnv}
 
 def runJob (jobname):
