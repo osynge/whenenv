@@ -357,7 +357,7 @@ class runnershell:
         nextlinecount = 3
         timeouts = 0
         while self.souldloop == True:
-            index = self.p.expect ([prompt,'%s=.*\r\n' % (match_one),pexpect.EOF, pexpect.TIMEOUT, 'Unpacking', '\r\n','\n'],timeout=500)
+            index = self.p.expect ([self.prompt,'%s=.*\r\n' % (match_one),pexpect.EOF, pexpect.TIMEOUT, 'Unpacking', '\r\n','\n'],timeout=500)
             self.log.debug("indexxx=%s" % (index))
             if index == 0:
                 timeouts = 0
