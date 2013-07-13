@@ -284,7 +284,7 @@ class runnershell:
         self.setPrompt()
         return True
     def finalise(self):
-        self.log("finalising")
+        self.log.info("finalising")
         if self.p.isalive() == True:
             self.p.send("\nexit 0\n")
             self.p.flush()
