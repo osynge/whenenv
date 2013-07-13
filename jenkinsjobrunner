@@ -107,7 +107,7 @@ def jumpstrart():
 def lsb_release():
     log = logging.getLogger("lsb_release")
     cmd = "lsb_release -a"
-    processRc,stdout,stderr = subphandling(cmd,timeout = 10):  
+    processRc,stdout,stderr = subphandling(cmd,timeout = 10)
     if processRc != 0:
         log.error("'%s' returned an error" % (cmd))
         return None
