@@ -339,7 +339,8 @@ class runnershell:
             elif index == 1:
                 break
             elif index == 3:
-                
+                self.log.info("timeout")
+                break
             else:
                 self.log.info("error=%s" % (index))
         self.log.info("getEnv returns=%s" % (foundEnv))
