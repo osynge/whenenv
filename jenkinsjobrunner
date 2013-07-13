@@ -406,7 +406,10 @@ class runnershell:
                 timeouts = 0
                 #self.p.send('echo %s="${?}"\n' % (bashvar_one))
             if index == 2:
-                
+                imput = self.p.before
+                striped = imput.strip()
+                if len(striped) > 0:
+                    self.log.info(imput.strip())
                 self.log.error("Unexpected EOF")
                 exitstatus = self.p.exitstatus
                 if exitstatus != None:
