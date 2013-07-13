@@ -385,7 +385,7 @@ class runnershell:
         timeouts = 0
         while self.souldloop == True:
             index = self.p.expect ([bashvar_one,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=5)
-            self.log.info("indexxx=%s" % (index))
+            self.log.debug("indexxx=%s" % (index))
             
             if index == 0:
                 secondIndex = self.p.expect ([bashvar_one,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=5)
