@@ -252,7 +252,7 @@ class ChrootPackageInstaller:
 
 class runnershell:
     def __init__(self, chrootCmd, env):
-        self.log = logging.getLogger("ChrootPackageInstaller")
+        self.log = logging.getLogger("runnershell")
         self.chrootCmd = chrootCmd
         match_prompt = uuid.uuid1()
         self.prompt = str(match_prompt)
