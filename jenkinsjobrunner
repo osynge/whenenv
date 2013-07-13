@@ -265,18 +265,16 @@ class runnershell:
         self.p.send("stty -echo\n")
         self.p.flush()
         self.p.send("PS1=%s\n" % (self.prompt))
-        done = False
-        while done == False:
-            index = self.p.expect ([self.prompt, 
-                    pexpect.EOF, 
-                    pexpect.TIMEOUT],timeout=500)
-            if index == 0:
-                done = True
-            else:
-                self.log.error("Somethign went wrong entering chroot")
-                self.p = None
-                return False
         self.p.flush()
+        
+        self.p.send("export PS1\n")
+        self.p.flush()
+        self.p.send("echo PS1='${PS1}'"\n")
+        index = self.p.expect (["PS1='%s.*'\r\n" % (end),self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
+        
+        
+        if index = 0:
+            self.log("Iniatialised Ok")
         return True
     def finalise(self):
         self.log("finalising")
@@ -364,9 +362,8 @@ class runnershell:
             index = self.p.expect (['%s=.*\r\n' % (match_one),self.prompt,pexpect.EOF, pexpect.TIMEOUT, 'Unpacking', '\r\n','\n'],timeout=500)
             self.log.debug("indexxx=%s" % (index))
             
-            if index == 1:
-                timeouts = 0
             if index == 0:
+                self.log.info("Got script RC")
                 timeouts = 0
                 after = self.p.after.split('\n')
                 #print self.p.after
@@ -379,6 +376,8 @@ class runnershell:
                 returnCode = int(SplitLine[1])
                 self.log.debug("scriptrc=%s" % (returnCode))
                 break
+            if index == 1:
+                timeouts = 0
             if index == 2:
                 
                 self.log.error("Unexpected EOF")
