@@ -480,7 +480,7 @@ class jobPartRun:
         for artifact in RawartifactsList:
             directory = os.path.dirname(artifact)
             src = "%s/%s" %( prefix,artifact)
-            dest = "artifact"
+            dest = artifact
             self.log.info("Copying directory=%s,src=%s,dest=%s" % (directory,src,dest))
             shutil.copyfile(src, dest)
         return True
