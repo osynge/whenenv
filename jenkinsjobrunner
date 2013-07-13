@@ -308,6 +308,10 @@ class runnershell:
             self.p.send("\nexit 0\n")
             self.p.flush()
         if self.p.isalive() == True:
+            self.p.send("\nexit 0\n")
+            self.p.flush()
+        
+        if self.p.isalive() == True:
             self.log.info("waiting")
             self.p.wait()
         exitstatus = self.p.exitstatus
