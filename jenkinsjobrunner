@@ -302,10 +302,12 @@ class runnershell:
         env_ignored = set(["PATH","SHLVL","OLDPWD",])
 
         reuslts = {}
+        self.p.send("\n")
         self.p.flush()
         self.p.send("export\n")
         end = str( uuid.uuid1())
-        self.p.send("echo ${%s}=${?}\n" % (end))
+        self.p.send('echo ${%s}="${?}"\n' % (end))
+        match = 'declare -x .*='
         self.souldloop = True
         foundEnv = {}
         while self.souldloop == True:
@@ -314,13 +316,8 @@ class runnershell:
                 self.log.info("exitstatus=%s" % (exitstatus))
                 self.log.info(self.p.env)
                 break
-            index = self.p.expect (['%s.*\r\n' % (end),self.prompt,pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=200)
+            index = self.p.expect ([match,self.prompt,pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=2)
             if index == 0:
-                after = self.p.after.split('\n')
-                self.log.info("sdfsdfsdf='%s,%s,%s'" % (after[0].strip(),index))
-                break
-            
-            if index == 4:
                 imput = self.p.before
                 striped = imput.strip()
                 if len (striped) == 0:
@@ -337,6 +334,8 @@ class runnershell:
                 if key in env_ignored:
                     continue
                 foundEnv[key] = value
+            else:
+                self.log.info("error")
         return foundEnv
         
     def runscript(self,script):
