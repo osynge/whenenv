@@ -288,7 +288,7 @@ class runnershell:
             src = "%s/%s" %( prefix,artifact)
             dest = "artifact"
             self.log.info("directory=%s,src=%s,dest=%s" % (directory,src,dest))
-            shutil.copyfile(src, dst)
+            shutil.copyfile(src, dest)
         return True
             
     def packagesDebain(self,jobpart,env):
