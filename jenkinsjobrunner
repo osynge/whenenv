@@ -212,7 +212,7 @@ class ChrootPackageInstaller:
             # so now the command has executed
             self.p.flush()
             # We now need to see teh RC
-            self.p.send("echo $?")
+            self.p.send("echo $?\n")
             rc = ""
             done = False
             while done == False:
