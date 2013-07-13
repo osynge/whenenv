@@ -340,6 +340,7 @@ class runnershell:
         return foundEnv
         
     def runscript(self,script):
+        self.log.info("runscript(%s)" % (script))
         # Now load script
         fp = open(script)
         
