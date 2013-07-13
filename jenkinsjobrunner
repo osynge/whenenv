@@ -314,10 +314,10 @@ class runnershell:
                 self.log.info("exitstatus=%s" % (exitstatus))
                 self.log.info(self.p.env)
                 break
-            index = self.p.expect ([self.prompt,'%s.*\r\n' % (end),pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=200)
-            if index == 1:
+            index = self.p.expect (['%s.*\r\n' % (end),self.prompt,pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=200)
+            if index == 0:
                 after = self.p.after.split('\n')
-                self.log.info("sdfsdfsdf=%s,%s" % (after[0].strip(),index))
+                self.log.info("sdfsdfsdf='%s,%s,%s'" % (after[0].strip(),index))
                 break
             
             if index == 4:
