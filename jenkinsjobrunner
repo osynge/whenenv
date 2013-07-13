@@ -258,10 +258,10 @@ class runnershell:
         
          
         if release["Distributor ID"] == "Debian":
-            self.packagesDebain(jobpart)
+            self.packagesDebain(jobpart,env)
         
         if release["Distributor ID"] == "Scientific":
-            self.packagesScientific(jobpart)
+            self.packagesScientific(jobpart,env)
           
                     
         
