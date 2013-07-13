@@ -324,7 +324,7 @@ class runnershell:
 
     def getEnv(self):
         self.log.info("getEnv")
-        env_ignored = set(["PATH","SHLVL","OLDPWD",])
+        env_ignored = set(["PATH","SHLVL","OLDPWD",]).union(set(os.environ.keys()))
 
         reuslts = {}
         self.p.send("\n")
@@ -694,9 +694,10 @@ class jobPartRun:
         if rc == 0:
             afterEnv = sr.getEnv()
             #self.log.info("afterEnv '%s'" % (afterEnv))
-            keysInitial = set(initialEnv.keys())        
-            keysFinal = set(afterEnv.keys())
+            keysInitial = set(initialEnv.keys()).difference()
+            keysFinal = set(afterEnv.keys()).difference()
             keysnew = keysFinal.difference(keysInitial)
+            
             for key in keysnew:
                 value = afterEnv[key]
                 self.log.info("Exported '%s=%s'" % (key,value))
