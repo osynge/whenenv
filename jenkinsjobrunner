@@ -269,7 +269,7 @@ class runnershell:
         
         self.p.send("export PS1\n")
         self.p.flush()
-        self.p.send("echo PS1='${PS1}'"\n")
+        self.p.send("echo PS1='${PS1}'\n")
         index = self.p.expect (["PS1='%s.*'\r\n" % (end),self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
         
         
