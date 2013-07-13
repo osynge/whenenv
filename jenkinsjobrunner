@@ -864,10 +864,12 @@ def runJob (jobname):
                 log.error("cmd '%s' returned '%s'." % (jobpart,resetMap["rc"]))
                 return resetMap["rc"]
             else:
-                if "artifacts" in jobpart:
+                if "artifacts" in jobpart.keys():E
                     rc = foo.getArtifacts(jobpart,enviroment)
                     if rc != True:
                         return rc
+                else:
+                    log.info("No artifacts '%s' " % (jobpart))
     return 0
         
         
