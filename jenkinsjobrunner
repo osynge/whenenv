@@ -389,7 +389,8 @@ class runnershell:
             if index == 0:
                 self.log.info("Got script RC")
                 timeouts = 0
-                after = self.p.after.split('\n')
+                match = self.p.before.split(bashvar_one)
+                self.log.info("indexxx=%s" % (match))
                 #print self.p.after
                 #print dir(self.p.after)
                 SplitLine = after[0].strip().split('=')
