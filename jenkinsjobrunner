@@ -299,6 +299,7 @@ class runnershell:
         return True
 
     def getEnv(self):
+        self.log.info("getEnv")
         env_ignored = set(["PATH","SHLVL","OLDPWD",])
 
         reuslts = {}
@@ -340,7 +341,7 @@ class runnershell:
                 break
             else:
                 self.log.info("error=%s" % (index))
-        self.log.info("foundEnv=%s" % (foundEnv))
+        self.log.info("getEnv returns=%s" % (foundEnv))
         return foundEnv
         
     def runscript(self,script):
