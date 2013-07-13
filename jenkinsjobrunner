@@ -596,7 +596,7 @@ class jobPartRun:
         
         
     def executabingo(self,jobpart,env = {}):
-        
+        self.log.error("executabingo")
         inputenv = os.environ
         inputenv.update(env)
         output = {"rc" :  255 , "env" : {}}
@@ -618,6 +618,7 @@ class jobPartRun:
         chootdir = inputenv["CHROOT"]
         command = "/bin/bash"
         allfliages =  jobpart["flags"]
+        self.log.error("flags=%s" % (allfliages))
         if "chroot" in allfliages:
             command = "%s %s /bin/bash"  % ("/usr/sbin/chroot" , chootdir)
         
