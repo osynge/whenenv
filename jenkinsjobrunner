@@ -127,8 +127,51 @@ def lsb_release():
     
     return output
 
-
-
+class ChrootPackageInstaller:
+    def __init__(self, chrootCmd, env):
+        self.log = logging.getLogger("ChrootPackageInstaller")
+        self.chrootCmd = chrootCmd
+        match_prompt = uuid.uuid1()
+        self.prompt = str(match_prompt)
+        self.env = env
+        self.p = None
+    def initialise():
+        self.p = pexpect.spawn(chrootCmd)
+        self.p.send("PS1=%s\n" % (self.prompt))
+        done = False
+        while done == False:
+            index = self.p.expect ([self.prompt, 
+                    pexpect.EOF, 
+                    pexpect.TIMEOUT],timeout=500)
+            if index == 0:
+                done = True
+            else:
+                self.log.error("Somethign went wrong entering chroot")
+                self.p = None
+                return False
+        return True
+    
+        
+    def updatePackages():
+        if self.p == None:
+            self.log.error("programming error no p")
+            return False
+        self.p.send("rpm -qa")
+        while done == False:
+            index = self.p.expect ([self.prompt,
+                    '\r\n', 
+                    pexpect.EOF, 
+                    pexpect.TIMEOUT],timeout=500)
+            if index == 0:
+                done = True
+            elif index == 1:
+                self.log.info("before=%s" % (p.before))
+                self.log.info("after=%s" % (p.after))
+            else:
+                self.log.error("Somethign went wrong entering chroot")
+                self.p = None
+                return False
+        
 class runnershell:
     def __init__(self, shell="/bin/bash"):
         self.log = logging.getLogger("runnershell")
@@ -251,8 +294,34 @@ class runnershell:
     
     def packagesScientific(self,jobpart,env):
         self.log.info("packagesScientific(%s,%s)" % (jobpart,env))
+        depnedacylist = []
+        if "shell" in jobpart.keys():
+            
+            if "dependancies" in jobpart["shell"].keys():
+                
+                if "Scientific" in jobpart["shell"]["dependancies"].keys():
+                    self.log.info("foundthe answer")
+                    depnedacylist = list(jobpart["shell"]["dependancies"]["Debian"])
+        if len(depnedacylist) == 0:
+            return True
         
-    
+        match_prompt = uuid.uuid1()
+        prompt = str(match_prompt)
+        packagesmissing = []
+        alreadyinstalled = []
+        chrootdir = env['CHROOT']
+        cmd = "/usr/sbin/chroot %s" % (chrootdir)
+        pi = ChrootPackageInstaller(cmd,env)
+        initok = pi.initialise()
+        if  initok != True:
+            return False
+        initok = pi.updatePackages()
+        if  initok != True:
+            return False
+        return True
+        
+        
+        
     def packages(self,jobpart,env):
         release =  lsb_release()
         
