@@ -192,7 +192,7 @@ class ChrootPackageInstaller:
                 needtoInstall.append(package)
         for package in needtoInstall:
             self.p.flush()
-            self.p.send("yum install %s\n" % (package))
+            self.p.send("yum install -yq %s\n" % (package))
             done = False
             while done == False:
                 index = self.p.expect ([self.prompt,
