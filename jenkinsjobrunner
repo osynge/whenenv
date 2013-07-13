@@ -371,7 +371,7 @@ class runnershell:
             self.p.send(line)
         self.p.send('\necho %s="${?}"\n' % (bashvar_one))
         match = '%s=".*?"\r\n' % (bashvar_one)
-        self.log.info("match=%s" )
+        self.log.info("match='%s'" % (match))
         self.souldloop = True
         
         ready = False
@@ -399,7 +399,12 @@ class runnershell:
                 self.log.debug("scriptrc=%s" % (returnCode))
                 break
             if index == 1:
+                imput = self.p.before
+                striped = imput.strip()
+                if len(striped) > 0:
+                    self.log.info(imput.strip())
                 timeouts = 0
+                #self.p.send('echo %s="${?}"\n' % (bashvar_one))
             if index == 2:
                 
                 self.log.error("Unexpected EOF")
@@ -414,7 +419,7 @@ class runnershell:
                 
             if index == 3:
                 self.log.error("TimeOut")
-                self.p.send("\n")
+                
                 timeouts = timeouts +1
                 if timeouts > 100:
                     self.log.error("timedout")
