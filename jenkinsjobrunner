@@ -247,11 +247,170 @@ class ChrootPackageInstaller:
             return False
         return True
         
-        
-        
+
 class runnershell:
+    def __init__(self, chrootCmd, env):
+        self.log = logging.getLogger("ChrootPackageInstaller")
+        self.chrootCmd = chrootCmd
+        match_prompt = uuid.uuid1()
+        self.prompt = str(match_prompt)
+        self.env = env
+        self.p = None
+    def initialise(self):
+        if None != self.p:
+            self.finalise()
+        self.log.info("Initialising:%s" % (self.chrootCmd))
+        self.p = pexpect.spawn(self.chrootCmd)
+        self.p.send("stty -echo\n")
+        self.p.flush()
+        self.p.send("PS1=%s\n" % (self.prompt))
+        done = False
+        while done == False:
+            index = self.p.expect ([self.prompt, 
+                    pexpect.EOF, 
+                    pexpect.TIMEOUT],timeout=500)
+            if index == 0:
+                done = True
+            else:
+                self.log.error("Somethign went wrong entering chroot")
+                self.p = None
+                return False
+        self.p.flush()
+        return True
+    def finalise(self):
+        self.log("finalising")
+        if self.p.isalive() == True:
+            self.p.send("\nexit 0\n")
+            self.p.flush()
+        if self.p.isalive() == True:
+            self.p.wait()
+        exitstatus = self.p.exitstatus
+        self.p = None
+        return exitstatus
+
+    def setEnv(self,env):
+        for enviroment in env.keys():
+            self.p.send('%s="%s"\n' % (enviroment,env[enviroment]))
+            self.p.flush()
+        return true
+
+    def getEnv(self):
+        reuslts = {}
+        self.p.flush()
+        self.p.send("export\n")
+        self.p.send("echo ${%s}=${?}\n" % (bashvar_two))
+        self.souldloop = True
+        foundEnv = {}
+        while self.souldloop == True:
+            exitstatus = self.p.exitstatus
+            if exitstatus != None:
+                self.log.info("exitstatus=%s" % (exitstatus))
+                self.log.info(self.p.env)
+                break
+            index = self.p.expect ([prompt,'%s.*\r\n' % (match_two),pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=200)
+            if index == 1:
+                after = self.p.after.split('\n')
+                self.log.info("sdfsdfsdf=%s,%s" % (after[0].strip(),index))
+                break
+            
+            if index == 4:
+                imput = self.p.before
+                striped = imput.strip()
+                if len (striped) == 0:
+                    continue
+                if "declare -x " != (striped[:11]):
+                    continue
+                regdelexp = re.compile('=')
+                shellline = striped[11:]
+                matches = regdelexp.search(shellline)
+                if matches == None:
+                    continue
+                key = shellline[:matches.start()]
+                value = shellline[matches.end():][1:-1]
+                if key in env_ignored:
+                    continue
+                if key in knownKeys:
+                    if inputenv[key] != value:
+                        self.log.info("Ignoring variable change %s=%s','%s" % (key,inputenv[key] , value))
+                    continue
+                
+                foundEnv[key] = value
+        return foundEnv
+        
+    def runscript(self,script):
+        # Now load script
+        fp = open(script)
+        
+        match_one =  uuid.uuid1()
+        bashvar_one = base64.b32encode(str(match_one).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
+        self.p.flush()
+        self.p.send("\nset -e\n")
+        self.p.flush()
+        for line in fp:
+            self.p.send(line)
+        self.p.send("\necho ${%s}=${?}\n" % (bashvar_one))
+        self.souldloop = True
+        self.souldloop = True
+        ready = False
+        state = 0
+        returnCode = None
+        
+        nextlinecount = 3
+        timeouts = 0
+        while self.souldloop == True:
+            index = self.p.expect ([prompt,'%s=.*\r\n' % (match_one),pexpect.EOF, pexpect.TIMEOUT, 'Unpacking', '\r\n','\n'],timeout=500)
+            self.log.debug("indexxx=%s" % (index))
+            if index == 0:
+                timeouts = 0
+            if index == 1:
+                timeouts = 0
+                after = self.p.after.split('\n')
+                #print self.p.after
+                #print dir(self.p.after)
+                SplitLine = after[0].strip().split('=')
+                #print SplitLine
+                if len(SplitLine) < 2:
+                    self.log.error("Failed retriving RC")
+                    return output
+                returnCode = int(SplitLine[1])
+                self.log.debug("scriptrc=%s" % (returnCode))
+                break
+            if index == 2:
+                
+                self.log.error("Unexpected EOF")
+                exitstatus = self.p.exitstatus
+                if exitstatus != None:
+                    output["rc"] = exitstatus
+                else:
+                    output["rc"] = 255
+                self.log.error("Quit")
+                return output
+                    
+                
+            if index == 3:
+                self.log.error("TimeOut")
+                self.p.send("\n")
+                timeouts = timeouts +1
+                if timeouts > 100:
+                    self.log.error("timedout")
+                    return output
+            if index == 4:
+                timeouts = 0
+                imput = self.p.before
+                striped = imput.strip()
+                if len(striped) > 0:
+                    self.log.info(imput.strip())
+            
+            if index == 5:
+                timeouts = 0
+                imput = self.p.before
+                striped = imput.strip()
+                if len(striped) > 0:
+                    self.log.info(imput.strip())
+            
+class jobPartRun:
     def __init__(self, shell="/bin/bash"):
-        self.log = logging.getLogger("runnershell")
+        self.log = logging.getLogger("jobPartRun")
         self.shell = shell
         
         
@@ -419,10 +578,6 @@ class runnershell:
         initok = pi.installPackages(depnedacylist)
         if  initok == False:
             return False
-        
-        
-        
-        
         return True
         
         
@@ -447,181 +602,49 @@ class runnershell:
         output = {"rc" :  255 , "env" : {}}
         knownKeys = set(inputenv)
         env_ignored = set(["PATH","SHLVL","OLDPWD",]).union(set(env.keys()))
+        
+        if not "flags" in jobpart.keys():
+            sel.log.error("no flags specified")
+            return output
+        
+        if not "script" in jobpart.keys():
+            sel.log.error("no script specified")
+            return output
+            
+        if not "CHROOT" in inputenv.keys():
+            sel.log.error("no CHROOT")
+            return output
+        
+        chootdir = inputenv["CHROOT"]
         command = "/bin/bash"
-        
-        
-        
-        
-        
-        
-        
-        if "shell" in jobpart.keys():
-            chootdir = "chroot"
-            if "CHROOT" in inputenv.keys():
-                chootdir = inputenv["CHROOT"]
+        allfliages =  jobpart["flags"]
+        if "chroot" in allfliages:
             command = "%s %s /bin/bash"  % ("/usr/sbin/chroot" , chootdir)
-
+        
         #chroot /workspace/docbook-production/chroot/ /bin/bash
-
-        
-        self.p = pexpect.spawn(command)
-        #script_filename = "foo"
-        #if os.path.isfile(script_filename):
-        #    fout = file (script_filename, "ab")
-        #else:
-        #    fout = file (script_filename, "wb")
-        #self.p.logfile = fout
-        match_prompt = uuid.uuid1()
-        prompt = str(match_prompt)
-        self.p.send("PS1=%s\n" % (prompt)) 
-        index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
-        self.p.send("stty -echo\n")
-        index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
-        
-        # Now load enviroment
-        
-        for enviroment in env.keys():
-            self.p.send('%s="%s"\n' % (enviroment,env[enviroment]))
-            index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
-        
-        # Now load build deps
-        
-        self.packages(jobpart,env)
-
-        
+        sr = runnershell(command,env)
+        rc = sr.initialise()
+        if rc != True:
+            sel.log.error("failed to init CHROOT")
+            return output
+        rc = sr.setEnv(env)
+        if rc != True:
+            sel.log.error("failed to set env in CHROOT")
+            return output
         # Now load script
         script = "%s/%s" % (os.path.dirname(os.path.realpath(__file__)),jobpart["script"])
-        fp = open(script)
-        
-
-        match_one =  uuid.uuid1()
-        bashvar_one = base64.b32encode(str(match_one).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
-        match_two =  uuid.uuid1()
-        bashvar_two = base64.b32encode(str(match_two).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
-        
-        
-        
-        
-        self.p.send("%s=%s\n" % (bashvar_one,match_one))
-        index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
-        self.p.send("%s=%s\n" % (bashvar_two,match_two))
-        index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
-        #self.p.send("set -x\n")
-        #index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
-        
-        commandstack = []
-        for line in fp:
-            self.p.send(line)
-           
-        
-        self.p.send("echo ${%s}=${?}\n" % (bashvar_one))
-        
-        self.p.send("\n")
-        self.souldloop = True
-        ready = False
-        state = 0
-        returnCode = None
-        
-        nextlinecount = 3
-        timeouts = 0
-        while self.souldloop == True:
-            index = self.p.expect ([prompt,'%s=.*\r\n' % (match_one),pexpect.EOF, pexpect.TIMEOUT, 'Unpacking', '\r\n','\n'],timeout=500)
-            self.log.debug("indexxx=%s" % (index))
-            if index == 0:
-                timeouts = 0
-            if index == 1:
-                timeouts = 0
-                after = self.p.after.split('\n')
-                #print self.p.after
-                #print dir(self.p.after)
-                SplitLine = after[0].strip().split('=')
-                #print SplitLine
-                if len(SplitLine) < 2:
-                    self.log.error("Failed retriving RC")
-                    return output
-                returnCode = int(SplitLine[1])
-                self.log.debug("scriptrc=%s" % (returnCode))
-                break
-            if index == 2:
-                
-                self.log.error("Unexpected EOF")
-                exitstatus = self.p.exitstatus
-                if exitstatus != None:
-                    output["rc"] = exitstatus
-                else:
-                    output["rc"] = 255
-                self.log.error("Quit")
-                return output
-                    
-                
-            if index == 3:
-                self.log.error("TimeOut")
-                self.p.send("\n")
-                timeouts = timeouts +1
-                if timeouts > 100:
-                    self.log.error("timedout")
-                    return output
-            if index == 4:
-                timeouts = 0
-                imput = self.p.before
-                striped = imput.strip()
-                if len(striped) > 0:
-                    self.log.info(imput.strip())
-            
-            if index == 5:
-                timeouts = 0
-                imput = self.p.before
-                striped = imput.strip()
-                if len(striped) > 0:
-                    self.log.info(imput.strip())
-            
-        self.p.send("export\n")
-        self.p.send("echo ${%s}=${?}\n" % (bashvar_two))
-        self.souldloop = True
+        initialEnv = sr.getEnv()
+        rc = sr.runscript(script)
+        afterEnv = sr.getEnv()
+        keysInitial = set(initialEnv.keys())
+        keysFinal = set(afterEnv.keys())
+        keysnew = keysFinal.difference(keysInitial)
         foundEnv = {}
-        while self.souldloop == True:
-            exitstatus = self.p.exitstatus
-            if exitstatus != None:
-                self.log.info("exitstatus=%s" % (exitstatus))
-                self.log.info(self.p.env)
-                break
-            index = self.p.expect ([prompt,'%s.*\r\n' % (match_two),pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=200)
-            if index == 1:
-                after = self.p.after.split('\n')
-                self.log.info("sdfsdfsdf=%s,%s" % (after[0].strip(),index))
-                break
-            
-            if index == 4:
-                imput = self.p.before
-                striped = imput.strip()
-                if len (striped) == 0:
-                    continue
-                if "declare -x " != (striped[:11]):
-                    continue
-                regdelexp = re.compile('=')
-                shellline = striped[11:]
-                matches = regdelexp.search(shellline)
-                if matches == None:
-                    continue
-                key = shellline[:matches.start()]
-                value = shellline[matches.end():][1:-1]
-                if key in env_ignored:
-                    continue
-                if key in knownKeys:
-                    if inputenv[key] != value:
-                        self.log.info("Ignoring variable change %s=%s','%s" % (key,inputenv[key] , value))
-                    continue
-                
-                foundEnv[key] = value
-        
-        if self.p.isalive() == True:
-            self.p.send("exit 0\n")
-        if self.p.isalive() == True:
-            index = self.p.expect ([prompt,pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=2)
-            
-        if self.p.isalive() == True:
-            self.p.wait()
-        exitstatus = self.p.exitstatus
+        for key in keysnew:
+            value = afterEnv[key]
+            self.log.info("Exported '%s=%s'" % (key,value))
+            foundEnv[key] = value
+        returnCode = sr.finalise()
         return {"rc" :  returnCode , "env" : foundEnv}
 
 def runJob (jobname):
@@ -787,7 +810,7 @@ def runJob (jobname):
                 log.error("cmd '%s' returned '%s'." % (cmd,processRc) )
                 return processRc
         if type(jobpart) == dict:
-            foo = runnershell()
+            foo = jobPartRun()
             cmd = jobpart["script"]
             #requires = set(jobpart["requires"])
             log.info("running jobpart '%s' " % (cmd))
