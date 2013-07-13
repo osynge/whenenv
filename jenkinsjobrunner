@@ -136,7 +136,8 @@ class ChrootPackageInstaller:
         self.env = env
         self.p = None
     def initialise():
-        self.p = pexpect.spawn(chrootCmd)
+        self.log.info("Initialising:%s" % (self.chrootCmd))
+        self.p = pexpect.spawn(self.chrootCmd)
         self.p.send("PS1=%s\n" % (self.prompt))
         done = False
         while done == False:
