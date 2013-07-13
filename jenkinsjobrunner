@@ -372,8 +372,7 @@ class runnershell:
         sent = 'echo %s${?}%s\n' % (bashvar_one,bashvar_one)
         self.log.info("sent='%s'" % (sent))
         self.p.send(sent)
-        match = '.*?%s\r\n' % (bashvar_one,bashvar_one)
-        self.log.info("match='%s'" % (match))
+        
         self.souldloop = True
         
         ready = False
@@ -407,9 +406,9 @@ class runnershell:
                 self.log.error("Unexpected EOF")
                 exitstatus = self.p.exitstatus
                 if exitstatus != None:
-                    output["rc"] = exitstatus
+                    output = exitstatus
                 else:
-                    output["rc"] = 255
+                    output = 255
                 self.log.error("Quit")
                 return output
                     
