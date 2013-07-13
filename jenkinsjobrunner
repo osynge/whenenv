@@ -319,7 +319,7 @@ class runnershell:
             if enviroment in env_ignored:
                 continue
             cmd = '%s="%s"\n' % (enviroment,env[enviroment])
-            self.log.info("cmd=%s" %(cmd))
+            self.log.info("setEnv %s" %(cmd))
             self.p.send(cmd)
             self.p.flush()
         return True
