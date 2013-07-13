@@ -295,7 +295,7 @@ class runnershell:
         return True
 
     def getEnv(self):
-        env_ignored = set(["PATH","SHLVL","OLDPWD",]).union(set(env.keys()))
+        env_ignored = set(["PATH","SHLVL","OLDPWD",])
 
         reuslts = {}
         self.p.flush()
