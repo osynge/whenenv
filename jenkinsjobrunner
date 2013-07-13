@@ -264,7 +264,8 @@ class runnershell:
         
         self.p.send("PS1=%s\n" % (self.prompt))
         self.p.flush()
-        index = self.p.expect ([match,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
+        
+        index = self.p.expect ([self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
         self.p.send("export PS1\n")
         self.p.flush()
         self.p.send("echo PS1=${PS1}\n")
