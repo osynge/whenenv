@@ -295,6 +295,8 @@ class runnershell:
         return True
 
     def getEnv(self):
+        env_ignored = set(["PATH","SHLVL","OLDPWD",]).union(set(env.keys()))
+
         reuslts = {}
         self.p.flush()
         self.p.send("export\n")
