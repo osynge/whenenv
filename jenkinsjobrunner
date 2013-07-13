@@ -308,6 +308,7 @@ class runnershell:
         self.p.send("export\n")
         self.p.flush()
         match = 'declare -x '
+        
         self.souldloop = True
         foundEnv = {}
         while self.souldloop == True:
@@ -319,24 +320,26 @@ class runnershell:
             index = self.p.expect ([match,pexpect.EOF, pexpect.TIMEOUT],timeout=2)
             self.log.info("index=%s" %(index))
             if index == 0:
-                
                 imput = self.p.before
-                self.log.info("index=%s=%s" % (index,imput))
-                striped = imput.strip()
-                if len (striped) == 0:
-                    continue
-                if "declare -x " != (striped[:11]):
-                    continue
-                regdelexp = re.compile('=')
-                shellline = striped[11:]
-                matches = regdelexp.search(shellline)
-                if matches == None:
-                    continue
-                key = shellline[:matches.start()]
-                value = shellline[matches.end():][1:-1]
-                if key in env_ignored:
-                    continue
-                foundEnv[key] = value
+                self.log.info("watching='%s'" % (imput))
+                secondlevel = self.p.expect (['"\r\n',pexpect.EOF, pexpect.TIMEOUT],timeout=2)
+                imput = self.p.befor
+                self.log.info("secondlevel=%s=%s" % (imput))
+                if secondlevel == 0:
+                    imput = self.p.before
+                    elf.log.info("secondlevel=%s" % (imput))
+                    imput = self.p.before
+                    striped = imput.strip()
+                    if len (striped) == 0:
+                        continue
+                    matches = regdelexp.search(shellline)
+                    if matches == None:
+                        continue
+                    key = shellline[:matches.start()]
+                    value = shellline[matches.end():][1:-1]
+                    if key in env_ignored:
+                        continue
+                    foundEnv[key] = value
             elif index == 1:
                 break
             elif index == 3:
