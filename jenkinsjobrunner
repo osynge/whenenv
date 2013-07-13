@@ -212,6 +212,7 @@ class ChrootPackageInstaller:
             # so now the command has executed
             self.p.flush()
             # We now need to see teh RC
+            self.log.info("checking execution status")
             self.p.send("echo $?\n")
             rc = ""
             done = False
