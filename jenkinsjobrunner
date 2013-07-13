@@ -314,7 +314,7 @@ class runnershell:
         return exitstatus
 
     def setEnv(self,env):
-        env_ignored = set(["PATH","SHLVL","OLDPWD",]).union(set(os.environ.keys()))
+        env_ignored = set(["PATH","SHLVL","OLDPWD","PS1"])
         for enviroment in env.keys():
             if enviroment in env_ignored:
                 continue
