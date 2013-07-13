@@ -271,7 +271,7 @@ class runnershell:
         self.p.flush()
         self.p.send("echo PS1='${PS1}'\n")
         match = "PS1='%s.*'\r\n" % (self.prompt)
-        self.log.info("Seting PS1=%s" % (match))
+        self.log.info("Seting PS1=%s" % (self.prompt))
         index = self.p.expect ([match,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
         
         
