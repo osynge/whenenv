@@ -267,7 +267,7 @@ class runnershell:
         
         
     def executabingo(self,jobpart,env = {}):
-        self.packages(jobpart,env)
+        
         inputenv = os.environ
         inputenv.update(env)
         output = {"rc" :  255 , "env" : {}}
@@ -312,7 +312,7 @@ class runnershell:
         
         # Now load build deps
         
-        self.packages(jobpart)
+        self.packages(jobpart,env)
 
         
         # Now load script
