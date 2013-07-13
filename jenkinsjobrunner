@@ -825,7 +825,7 @@ def runJob (jobname):
                     "command" : { "template" : "chroot %CHROOT%",
                         "envimeroment" : ["CHROOT"]
                         },
-                    "dependancies" :{ "Scientific" : ["hepixvmitrust","git", "python","rpm","make","python-setuptools","m2crypto" ] },
+                    "dependancies" :{ "Scientific" : ["org-desy-grid-virt-sort-release" ,"hepixvmitrust","git", "python","rpm","make","python-setuptools","m2crypto" ] },
                     },
                 "artifacts" : ["artifacts.tgz"],
                 "flags" : ["chroot"],
