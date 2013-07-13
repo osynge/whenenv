@@ -338,6 +338,8 @@ class runnershell:
                 foundEnv[key] = value
             elif index == 1:
                 break
+            elif index == 3:
+                
             else:
                 self.log.info("error=%s" % (index))
         self.log.info("getEnv returns=%s" % (foundEnv))
