@@ -335,7 +335,7 @@ class runnershell:
                     continue
                 foundEnv[key] = value
             else:
-                self.log.info("error")
+                self.log.info("error=%s" % (index))
         return foundEnv
         
     def runscript(self,script):
