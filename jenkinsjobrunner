@@ -369,7 +369,9 @@ class runnershell:
         self.setPrompt()
         for line in fp:
             self.p.send(line)
-        self.p.send('\necho %s${?}%s"\n' % (bashvar_one,bashvar_one))
+        sent = 'echo %s${?}%s\n' % (bashvar_one,bashvar_one)
+        self.log.info("sent='%s'" % (sent))
+        self.p.send(sent)
         match = '%s.*?%s\r\n' % (bashvar_one,bashvar_one)
         self.log.info("match='%s'" % (match))
         self.souldloop = True
