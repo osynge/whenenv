@@ -75,54 +75,6 @@ def exit_with_usage():
     print globals()['__doc__']
     os._exit(1)
 
-def oldmain():
-
-    ######################################################################
-    # Parse the options, arguments, get ready, etc.
-    ######################################################################
-    try:
-        optlist, args = getopt.getopt(sys.argv[1:], 'h?ac:', ['help','h','?'])
-    except Exception, e:
-        print str(e)
-        exit_with_usage()
-    options = dict(optlist)
-    if len(args) > 1:
-        exit_with_usage()
-        
-    if [elem for elem in options if elem in ['-h','--h','-?','--?','--help']]:
-        print "Help:"
-        exit_with_usage()
-
-    if len(args) == 1:
-        script_filename = args[0]
-    else:
-        script_filename = "script.log"
-    if '-a' in options:
-        fout = file (script_filename, "ab")
-    else:
-        fout = file (script_filename, "wb")
-    if '-c' in options:
-        command = options['-c']
-    else:
-        command = "sh"
-
-    # Begin log with date/time in the form CCCCyymm.hhmmss
-    fout.write ('# %4d%02d%02d.%02d%02d%02d \n' % time.localtime()[:-3])
-    
-    ######################################################################
-    # Start the interactive session
-    ######################################################################
-    p = pexpect.spawn(command)
-    p.logfile = fout
-    global global_pexpect_instance
-    global_pexpect_instance = p
-    signal.signal(signal.SIGWINCH, sigwinch_passthrough)
-
-    print "Script recording started. Type ^] (ASCII 29) to escape from the script shell."
-    p.interact(chr(29))
-    fout.close()
-    return 0
-
 def sigwinch_passthrough (sig, data):
 
     # Check for buggy platforms (see pexpect.setwinsize()).
@@ -594,6 +546,16 @@ def runJob (jobname):
             },
             {   "script" : "transfer/chroot-debian-wheezy-teardown.sh"},
             ],
+        "chroot-test-vmcatcher-scientific-6-prod" : [{"script" : "transfer/chroot-scientific-6-buildup-prod.sh"},
+            {   "script" : ""
+                "shell" : { "type" : "chroot",
+                    "command" : { "template" : "chroot %CHROOT%",
+                        "envimeroment" : ["CHROOT"]
+                        },
+                    "dependancies" :{ "Scientific" : ["git", "python","rpm","make","python-setuptools","python-m2crypto" ] },
+                    }
+            },
+            {"script" : "transfer/chroot-scientific-6-teardown.sh"}],
         }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
