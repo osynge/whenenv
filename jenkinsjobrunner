@@ -273,7 +273,7 @@ class runnershell:
         index = self.p.expect (["PS1='%s.*'\r\n" % (end),self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
         
         
-        if index = 0:
+        if index == 0:
             self.log("Iniatialised Ok")
         return True
     def finalise(self):
