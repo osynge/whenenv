@@ -305,7 +305,7 @@ class runnershell:
         reuslts = {}
         self.p.send("\n")
         self.p.flush()
-        self.p.send("export\n")
+        self.p.send("export\n\n")
         self.p.flush()
         match = 'declare -x '
         
