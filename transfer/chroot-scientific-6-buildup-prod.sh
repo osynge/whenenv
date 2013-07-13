@@ -1,5 +1,6 @@
 set -x
 CROOT_DIR="/root/sl6"
+rm -rf artifacts.tgz
 /usr/bin/chrootbuilder \
 --input \
 /var/cache/vmcatcher/endorsed/aa42ca85-179b-4873-b12e-32d549bf02b6 \
