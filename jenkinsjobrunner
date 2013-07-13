@@ -314,8 +314,10 @@ class runnershell:
         return exitstatus
 
     def setEnv(self,env):
-        
+        env_ignored = set(["PATH","SHLVL","OLDPWD",]).union(set(os.environ.keys()))
         for enviroment in env.keys():
+            if key in env_ignored:
+                continue
             cmd = '%s="%s"\n' % (enviroment,env[enviroment])
             self.log.debug("cmd=%s" %(cmd))
             self.p.send(cmd)
