@@ -4,7 +4,7 @@ GITLOCATION="git://github.com/hepix-virtualisation/vmcatcher.git"
 set +e
 rm -rf build
 set -e
-echo PS1=$PS1
+echo PS1\${PS1}PS1
 git clone ${GITLOCATION} build
 cd build
 latest_tag=$(git tag | org_desy_grid_virt_sort_release.py | tail -n 1)
