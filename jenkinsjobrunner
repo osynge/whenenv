@@ -140,6 +140,7 @@ class ChrootPackageInstaller:
         self.p = pexpect.spawn(self.chrootCmd)
         self.p.send("\nstty -echo\n")
         self.p.flush()
+        
         self.p.send("PS1=%s\n" % (self.prompt))
         done = False
         while done == False:
@@ -149,7 +150,7 @@ class ChrootPackageInstaller:
             if index == 0:
                 done = True
             else:
-                self.log.error("Somethign went wrong entering chroot")
+                self.log.error("Somethign went wrong entering chroot %s=%s" % (index,self.chrootCmd))
                 self.p = None
                 return False
         self.p.flush()
