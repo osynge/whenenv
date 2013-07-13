@@ -167,8 +167,8 @@ class ChrootPackageInstaller:
             if index == 0:
                 done = True
             elif index == 1:
-                self.log.info("before=%s" % (p.before))
-                self.log.info("after=%s" % (p.after))
+                self.log.info("before=%s" % (self.p.before))
+                self.log.info("after=%s" % (self.p.after))
             else:
                 self.log.error("Somethign went wrong entering chroot")
                 self.p = None
