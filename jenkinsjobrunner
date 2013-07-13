@@ -334,6 +334,8 @@ class runnershell:
                 if key in env_ignored:
                     continue
                 foundEnv[key] = value
+            elif index == 1:
+                break
             else:
                 self.log.info("error=%s" % (index))
         return foundEnv
