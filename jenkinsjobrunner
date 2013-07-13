@@ -233,9 +233,19 @@ class ChrootPackageInstaller:
             if rc != '0':
                 self.log.error("rc=%s" % (rc))
                 return False
-            
-            
-            
+        # Now we check all packages are installed
+        packagesFound = self.updatePackages()
+        needtoInstall = []
+        for package in packagelist:
+            if package in packagesFound:
+                self.log.info("already installed:%s" % (package))
+            else:
+                self.log.info("not installed:%s" % (package))
+                needtoInstall.append(package)     
+        if len(needtoInstall) > 0:
+            self.log.error("The following packages did not install:%s" % (needtoInstall))
+            return False
+        return True
         
         
         
