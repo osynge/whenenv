@@ -712,9 +712,9 @@ def runJob (jobname):
     log = logging.getLogger("runJob")
     mappings = {
         "GenChroot.SL-6X" : ["transfer/GenChroot.SL-6X.sh"],
-        "vmcatcher-scientific-6-prod" : ["transfer/chroot-scientific-6-buildup-prod.sh",
-            "transfer/vmcatcher-scientific-6-prod.sh",
-            "transfer/chroot-scientific-6-teardown.sh"],
+        #"vmcatcher-scientific-6-prod" : ["transfer/chroot-scientific-6-buildup-prod.sh",
+        #    "transfer/vmcatcher-scientific-6-prod.sh",
+        #    "transfer/chroot-scientific-6-teardown.sh"],
         "vmcatcher-scientific-6-trunk" : ["transfer/chroot-scientific-6-buildup-trunk.sh",
             "transfer/vmcatcher-scientific-6-trunk.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
@@ -856,6 +856,9 @@ def runJob (jobname):
                 "flags" : ["chroot"],
             },
             {"script" : "transfer/chroot-scientific-6-teardown.sh"}],
+            "vmcatcher-scientific-6-prod" : [{"script" : "transfer/chroot-scientific-6-buildup-prod.sh"},
+                {"script" : "transfer/vmcatcher-scientific-6-prod.sh"},
+                {"script" : "transfer/chroot-scientific-6-teardown.sh"}],
         }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
