@@ -158,6 +158,7 @@ class ChrootPackageInstaller:
             self.log.error("programming error no p")
             return False
         self.p.send("rpm -qa")
+        done = False
         while done == False:
             index = self.p.expect ([self.prompt,
                     '\r\n', 
