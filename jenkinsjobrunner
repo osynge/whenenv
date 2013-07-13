@@ -264,24 +264,31 @@ class runnershell:
         
         self.p.send("PS1=%s\n" % (self.prompt))
         self.p.flush()
-        
+        match_one =  uuid.uuid1()
+        bashvar_one = base64.b32encode(str(match_one).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
+        sent = 'echo %s${PS1}%s\n' % (bashvar_one,bashvar_one)
         index = self.p.expect ([self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
         self.p.send("export PS1\n")
         self.p.flush()
-        self.p.send('echo PS1xxxx="${PS1}"\n')
-        match = "PS1xxxx=%s.*?\r\n" % (self.prompt)
-        self.log.info("Seting PS1=%s" % (self.prompt))
+        sent = 'echo %s${PS1}%s\n' % (bashvar_one,bashvar_one)
+        self.p.send(sent)
         done = False
         while done == False:
-            index = self.p.expect ([self.prompt, 
+            index = self.p.expect ([bashvar_one, 
                     pexpect.EOF, 
                     pexpect.TIMEOUT],timeout=50)
             if index == 0:
-                done = True
-            else:
-                self.log.error("Somethign went wrong entering chroot %s=%s" % (index,self.chrootCmd))
-                self.p = None
-                return False
+                second = self.p.expect ([bashvar_one, 
+                    pexpect.EOF, 
+                    pexpect.TIMEOUT],timeout=50)
+                if second == 0:
+                    cleaned = self.p.before.strip()
+                    done = True
+                    if cleaned == self.prompt:
+                        self.log.error("priompt set goot %s" % (cleaned))
+                    else:
+                        self.log.error("Somethign went wrong entering chroot %s=%s" % (index,self.chrootCmd))
+                        
         
         if index == 0:
             self.log.info("prompt Ok")
