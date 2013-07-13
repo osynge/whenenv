@@ -354,7 +354,7 @@ class runnershell:
                 break
             else:
                 self.log.info("error=%s" % (index))
-        self.log.info("getEnv returns=%s" % (foundEnv))
+        self.log.debug("getEnv returns=%s" % (foundEnv))
         return foundEnv
         
     def runscript(self,script):
@@ -366,6 +366,7 @@ class runnershell:
         bashvar_one = base64.b32encode(str(match_one).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
         self.p.flush()
         self.p.send("\nset -e\n")
+        self.p.send("\nset -x\n")
         self.p.flush()
         self.setPrompt()
         for line in fp:
