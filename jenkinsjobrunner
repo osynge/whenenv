@@ -302,7 +302,7 @@ class runnershell:
                 
                 if "Scientific" in jobpart["shell"]["dependancies"].keys():
                     self.log.info("foundthe answer")
-                    depnedacylist = list(jobpart["shell"]["dependancies"]["Debian"])
+                    depnedacylist = list(jobpart["shell"]["dependancies"]["Scientific"])
         if len(depnedacylist) == 0:
             return True
         
