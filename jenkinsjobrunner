@@ -314,7 +314,7 @@ class runnershell:
             exitstatus = self.p.exitstatus
             if exitstatus != None:
                 self.log.info("exitstatus=%s" % (exitstatus))
-                self.log.info(self.p.env)
+                self.log.info("self.p.env=%s" % self.p.env)
                 break
             index = self.p.expect ([match,self.prompt,pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=2)
             if index == 0:
@@ -338,6 +338,7 @@ class runnershell:
                 break
             else:
                 self.log.info("error=%s" % (index))
+        self.log.info("foundEnv=%s" % (foundEnv))
         return foundEnv
         
     def runscript(self,script):
