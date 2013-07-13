@@ -270,11 +270,13 @@ class runnershell:
         self.p.send("export PS1\n")
         self.p.flush()
         self.p.send("echo PS1='${PS1}'\n")
-        index = self.p.expect (["PS1='%s.*'\r\n" % (end),self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
+        match = "PS1='%s.*'\r\n" % (self.prompt)
+        self.log.info("Seting PS1=%s" % (match))
+        index = self.p.expect ([match,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
         
         
         if index == 0:
-            self.log("Iniatialised Ok")
+            self.log.info("Iniatialised Ok")
         return True
     def finalise(self):
         self.log("finalising")
