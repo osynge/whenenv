@@ -306,8 +306,7 @@ class runnershell:
         self.p.send("\n")
         self.p.flush()
         self.p.send("export\n")
-        end = str( uuid.uuid1())
-        match = 'declare -x .*?=".*?"\r\n'
+        match = 'declare -x '
         self.souldloop = True
         foundEnv = {}
         while self.souldloop == True:
