@@ -310,7 +310,7 @@ class runnershell:
         
         for enviroment in env.keys():
             cmd = '%s="%s"\n' % (enviroment,env[enviroment])
-            self.log.info(cmd)
+            self.log.debug("cmd=%s" %(cmd))
             self.p.send(cmd)
             self.p.flush()
         return True
