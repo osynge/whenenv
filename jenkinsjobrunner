@@ -317,6 +317,7 @@ class runnershell:
                 self.log.info("self.p.env=%s" % self.p.env)
                 break
             index = self.p.expect ([match,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=2)
+            self.log.info("index=%s" %(index))
             if index == 0:
                 
                 imput = self.p.before
