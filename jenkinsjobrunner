@@ -873,25 +873,25 @@ def runJob (jobname):
         if type(jobpart) == dict:
             jobDetails.update(jobpart)
 
-        foo = jobPartRun()
-        #requires = set(jobpart["requires"])
-        log.info("running jobpart '%s' " % (jobpart))
-        if not "flags" in jobpart.keys():
-            jobpart["flags"] = []
-        resetMap = foo.executabingo(jobpart,enviroment)
+        foo = jobDetailsRun()
+        #requires = set(jobDetails["requires"])
+        log.info("running jobDetails '%s' " % (jobDetails))
+        if not "flags" in jobDetails.keys():
+            jobDetails["flags"] = []
+        resetMap = foo.executabingo(jobDetails,enviroment)
         if resetMap["env"] != 0:
             enviroment.update(resetMap["env"])
             log.debug("Job Enviroment='%s'" % (enviroment) )
         if resetMap["rc"] != 0:
-            log.error("cmd '%s' returned '%s'." % (jobpart,resetMap["rc"]))
+            log.error("cmd '%s' returned '%s'." % (jobDetails,resetMap["rc"]))
             return resetMap["rc"]
         else:
-            if "artifacts" in jobpart.keys():
-                rc = foo.getArtifacts(jobpart,enviroment)
+            if "artifacts" in jobDetails.keys():
+                rc = foo.getArtifacts(jobDetails,enviroment)
                 if rc != True:
                     return rc
             else:
-                log.info("No artifacts '%s' " % (jobpart))
+                log.info("No artifacts '%s' " % (jobDetails))
     return 0
         
         
