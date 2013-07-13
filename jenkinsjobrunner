@@ -332,11 +332,6 @@ class runnershell:
                 value = shellline[matches.end():][1:-1]
                 if key in env_ignored:
                     continue
-                if key in knownKeys:
-                    if inputenv[key] != value:
-                        self.log.info("Ignoring variable change %s=%s','%s" % (key,inputenv[key] , value))
-                    continue
-                
                 foundEnv[key] = value
         return foundEnv
         
