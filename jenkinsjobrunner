@@ -311,6 +311,7 @@ class runnershell:
             self.p.wait()
         exitstatus = self.p.exitstatus
         self.p = None
+        self.log.info("finalising done")
         return exitstatus
 
     def setEnv(self,env):
@@ -856,9 +857,10 @@ def runJob (jobname):
                 "flags" : ["chroot"],
             },
             {"script" : "transfer/chroot-scientific-6-teardown.sh"}],
-            "vmcatcher-scientific-6-prod" : [{"script" : "transfer/chroot-scientific-6-buildup-prod.sh"},
+        "vmcatcher-scientific-6-prod" : [{"script" : "transfer/chroot-scientific-6-buildup-prod.sh"},
                 {"script" : "transfer/vmcatcher-scientific-6-prod.sh"},
                 {"script" : "transfer/chroot-scientific-6-teardown.sh"}],
+        
         }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
