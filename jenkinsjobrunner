@@ -604,7 +604,7 @@ class jobPartRun:
         env_ignored = set(["PATH","SHLVL","OLDPWD",]).union(set(env.keys()))
         
         if not "flags" in jobpart.keys():
-            sel.log.error("no flags specified")
+            self.log.error("no flags specified")
             return output
         
         if not "script" in jobpart.keys():
