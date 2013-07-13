@@ -274,11 +274,11 @@ class runnershell:
     
     def getArtifacts(self,jobpart,env):
         if not "artifacts" in jobpart.keys():
-            self.log.info("No artifacts in chroot script so no chroot artifacts")
+            self.log.debug("No artifacts in chroot script so no chroot artifacts")
             return True
             RawartifactsList = list(jobpart["artifacts"])
         if not "CHROOT" in env.keys():
-            self.log.info("No CHROOT variable, so no chroot artifacts")
+            self.log.debug("No CHROOT variable, so no chroot artifacts")
             return True
         prefix =  env["CHROOT"]
         RawartifactsList = list(jobpart["artifacts"])
@@ -287,7 +287,7 @@ class runnershell:
             directory = os.path.dirname(artifact)
             src = "%s/%s" %( prefix,artifact)
             dest = "artifact"
-            self.log.info("directory=%s,src=%s,dest=%s" % (directory,src,dest))
+            self.log.info("Copying directory=%s,src=%s,dest=%s" % (directory,src,dest))
             shutil.copyfile(src, dest)
         return True
             
