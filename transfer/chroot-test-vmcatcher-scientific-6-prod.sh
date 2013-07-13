@@ -1,7 +1,7 @@
 id
 hostname -f
 GITLOCATION="git://github.com/hepix-virtualisation/vmcatcher.git"
-rm -rf build
+echo `rm -rf build`
 git clone ${GITLOCATION} build
 cd build
 latest_tag=$(git tag | org_desy_grid_virt_sort_release.py | tail -n 1)
