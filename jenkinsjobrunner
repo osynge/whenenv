@@ -327,16 +327,16 @@ class runnershell:
                 self.log.info("secondlevel=%s=%s" % (secondlevel,imput))
                 if secondlevel == 0:
                     imput = self.p.before
-                    self.log.info("secondlevel=%s" % (imput))
-                    imput = self.p.before
                     striped = imput.strip()
                     if len (striped) == 0:
                         continue
-                    matches = regdelexp.search(shellline)
-                    if matches == None:
+                    self.log.info("secondlevel=%s" % (striped))
+                    splitline = striped.split('="')
+                    if len(splitline) < 2:
                         continue
-                    key = shellline[:matches.start()]
-                    value = shellline[matches.end():][1:-1]
+                    key = splitline[0]
+                    
+                    value = splitline[1]
                     if key in env_ignored:
                         continue
                     foundEnv[key] = value
