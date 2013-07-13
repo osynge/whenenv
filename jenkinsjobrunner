@@ -261,16 +261,26 @@ class runnershell:
     
     
     def setPrompt(self):
+        
         self.p.send("PS1=%s\n" % (self.prompt))
         self.p.flush()
-        
+        index = self.p.expect ([match,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
         self.p.send("export PS1\n")
         self.p.flush()
         self.p.send("echo PS1=${PS1}\n")
         match = "PS1=%s.*?\r\n" % (self.prompt)
         self.log.info("Seting PS1=%s" % (self.prompt))
-        index = self.p.expect ([match,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
-        
+        done = False
+        while done == False:
+            index = self.p.expect ([self.prompt, 
+                    pexpect.EOF, 
+                    pexpect.TIMEOUT],timeout=50)
+            if index == 0:
+                done = True
+            else:
+                self.log.error("Somethign went wrong entering chroot %s=%s" % (index,self.chrootCmd))
+                self.p = None
+                return False
         
         if index == 0:
             self.log.info("prompt Ok")
