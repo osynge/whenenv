@@ -334,7 +334,7 @@ class runnershell:
                 self.log.info("exitstatus=%s" % (exitstatus))
                 self.log.info("self.p.env=%s" % self.p.env)
                 break
-            index = self.p.expect ([match,pexpect.EOF, pexpect.TIMEOUT],timeout=2)
+            index = self.p.expect ([match,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
             self.log.debug("index=%s" %(index))
             if index == 0:
                 imput = self.p.before.strip()
@@ -596,7 +596,7 @@ class jobPartRun:
             self.log.error("exit status=%s, cmd=%s" % (exitstatus,cmd))
     
     def packagesScientific(self,jobpart,env):
-        self.log.info("packagesScientific(%s,%s)" % (jobpart,env))
+        self.log.debug("packagesScientific(%s,%s)" % (jobpart,env))
         depnedacylist = []
         if "shell" in jobpart.keys():
             
