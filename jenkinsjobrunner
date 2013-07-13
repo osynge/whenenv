@@ -135,7 +135,7 @@ class ChrootPackageInstaller:
         self.prompt = str(match_prompt)
         self.env = env
         self.p = None
-    def initialise():
+    def initialise(self):
         self.log.info("Initialising:%s" % (self.chrootCmd))
         self.p = pexpect.spawn(self.chrootCmd)
         self.p.send("PS1=%s\n" % (self.prompt))
@@ -153,7 +153,7 @@ class ChrootPackageInstaller:
         return True
     
         
-    def updatePackages():
+    def updatePackages(self):
         if self.p == None:
             self.log.error("programming error no p")
             return False
