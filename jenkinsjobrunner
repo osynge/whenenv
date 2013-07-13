@@ -125,7 +125,7 @@ def lsb_release():
             output[splitline[0]] = value
     log.info(output)
     
-    return None
+    return output
 
 
 
@@ -150,9 +150,7 @@ class runnershell:
         if len(striped) > 0:
             self.log.info("endofline=%s" % (imput.strip()))
         #infomration = self.p.read()
-
-    def packages(self,jobpart):
-        lsb_release()
+    def packagesDebain(self,jobpart,env):
         depnedacylist = []
         if "shell" in jobpart.keys():
             
@@ -250,12 +248,26 @@ class runnershell:
                 p.wait()
             exitstatus = p.exitstatus
             self.log.error("exit status=%s, cmd=%s" % (exitstatus,cmd))
-                
+    
+    def packagesScientific(self,jobpart,env):
+        self.log.info("packagesScientific(%s,%s)" % (jobpart,env))
+        
+    
+    def packages(self,jobpart,env):
+        release =  lsb_release()
+        
+         
+        if release["Distributor ID"] == "Debian":
+            self.packagesDebain(jobpart)
+        
+        if release["Distributor ID"] == "Scientific":
+            self.packagesScientific(jobpart)
+          
                     
         
         
     def executabingo(self,jobpart,env = {}):
-        self.packages(jobpart)
+        self.packages(jobpart,env)
         inputenv = os.environ
         inputenv.update(env)
         output = {"rc" :  255 , "env" : {}}
