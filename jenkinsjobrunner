@@ -339,6 +339,10 @@ class runnershell:
         initok = pi.updatePackages()
         if  initok == False:
             return False
+        initok = pi.installPackages(depnedacylist)
+        if  initok == False:
+            return False
+        
         
         
         
