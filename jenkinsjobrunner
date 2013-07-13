@@ -161,8 +161,9 @@ class ChrootPackageInstaller:
             self.log.error("programming error no p")
             return False
         self.p.flush()
-        self.p.send("rpm -qa\n")
+        self.p.send("rpm -qa --qf '%{NAME}\n'\n")
         done = False
+        packagelist = []
         while done == False:
             index = self.p.expect ([self.prompt,
                     '\r\n', 
@@ -171,12 +172,26 @@ class ChrootPackageInstaller:
             if index == 0:
                 done = True
             elif index == 1:
-                self.log.info("before=%s" % (self.p.before))
-                self.log.info("after=%s" % (self.p.after))
+                packagelist.append(self.p.before)
+                self.log.debug("before=%s" % (self.p.before))
+                self.log.debug("after=%s" % (self.p.after))
             else:
                 self.log.error("Somethign went wrong entering chroot")
                 self.p = None
                 return False
+        self.packagelist = packagelist
+        return self.packagelist
+    def installPackages(self,packagelist):
+        packagesFound = self.updatePackages()
+        needtoInstall = []
+        for package in packagelist:
+            if package in packagesFound:
+                self.log.info("already installed:%s" % (package))
+            else:
+                self.log.info("not installed:%s" % (package))
+            
+        
+        
         
 class runnershell:
     def __init__(self, shell="/bin/bash"):
@@ -319,11 +334,14 @@ class runnershell:
         cmd = "/usr/sbin/chroot %s" % (chrootdir)
         pi = ChrootPackageInstaller(cmd,env)
         initok = pi.initialise()
-        if  initok != True:
+        if  initok == False:
             return False
         initok = pi.updatePackages()
-        if  initok != True:
+        if  initok == False:
             return False
+        
+        
+        
         return True
         
         
