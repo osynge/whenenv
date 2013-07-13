@@ -327,7 +327,7 @@ class runnershell:
                 self.log.info("secondlevel=%s=%s" % (secondlevel,imput))
                 if secondlevel == 0:
                     imput = self.p.before
-                    elf.log.info("secondlevel=%s" % (imput))
+                    self.log.info("secondlevel=%s" % (imput))
                     imput = self.p.before
                     striped = imput.strip()
                     if len (striped) == 0:
