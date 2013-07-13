@@ -120,7 +120,7 @@ def lsb_release():
         splitline = line.strip().split(':')
         if len(splitline) <= 1:
             continue
-        if splitline[0] == in magicLines:
+        if splitline[0] in magicLines:
             value = splitline[1].strip()
             output[splitline[0]] = value
     log.info(output)
