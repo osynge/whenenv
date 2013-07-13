@@ -680,7 +680,7 @@ class jobPartRun:
                 self.log.info("Exported '%s=%s'" % (key,value))
                 foundEnv[key] = value
         returnCode = sr.finalise()
-        
+        self.log.info("finalise rc '%s'" % (returnCode))
         return {"rc" :  rc , "env" : foundEnv}
 
 def runJob (jobname):
