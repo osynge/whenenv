@@ -1,4 +1,11 @@
-chroot chroot
+if [ "X" == "X${CHROOT}" ]
+then 
+    echo "No CHROOT set"
+    exit 1
+fi
+chroot ${CHROOT}
+set -x
+set -e
 apt-get install git \
     python \
     rpm \
