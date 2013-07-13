@@ -644,7 +644,7 @@ class jobPartRun:
         if not "script" in jobpart.keys():
             sel.log.error("no script specified")
             return output
-
+        self.packages(jobpart,env)
         command = "/bin/bash"
         allfliages =  jobpart["flags"]
         self.log.error("flags=%s" % (allfliages))
