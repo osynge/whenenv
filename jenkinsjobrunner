@@ -306,6 +306,7 @@ class runnershell:
         self.p.send("\n")
         self.p.flush()
         self.p.send("export\n")
+        self.p.flush()
         match = 'declare -x '
         self.souldloop = True
         foundEnv = {}
@@ -315,7 +316,7 @@ class runnershell:
                 self.log.info("exitstatus=%s" % (exitstatus))
                 self.log.info("self.p.env=%s" % self.p.env)
                 break
-            index = self.p.expect ([match,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=2)
+            index = self.p.expect ([match,pexpect.EOF, pexpect.TIMEOUT],timeout=2)
             self.log.info("index=%s" %(index))
             if index == 0:
                 
