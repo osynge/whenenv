@@ -1,5 +1,5 @@
 set -x
-CROOT_DIR="/root/sl6"
+CHROOT="/root/sl6"
 rm -rf artifacts.tgz
 /usr/bin/chrootbuilder \
 --input \
