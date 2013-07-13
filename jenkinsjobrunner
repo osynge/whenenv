@@ -292,7 +292,7 @@ class runnershell:
         for enviroment in env.keys():
             self.p.send('%s="%s"\n' % (enviroment,env[enviroment]))
             self.p.flush()
-        return true
+        return True
 
     def getEnv(self):
         reuslts = {}
