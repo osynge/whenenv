@@ -376,7 +376,7 @@ class runnershell:
         self.p.send(sent)
         
         self.souldloop = True
-        
+        output = 0
         ready = False
         state = 0
         returnCode = None
