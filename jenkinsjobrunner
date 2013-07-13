@@ -381,8 +381,8 @@ class runnershell:
         nextlinecount = 3
         timeouts = 0
         while self.souldloop == True:
-            index = self.p.expect ([match,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=500)
-            self.log.debug("indexxx=%s" % (index))
+            index = self.p.expect ([match,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=5)
+            self.log.info("indexxx=%s" % (index))
             
             if index == 0:
                 self.log.info("Got script RC")
