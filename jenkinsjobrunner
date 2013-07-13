@@ -815,9 +815,8 @@ def runJob (jobname):
                 return processRc
         if type(jobpart) == dict:
             foo = jobPartRun()
-            cmd = jobpart["script"]
             #requires = set(jobpart["requires"])
-            log.info("running jobpart '%s' " % (cmd))
+            log.info("running jobpart '%s' " % (jobpart))
             resetMap = foo.executabingo(jobpart,enviroment)
             if resetMap["env"] != 0:
                 enviroment.update(resetMap["env"])
