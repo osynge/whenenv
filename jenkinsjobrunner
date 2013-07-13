@@ -257,13 +257,9 @@ class runnershell:
         self.prompt = str(match_prompt)
         self.env = env
         self.p = None
-    def initialise(self):
-        if None != self.p:
-            self.finalise()
-        self.log.info("Initialising:%s" % (self.chrootCmd))
-        self.p = pexpect.spawn(self.chrootCmd)
-        self.p.send("stty -echo\n")
-        self.p.flush()
+    
+    
+    def setPrompt(self):
         self.p.send("PS1=%s\n" % (self.prompt))
         self.p.flush()
         
@@ -276,7 +272,16 @@ class runnershell:
         
         
         if index == 0:
-            self.log.info("Iniatialised Ok")
+            self.log.info("prompt Ok")
+    
+    def initialise(self):
+        if None != self.p:
+            self.finalise()
+        self.log.info("Initialising:%s" % (self.chrootCmd))
+        self.p = pexpect.spawn(self.chrootCmd)
+        self.p.send("stty -echo\n")
+        self.p.flush()
+        self.setPrompt()
         return True
     def finalise(self):
         self.log("finalising")
@@ -355,15 +360,18 @@ class runnershell:
         self.log.info("runscript(%s)" % (script))
         # Now load script
         fp = open(script)
-        
+        self.setPrompt()
         match_one =  uuid.uuid1()
         bashvar_one = base64.b32encode(str(match_one).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
         self.p.flush()
         self.p.send("\nset -e\n")
         self.p.flush()
+        self.setPrompt()
         for line in fp:
             self.p.send(line)
         self.p.send('\necho %s="${?}"\n' % (bashvar_one))
+        match = '%s=".*?"\r\n' % (bashvar_one)
+        self.log.info("match=%s" )
         self.souldloop = True
         
         ready = False
@@ -373,7 +381,7 @@ class runnershell:
         nextlinecount = 3
         timeouts = 0
         while self.souldloop == True:
-            index = self.p.expect (['%s=".*?"\r\n' % (bashvar_one),self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=500)
+            index = self.p.expect ([match,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=500)
             self.log.debug("indexxx=%s" % (index))
             
             if index == 0:
