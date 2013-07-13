@@ -869,7 +869,7 @@ def runJob (jobname):
         if type(jobpart) == str:
             
             log.info("running jobpart '%s' " % (jobpart) )
-            jobDetails["script"] : jobpart }
+            jobDetails["script"] = jobpart 
         if type(jobpart) == dict:
             jobDetails.update(jobpart)
 
