@@ -435,6 +435,7 @@ class runnershell:
                 striped = imput.strip()
                 if len(striped) > 0:
                     self.log.info(imput.strip())
+        return output
             
 class jobPartRun:
     def __init__(self, shell="/bin/bash"):
