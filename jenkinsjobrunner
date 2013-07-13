@@ -324,7 +324,7 @@ class runnershell:
                 self.log.info("watching='%s'" % (imput))
                 secondlevel = self.p.expect (['"\r\n',pexpect.EOF, pexpect.TIMEOUT],timeout=2)
                 imput = self.p.before
-                self.log.info("secondlevel=%s=%s" % (imput))
+                self.log.info("secondlevel=%s=%s" % (secondlevel,imput))
                 if secondlevel == 0:
                     imput = self.p.before
                     elf.log.info("secondlevel=%s" % (imput))
