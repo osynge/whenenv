@@ -5,7 +5,7 @@ set +e
 rm -rf build
 set -e
 echo PS1\${PS1}PS1
-git clone ${GITLOCATION} build
+git clone -q ${GITLOCATION} build
 cd build
 latest_tag=$(git tag | org_desy_grid_virt_sort_release.py | tail -n 1)
 #latest_tag=`git tag | tail -n 1`
