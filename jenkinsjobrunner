@@ -649,7 +649,7 @@ class jobPartRun:
                 return output
             chootdir = inputenv["CHROOT"]
             command = "%s %s /bin/bash"  % ("/usr/sbin/chroot" , chootdir)
-        
+        self.log.error("command=%s" % (command))
         #chroot /workspace/docbook-production/chroot/ /bin/bash
         sr = runnershell(command,env)
         rc = sr.initialise()
