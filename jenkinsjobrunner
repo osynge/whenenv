@@ -307,7 +307,7 @@ class runnershell:
         self.p.flush()
         self.p.send("export\n")
         end = str( uuid.uuid1())
-        match = 'declare -x .*=".*"'
+        match = 'declare -x .*?=".*?"\r\n''
         self.souldloop = True
         foundEnv = {}
         while self.souldloop == True:
@@ -316,7 +316,7 @@ class runnershell:
                 self.log.info("exitstatus=%s" % (exitstatus))
                 self.log.info("self.p.env=%s" % self.p.env)
                 break
-            index = self.p.expect ([match,self.prompt,pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=2)
+            index = self.p.expect ([match,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=2)
             if index == 0:
                 
                 imput = self.p.before
