@@ -322,8 +322,9 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
                 if index == 3:
                     self.p.send("Y\n")
                 if index == 6:
-                    self.p.send(cmd + '\n')
-                    self.p.send("echo %s\n" % bashvar_two)
+                    sending = "%s\necho %s\n" % (cmd,bashvar_two)
+                    self.log.error("sending=%s" % (sending))
+                    self.p.send(sending)
                 if index >= 7:
                     imput = self.p.before
                     striped = imput.strip()
@@ -332,11 +333,13 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
                 if index in [0,5]:
                     done = True
                 if index == 1:
-                    self.p.send(cmd + '\n')
-                    self.p.send("echo %s\n" % bashvar_one)
+                    sending = "%s\necho %s\n" % (cmd,bashvar_one)
+                    self.log.error("sending=%s" % (sending))
+                    self.p.send(sending)
                 if index == 2:
-                    self.p.send(cmd + '\n')
-                    self.p.send("echo %s\n" % bashvar_two)
+                    sending = "%s\necho %s\n" % (cmd,bashvar_two)
+                    self.log.error("sending=%s" % (sending))
+                    self.p.send(sending)
         # Now we check all packages are installed
         packagesFound = self.updatePackages()
         needtoInstall = []
