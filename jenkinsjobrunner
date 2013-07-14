@@ -228,9 +228,9 @@ class runnershell:
         self.p.send("export\n")
         self.p.send("echo %s\n" % bashvar_two)
         self.p.flush()
-        #index = self.p.expect ([bashvar_one,pexpect.EOF, pexpect.TIMEOUT],timeout=100)
+        index = self.p.expect ([bashvar_one,pexpect.EOF, pexpect.TIMEOUT],timeout=100)
         match = 'declare -x '
-        ouput = self.p.read_nonblocking(timeout=100)
+        #ouput = self.p.read_nonblocking(timeout=100)
         self.log.critical("ouput=%s" %(ouput))
         souldloop = True
         foundEnv = {}
