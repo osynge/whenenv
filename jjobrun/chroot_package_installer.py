@@ -285,7 +285,7 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
                 needtoInstall.append(package)
         for package in needtoInstall:
             self.p.flush()
-            cmd = "yum install -y -q %s" % (package)
+            cmd = "apt-get install -y --force-yes %s\n" % (package)
             self.log.info("running :%s" % (cmd))
             self.p.send(cmd + '\n')
             done = False
@@ -371,21 +371,36 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
             
             done = False
             while done == False:
-                
-                index = p.expect (["install ok installed",
-                    "dpkg-query: no packages found matching %s" % (package),
-                    prompt, 
+                index = p.expect (["Do you want to continue",
+                    prompt,
+                    "%s is already the newest version." % (package),
+                    "additional disk space will be used", 
                     pexpect.EOF, 
-                    pexpect.TIMEOUT],timeout=500)
-                self.log.debug("result ddxd=%s`" % (index))
+                    pexpect.TIMEOUT,
+                    'Reading package lists',
+                    'The following NEW packages will be installed',
+                    'Get:.*\r\n',
+                    'Selecting previously unselected package',
+                    'Fetched',
+                    'Unpacking',
+                    'Setting',
+                    'Processing triggers for ', '\r\n'],
+                    timeout=500)
+                self.log.info("whatsDaProb=%s" % (index))
                 if index == 0:
-                    done = True
-                    alreadyinstalled.append(package)
-                if index == 1:
-                    packagesmissing.append(package)
+                    p.send("Y\n")
+                    
+                if index >= 6:
+                    imput = p.before
+                    striped = imput.strip()
+                    if len(striped) > 0:
+                        self.log.info(imput.strip())
+                if index in [2,4]:
                     done = True
                 if index == 3:
-                    done = True
+                    p.send("Y\n")
+                if index == 1:
+                    p.send(cmd)]
            
             exitstatus = p.exitstatus
             if p.isalive() == True:
