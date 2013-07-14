@@ -677,7 +677,7 @@ class jobPartRun:
         self.log.error("flags=%s" % (allfliages))
         if "chroot" in allfliages:
             if not "CHROOT" in inputenv.keys():
-                self.log.error("no CHROOT")
+                self.log.error("no CHROOT enviroment_valiable set")
                 return output
             chootdir = inputenv["CHROOT"]
             command = "%s %s /bin/bash"  % ("/usr/sbin/chroot" , chootdir)
