@@ -3,6 +3,10 @@ import uuid
 import base64
 import pexpect
 
+transtbl = string.maketrans(
+          'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
+          'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
+        )
 
 class runnershell:
     def __init__(self, chrootCmd, env):
