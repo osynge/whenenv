@@ -770,6 +770,10 @@ def main():
     
     if 'VMCHNDL_ON_LOG_CONF' in os.environ:
         logFile = os.environ['VMCHNDL_ON_LOG_CONF']
+    if 'CHROOT' in os.environ:
+        log.error("CHROOT in environ")
+        sys.exit(1)
+    
     # Set up log file
     LoggingLevel = logging.WARNING
     LoggingLevelCounter = 2
