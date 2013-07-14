@@ -535,7 +535,7 @@ class jobPartRun:
         alreadyinstalled = []
         for package in depnedacylist:
             self.log.info("todo=%s" % (package))
-            cmd = "/usr/sbin/chroot /workspace/document-production/chroot /usr/bin/dpkg-query -W --showformat='${Status}\n' %s\n" % (package)
+            cmd = "/usr/sbin/chroot $CHROOT /usr/bin/dpkg-query -W --showformat='${Status}\n' %s\n" % (package)
             p = pexpect.spawn(cmd)
             p.send("PS1=%s\n" % (prompt)) 
             p.send(cmd)
