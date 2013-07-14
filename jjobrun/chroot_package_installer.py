@@ -165,6 +165,7 @@ class ChrootPackageInstallerRedhat(ChrootPackageInstaller):
                 self.p = None
                 return False
         self.packagelist = packagelist
+        self.log.info("Number of packages installed=%s" % (len(self.packagelist)))
         return self.packagelist
         
     def installPackages(self,packagelist):
