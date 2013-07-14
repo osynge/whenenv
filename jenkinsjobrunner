@@ -471,13 +471,15 @@ class jobPartRun:
     def packages(self,jobpart,env):
         self.log.error("packages")
         release =  lsb_release()
-        self.log.error("Distributor=%s" % (release))
+        self.log.error("Distributor=%s" % (release["Distributor ID"]))
+        done = False
         if release["Distributor ID"] == "Debian":
             self.packagesDebain(jobpart,env)
-        
+            done = True
         if release["Distributor ID"] == "Scientific":
             self.packagesScientific(jobpart,env)
-          
+            done = True
+        self.log.error("Distributor Matched=%s" % (done))
                     
         
         
