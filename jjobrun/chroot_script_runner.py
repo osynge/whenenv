@@ -33,7 +33,7 @@ class runnershell:
         self.watchTimer += 1
     def watcherTimedDecrement(self):
         self.watchTimer = 0
-    
+        self.AliveChecks = {}
 
     def genWatcher(self):
         self.watch = True
