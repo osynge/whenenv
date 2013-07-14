@@ -1,4 +1,3 @@
-chroot chroot
 id
 hostname -f
 rm -f artifacts.tgz
