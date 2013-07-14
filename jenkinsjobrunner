@@ -469,9 +469,9 @@ class jobPartRun:
         
         
     def packages(self,jobpart,env):
+        self.log.error("packages")
         release =  lsb_release()
-        
-         
+        self.log.error("Distributor=%s" % (release))
         if release["Distributor ID"] == "Debian":
             self.packagesDebain(jobpart,env)
         
