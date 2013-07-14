@@ -286,19 +286,28 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
                 needtoInstall.append(package)
         for package in needtoInstall:
             self.p.flush()
+            match_one =  uuid.uuid1()
+            bashvar_one = base64.b32encode(str(match_one).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
+            match_two =  uuid.uuid1()
+            bashvar_two = base64.b32encode(str(match_one).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
+            self.p.send("echo %s\n" % bashvar_one)
+            index = self.p.expect ([bashvar_one,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
             cmd = "apt-get install -y --force-yes -q 3 %s\n" % (package)
+            self.p.send("echo %s\n" % bashvar_two)
             self.log.info("running :%s" % (cmd))
             self.p.send(cmd + '\n')
+            
             done = False
             while done == False:
-                index = self.p.expect ([self.prompt,
+                index = self.p.expect ([bashvar_two,
                         '\r\n', 
                         pexpect.EOF, 
-                        pexpect.TIMEOUT],timeout=500)
+                        pexpect.TIMEOUT],timeout=10)
                 if index == 0:
                     done = True
                 elif index == 1:
                     self.log.info(self.p.before)
+                elif index == 3:
                 else:
                     self.log.error("Somethign went wrong entering chroot")
                     self.p = None
