@@ -16,7 +16,39 @@ class runnershell:
         self.prompt = base64.b32encode(str(match_prompt).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
         self.env = env
         self.p = None
+        self.watch = True
+        self.cbBefore = None
+        self.cbTimeOut = None
+        self.watchTimer = 0
+        self.watchTimerMax = 500
+        
+        
+        
     
+    def watcherTimedOut(self):
+        if self.watchTimer > self.watchTimerMax:
+            return True
+        return False
+    def watcherTimedIncrement(self):
+        self.watchTimer += 1
+    def watcherTimedDecrement(self):
+        self.watchTimer = 0
+    
+
+    def genWatcher(self):
+        self.watch = True
+        while self.watch == True:
+            index = self.p.expect ([pexpect.EOF, pexpect.TIMEOUT],timeout=1)
+            if index == 0:
+                self.watch = False
+            elif index == 1:
+                before = self.p.before
+                if self.cbBefore != None:
+                    self.cbBefore(before,None)
+                if self.cbTimeOut != None:
+                    self.cbTimeOut(None)
+    def delWatcher(self):
+        self.watch = False
     
     def setPrompt(self):
         self.p.flush()
@@ -28,10 +60,11 @@ class runnershell:
         sent = 'echo %s\n' % (bashvar_one)
         self.p.send(sent)
         index = self.p.expect ([bashvar_one,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
-        self.p.send("PS1=%s\n" % (self.prompt))
+        self.p.send("PS1=%s\\n\n" % (self.prompt))
         self.p.send("export PS1\n")
         self.p.flush()
-        
+        self.p.send("TERM=vt100\n")
+        self.p.send("export TERM\n")
         
         sent = 'echo %s\n' % (bashvar_two)
         
@@ -156,8 +189,76 @@ class runnershell:
                 self.log.info("error=%s" % (index))
         self.log.debug("getEnv returns=%s" % (foundEnv))
         return foundEnv
-        
+    
     def runscript(self,script):
+        self.runscript3(script)
+        
+    def runscript_beve_callback(self,before,userdata):
+        self.watcherTimedDecrement()
+    
+        messageDiff = before[self.lastMessageLen:]
+        self.lastMessageLen = len(before)
+        print 'diff="%s"' % (messageDiff)
+        firstLine = messageDiff.split('\n')[0].strip()
+        print 'firstLine="%s"' % (firstLine)
+        print self.AliveChecks.keys()
+        if firstLine in self.AliveChecks.keys():
+            print  'ddddddddddddddddd'
+        slive = False
+        for key in self.AliveChecks.keys():
+            if key == firstLine:
+                slive = True
+        if slive:
+            # We know the terminal is back
+            self.scriptReturned = True
+            self.AliveChecks = {}
+        
+        
+        
+    
+    
+    def scriptReturnedCheck(self):
+        match_one =  uuid.uuid1()
+        bashvar_one = base64.b32encode(str(match_one).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
+        line2send = "echo %s\n" % (bashvar_one)
+        self.p.send(line2send)
+        self.AliveChecks[bashvar_one] = self.watchTimer
+        
+        
+    def runscript_timeout_callback(self,userdata):
+        self.watcherTimedIncrement()
+        print 'here=%s' % (self.readingline)
+        if len(self.lines) > self.readingline:
+            line2send = self.lines[self.readingline]
+            self.log.info("sent=%s" % (line2send))
+            self.p.send(line2send)
+            self.readingline += 1
+        else:
+            self.log.info("sent script")
+            if self.scriptReturned:
+                self.delWatcher()
+            if self.scriptReturnedCheck():
+                self.log.info("sent scriptreturnCheck")
+        #self.p.send("echo ls\n")
+        
+        
+    def runscript3(self,script):
+        self.log.info("runscript3(%s)" % (script))
+        self.cbBefore = self.runscript_beve_callback
+        self.cbTimeOut = self.runscript_timeout_callback
+        self.lines = []
+        self.readingline = 0
+        self.scriptReturned = False
+        self.lastMessageLen = 0
+        self.AliveChecks = {}
+        
+        fp = open(script)
+        for line in fp:
+            self.lines.append(line)
+        
+        self.genWatcher()
+    
+    def runscript2(self,script):
         self.log.info("runscript(%s)" % (script))
         # Now load script
         fp = open(script)
@@ -184,7 +285,7 @@ class runnershell:
         nextlinecount = 3
         timeouts = 0
         while souldloop == True:
-            index = self.p.expect ([bashvar_one,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=5)
+            index = self.p.expect ([bashvar_one,self.prompt,pexpect.EOF, pexpect.TIMEOUT,""],timeout=5)
             self.log.debug("indexxx=%s" % (index))
             
             if index == 0:
