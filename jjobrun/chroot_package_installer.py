@@ -272,6 +272,10 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
                 return False
         self.packagelist = packagelist
         return self.packagelist
+    
+    
+    def installPackage(self,package):
+        
                 
         
         
@@ -317,26 +321,23 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
             self.p.flush()
             # We now need to see teh RC
             self.log.info("checking execution status")
-            self.p.send("echo $?\n")
+            self.p.send("echo $?%s\n" % (bashvar_one))
             rc = ""
             done = False
             while done == False:
-                index = self.p.expect ([self.prompt,
+                index = self.p.expect ([bashvar_one,
                         '\r\n', 
                         pexpect.EOF, 
                         pexpect.TIMEOUT],timeout=500)
                 if index == 0:
                     done = True
                 elif index == 1:
-                    
-                    rc += self.p.before
+                    self.log.info(self.p.before)
                 else:
                     self.log.error("Somethign went wrong entering chroot")
                     self.p = None
                     return False
-            if rc != '0':
-                self.log.error("rc=%s" % (rc))
-                return False
+
         # Now we check all packages are installed
         packagesFound = self.updatePackages()
         needtoInstall = []
