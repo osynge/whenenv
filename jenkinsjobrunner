@@ -405,7 +405,7 @@ class jobPartRun:
         return True
             
     def packagesDebain(self,jobpart,env):
-        self.log.debug("packagesScientific(%s,%s)" % (jobpart,env))
+        self.log.info("packagesDebain(%s,%s)" % (jobpart,env))
         depnedacylist = []
         if "shell" in jobpart.keys():
             
@@ -415,6 +415,7 @@ class jobPartRun:
                     self.log.info("foundthe answer")
                     depnedacylist = list(jobpart["shell"]["dependancies"]["Debian"])
         if len(depnedacylist) == 0:
+            self.log.info("no packages to install")
             return True
         
         match_prompt = uuid.uuid1()
@@ -426,6 +427,7 @@ class jobPartRun:
         pi = ChrootPackageInstallerDebian(command = cmd,enviroment = env)
         initok = pi.initialise()
         if  initok == False:
+            self.log.info("INITIALISATION FAILED")
             return False
         initok = pi.updatePackages()
         if  initok == False:
@@ -436,7 +438,7 @@ class jobPartRun:
         return True
         
     def packagesScientific(self,jobpart,env):
-        self.log.debug("packagesScientific(%s,%s)" % (jobpart,env))
+        self.log.info("packagesScientific(%s,%s)" % (jobpart,env))
         depnedacylist = []
         if "shell" in jobpart.keys():
             
@@ -446,6 +448,7 @@ class jobPartRun:
                     self.log.info("foundthe answer")
                     depnedacylist = list(jobpart["shell"]["dependancies"]["Debian"])
         if len(depnedacylist) == 0:
+            self.log.info("no packages to install")
             return True
         
         match_prompt = uuid.uuid1()
@@ -454,12 +457,14 @@ class jobPartRun:
         alreadyinstalled = []
         chrootdir = env['CHROOT']
         cmd = "/usr/sbin/chroot %s" % (chrootdir)
-        pi = ChrootPackageInstallerRedhat(cmd,env)
+        pi = ChrootPackageInstallerRedhat(command = cmd,enviroment = env)
         initok = pi.initialise()
         if  initok == False:
+            self.log.info("INITIALISATION FAILED")
             return False
         initok = pi.updatePackages()
         if  initok == False:
+            self.log.info("updatePackages failed")
             return False
         initok = pi.installPackages(depnedacylist)
         if  initok == False:
