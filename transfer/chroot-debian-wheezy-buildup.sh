@@ -13,7 +13,7 @@ chrootbuilder \
   --overlay /var/cache/vmcatcher/endorsed/${UUID_Overlay} \
   --build
 
-ZINGA=${CHROOT}
-export ZINGA
+ABA=${CHROOT}
+export ABA
 
 
