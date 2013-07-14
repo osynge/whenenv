@@ -2,7 +2,7 @@ import logging
 import uuid
 import base64
 import pexpect
-
+import string
 transtbl = string.maketrans(
           'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
           'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
