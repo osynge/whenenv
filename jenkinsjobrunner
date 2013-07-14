@@ -877,7 +877,7 @@ def runJob (jobname):
                 "flags" : ["chroot"],
                 },
                 {"script" : "transfer/chroot-debian-wheezy-buildup.sh"}],
-        "chrootbuilder-debian-wheezy-prod": [{"script" : "transfer/chroot-scientific-6-buildup-prod.sh"},
+        "chrootbuilder-debian-wheezy-prod": [{"script" : "transfer/chroot-debian-wheezy-buildup.sh"},
                 {   "script" : "transfer/chrootbuilder-debian-wheezy-prod.sh",
                     "shell" : { "type" : "chroot",
                     "command" : { "template" : "chroot %CHROOT%",
