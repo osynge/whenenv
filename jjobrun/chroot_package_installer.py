@@ -316,7 +316,7 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
                     'Unpacking',
                     'Setting',
                     'Processing triggers for ', '\r\n'],
-                    timeout=500)
+                    timeout=50)
                 self.log.info("whatsDaProb=%s" % (index))
                 if index == 0:
                     p.send("Y\n")
@@ -331,8 +331,8 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
                 if index == 3:
                     p.send("Y\n")
                 if index == 1:
-                    done = True
-            
+                    self.p.send(cmd + '\n')
+                    self.p.send("echo %s\n" % bashvar_two)
 
         # Now we check all packages are installed
         packagesFound = self.updatePackages()
