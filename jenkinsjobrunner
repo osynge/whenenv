@@ -142,23 +142,26 @@ class runnershell:
     
     
     def setPrompt(self):
-        
-        self.p.send("PS1=%s\n" % (self.prompt))
         self.p.flush()
         match_one =  uuid.uuid1()
         bashvar_one = base64.b32encode(str(match_one).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
-        sent = 'echo %s${PS1}%s\n' % (bashvar_one,bashvar_one)
-        index = self.p.expect ([self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
+        match_two =  uuid.uuid1()
+        bashvar_two = base64.b32encode(str(match_two).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
+        
+        sent = 'echo %s\n' % (bashvar_one)
+        self.p.send(sent)
+        index = self.p.expect ([bashvar_one,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
+        self.p.send("PS1=%s\n" % (self.prompt))
         self.p.send("export PS1\n")
         self.p.flush()
         
-        match = '%s%s\n' % (bashvar_one,bashvar_one)
-        sent = 'echo %s%s\n' % (bashvar_one,bashvar_one)
+        
+        sent = 'echo %s\n' % (bashvar_two)
         
         self.p.send(sent)
         done = False
         while done == False:
-            index = self.p.expect ([match, 
+            index = self.p.expect ([bashvar_two, 
                     pexpect.EOF, 
                     pexpect.TIMEOUT],timeout=5)
             if index == 0:
