@@ -294,7 +294,7 @@ class runnershell:
         self.setPrompt()
         for line in fp:
             self.p.send(line)
-        sent = "echo %s$?%s\n" % (bashvar_one,bashvar_one)
+        sent = 'echo "%s$?%s"\n' % (bashvar_one,bashvar_one)
         self.log.info("sent='%s'" % (sent))
         self.p.send(sent)
         
