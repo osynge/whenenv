@@ -165,7 +165,7 @@ class runnershell:
                 if second == 0:
                     cleaned = self.p.before.strip()
                     done = True
-                    if cleaned == self.prompt:
+                    if cleaned == bashvar_one:
                         self.log.error("priompt set goot %s" % (cleaned))
                     else:
                         self.log.error("Somethign went wrong entering chroot %s=%s" % (index,self.chrootCmd))
