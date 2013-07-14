@@ -222,9 +222,9 @@ class runnershell:
         self.p.flush()
         match = 'declare -x '
         
-        self.souldloop = True
+        souldloop = True
         foundEnv = {}
-        while self.souldloop == True:
+        while souldloop == True:
             exitstatus = self.p.exitstatus
             if exitstatus != None:
                 self.log.info("exitstatus=%s" % (exitstatus))
@@ -283,7 +283,7 @@ class runnershell:
         self.log.info("sent='%s'" % (sent))
         self.p.send(sent)
         
-        self.souldloop = True
+        souldloop = True
         output = 0
         ready = False
         state = 0
@@ -291,7 +291,7 @@ class runnershell:
         
         nextlinecount = 3
         timeouts = 0
-        while self.souldloop == True:
+        while souldloop == True:
             index = self.p.expect ([bashvar_one,self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=5)
             self.log.debug("indexxx=%s" % (index))
             
