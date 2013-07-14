@@ -2,11 +2,6 @@
 UUID=aa7016b0-6508-41d2-bce0-c1724cb3d3e2
 UUID_Overlay=333fe448-28c9-44da-a9cb-402818d433bb
 CHROOT="/workspace/chroot"
-if [ ! -d ${CHROOT} ]
-then
-mkdir ${CHROOT}
-fi
-
 
 python /root/chrootbuilder \
   --input \
