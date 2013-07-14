@@ -137,7 +137,7 @@ class ChrootPackageInstallerRedhat(ChrootPackageInstaller):
             self.log.error("programming error no p")
             return False
         self.p.flush()
-        self.p.send("rpm -qa --qf '%{NAME}\n'\n")
+        self.p.send("/usr/bin/dpkg-query -W --showformat='${Status}\n")
         done = False
         packagelist = []
         while done == False:
@@ -230,7 +230,105 @@ class ChrootPackageInstallerDebian():
         super(SubClass, self).__init__(*args, **kwargs)
         
         self.log = logging.getLogger("ChrootPackageInstaller")
-    
+        
+        
+    def updatePackages(self):
+        if self.p == None:
+            self.log.error("programming error no p")
+            return False
+        self.p.flush()
+        self.p.send("/usr/bin/dpkg-query -W ${Package}\t${Status}\n")
+        match1 = "install ok installed\r\n"
+        done = False
+        packagelist = []
+        while done == False:
+            index = self.p.expect ([match1,self.prompt,
+                    '\r\n', 
+                    pexpect.EOF, 
+                    pexpect.TIMEOUT],timeout=500)
+            if index == 0:
+                self.log.debug("xxbefore=%s" % (self.p.before))
+                self.log.debug("xxafter=%s" % (self.p.after))
+            if index == 1:
+                done = True
+            elif index == 2:
+                packagelist.append(self.p.before)
+                self.log.debug("before=%s" % (self.p.before))
+                self.log.debug("after=%s" % (self.p.after))
+            else:
+                self.log.error("Somethign went wrong entering chroot")
+                self.p = None
+                return False
+        self.packagelist = packagelist
+        return self.packagelist
+                
+        
+        
+    def installPackages(self,packagelist):
+        packagesFound = self.updatePackages()
+        needtoInstall = []
+        for package in packagelist:
+            if package in packagesFound:
+                self.log.info("already installed:%s" % (package))
+            else:
+                self.log.info("not installed:%s" % (package))
+                needtoInstall.append(package)
+        for package in needtoInstall:
+            self.p.flush()
+            cmd = "yum install -y -q %s" % (package)
+            self.log.info("running :%s" % (cmd))
+            self.p.send(cmd + '\n')
+            done = False
+            while done == False:
+                index = self.p.expect ([self.prompt,
+                        '\r\n', 
+                        pexpect.EOF, 
+                        pexpect.TIMEOUT],timeout=500)
+                if index == 0:
+                    done = True
+                elif index == 1:
+                    self.log.info(self.p.before)
+                else:
+                    self.log.error("Somethign went wrong entering chroot")
+                    self.p = None
+                    return False
+            # so now the command has executed
+            self.p.flush()
+            # We now need to see teh RC
+            self.log.info("checking execution status")
+            self.p.send("echo $?\n")
+            rc = ""
+            done = False
+            while done == False:
+                index = self.p.expect ([self.prompt,
+                        '\r\n', 
+                        pexpect.EOF, 
+                        pexpect.TIMEOUT],timeout=500)
+                if index == 0:
+                    done = True
+                elif index == 1:
+                    
+                    rc += self.p.before
+                else:
+                    self.log.error("Somethign went wrong entering chroot")
+                    self.p = None
+                    return False
+            if rc != '0':
+                self.log.error("rc=%s" % (rc))
+                return False
+        # Now we check all packages are installed
+        packagesFound = self.updatePackages()
+        needtoInstall = []
+        for package in packagelist:
+            if package in packagesFound:
+                self.log.info("already installed:%s" % (package))
+            else:
+                self.log.info("not installed:%s" % (package))
+                needtoInstall.append(package)     
+        if len(needtoInstall) > 0:
+            self.log.error("The following packages did not install:%s" % (needtoInstall))
+            return False
+        return True    
     
     def packagesDebain(self,jobpart,env):
         depnedacylist = []
