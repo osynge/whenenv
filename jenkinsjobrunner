@@ -12,7 +12,7 @@ import re
 import base64
 import shutil
 
-from jjobrun.chroot_package_installer import ChrootPackageInstallerRedhatRedhat as ChrootPackageInstallerRedhat
+from jjobrun.chroot_package_installer import ChrootPackageInstallerRedhat as ChrootPackageInstallerRedhat
 
 
 def subphandling(cmd,timeout = 10):   
