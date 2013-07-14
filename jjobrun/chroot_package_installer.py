@@ -238,7 +238,8 @@ class ChrootPackageInstallerDebian():
             return False
         self.p.flush()
         self.p.send("/usr/bin/dpkg-query -W ${Package}\t${Status}\n")
-        match1 = "install ok installed\r\n"
+        match1 = "\tinstall ok installed\r\n"
+        match1 = "deinstall ok config-files\r\n"
         done = False
         packagelist = []
         while done == False:
