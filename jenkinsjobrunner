@@ -152,17 +152,20 @@ class runnershell:
         self.p.send("export PS1\n")
         self.p.flush()
         
-        match = '%s%s%s\n' % (bashvar_one,self.prompt,bashvar_one)
-        sent = 'echo %s${PS1}%s\n' % (bashvar_one,bashvar_one)
+        match = '%s%s\n' % (bashvar_one,bashvar_one)
+        sent = 'echo %s%s\n' % (bashvar_one,bashvar_one)
         
         self.p.send(sent)
         done = False
         while done == False:
             index = self.p.expect ([match, 
                     pexpect.EOF, 
-                    pexpect.TIMEOUT],timeout=50)
+                    pexpect.TIMEOUT],timeout=5)
             if index == 0:
                 done = True
+            elif index == 1:
+                self.p.send(sent)
+                self.log.info("prompt timeout=%s" % (index))
             else:
                 self.log.info("prompt bad=%s" % (index))
                 done = True       
