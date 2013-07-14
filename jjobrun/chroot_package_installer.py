@@ -1,4 +1,12 @@
+import logging
+import uuid
+import base64
+import string
 
+transtbl = string.maketrans(
+          'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
+          'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
+        )
 class ChrootPackageInstaller:
     def __init__(self, *args, **kwargs):
         # we still need these things chrootCmd, env):
@@ -227,9 +235,9 @@ class ChrootPackageInstallerRedhat(ChrootPackageInstaller):
 class ChrootPackageInstallerDebian(ChrootPackageInstaller):
 
     def __init__(self,  *args, **kwargs):
-        super(ChrootPackageInstallerDebian, self).__init__(*args, **kwargs)
-        
-        self.log = logging.getLogger("ChrootPackageInstaller")
+        #super(ChrootPackageInstallerDebian, self).__init__(*args, **kwargs)
+        ChrootPackageInstaller.__init__(self,*args, **kwargs)
+        self.log = logging.getLogger("ChrootPackageInstallerDebian")
         
         
     def updatePackages(self):
