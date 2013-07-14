@@ -1,11 +1,14 @@
 
 class ChrootPackageInstaller:
-    def __init__(self, chrootCmd, env):
+    def __init__(self, *args, **kwargs):
+        # we still need these things chrootCmd, env):
+        self.manufacturer = kwargs.get('manufacturer', 'Waterman')
+        self.cartridge_state =  "non-empty"
         self.log = logging.getLogger("ChrootPackageInstaller")
-        self.chrootCmd = chrootCmd
+        self.chrootCmd = kwargs.get('command', None)
         match_prompt = uuid.uuid1()
         self.prompt = base64.b32encode(str(match_prompt).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
-        self.env = env
+        self.env = kwargs.get('enviroment', None)
         self.p = None
     def initialise(self):
         self.log.info("Initialising:%s" % (self.chrootCmd))
@@ -121,12 +124,11 @@ class ChrootPackageInstaller:
             return False
         return True
         
-class ChrootPackageInstallerRedhat():
+class ChrootPackageInstallerRedhat(ChrootPackageInstaller):
 
     def __init__(self,  *args, **kwargs):
         super(SubClass, self).__init__(*args, **kwargs)
-        
-        self.log = logging.getLogger("ChrootPackageInstaller")
+        self.log = logging.getLogger("ChrootPackageInstallerRedhat")
         
         
         
@@ -244,3 +246,9 @@ class ChrootPackageInstallerRedhat():
             return False
         return True
         
+class ChrootPackageInstallerDebian():
+
+    def __init__(self,  *args, **kwargs):
+        super(SubClass, self).__init__(*args, **kwargs)
+        
+        self.log = logging.getLogger("ChrootPackageInstaller")
