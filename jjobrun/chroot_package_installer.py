@@ -274,8 +274,6 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
         return self.packagelist
     
     
-    def installPackage(self,package):
-        
                 
         
         
