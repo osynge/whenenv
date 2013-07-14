@@ -308,6 +308,7 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
                 elif index == 1:
                     self.log.info(self.p.before)
                 elif index == 3:
+                    self.p.send("echo %s\n" % bashvar_two)
                 else:
                     self.log.error("Somethign went wrong entering chroot")
                     self.p = None
