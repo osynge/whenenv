@@ -513,8 +513,10 @@ class jobPartRun:
         self.log.info("runscript rc '%s'" % (rc))
         foundEnv = {}
         if rc == 0:
+            self.log.info("Updating env")
             afterEnv = sr.getEnv()
-            #self.log.info("afterEnv '%s'" % (afterEnv))
+            self.log.info("initialEnv '%s'" % (initialEnv))
+            self.log.info("afterEnv '%s'" % (afterEnv))
             keysInitial = set(initialEnv.keys()).difference()
             keysFinal = set(afterEnv.keys()).difference()
             keysnew = keysFinal.difference(keysInitial)
