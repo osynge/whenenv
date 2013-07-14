@@ -146,7 +146,7 @@ class ChrootPackageInstallerRedhat(ChrootPackageInstaller):
             self.log.error("programming error no p")
             return False
         self.p.flush()
-        self.p.send("/usr/bin/dpkg-query -W --showformat='${Status}\n")
+        self.p.send("rpm -qa\n")
         done = False
         packagelist = []
         while done == False:
