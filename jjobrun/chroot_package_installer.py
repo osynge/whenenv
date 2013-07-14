@@ -295,46 +295,44 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
             self.p.send("echo %s\n" % bashvar_one)
             index = self.p.expect ([bashvar_one,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
             cmd = "apt-get install -y --force-yes -q 3 %s\n" % (package)
+            self.p.send(cmd + '\n')
             self.p.send("echo %s\n" % bashvar_two)
             self.log.info("running :%s" % (cmd))
-            self.p.send(cmd + '\n')
+            
             
             done = False
             while done == False:
-                index = self.p.expect ([bashvar_two,
-                        '\r\n', 
-                        pexpect.EOF, 
-                        pexpect.TIMEOUT],timeout=10)
+                index = p.expect (["Do you want to continue",
+                    bashvar_two,
+                    "%s is already the newest version." % (package),
+                    "additional disk space will be used", 
+                    pexpect.EOF, 
+                    pexpect.TIMEOUT,
+                    'Reading package lists',
+                    'The following NEW packages will be installed',
+                    'Get:.*\r\n',
+                    'Selecting previously unselected package',
+                    'Fetched',
+                    'Unpacking',
+                    'Setting',
+                    'Processing triggers for ', '\r\n'],
+                    timeout=500)
+                self.log.info("whatsDaProb=%s" % (index))
                 if index == 0:
+                    p.send("Y\n")
+                    
+                if index >= 6:
+                    imput = p.before
+                    striped = imput.strip()
+                    if len(striped) > 0:
+                        self.log.info(imput.strip())
+                if index in [2,4]:
                     done = True
-                elif index == 1:
-                    self.log.info(self.p.before)
-                elif index == 3:
-                    self.p.send("echo %s\n" % bashvar_two)
-                else:
-                    self.log.error("Somethign went wrong entering chroot")
-                    self.p = None
-                    return False
-            # so now the command has executed
-            self.p.flush()
-            # We now need to see teh RC
-            self.log.info("checking execution status")
-            self.p.send("echo $?%s\n" % (bashvar_one))
-            rc = ""
-            done = False
-            while done == False:
-                index = self.p.expect ([bashvar_one,
-                        '\r\n', 
-                        pexpect.EOF, 
-                        pexpect.TIMEOUT],timeout=500)
-                if index == 0:
+                if index == 3:
+                    p.send("Y\n")
+                if index == 1:
                     done = True
-                elif index == 1:
-                    self.log.info(self.p.before)
-                else:
-                    self.log.error("Somethign went wrong entering chroot")
-                    self.p = None
-                    return False
+            
 
         # Now we check all packages are installed
         packagesFound = self.updatePackages()
