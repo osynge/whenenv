@@ -151,7 +151,10 @@ class runnershell:
         index = self.p.expect ([self.prompt,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
         self.p.send("export PS1\n")
         self.p.flush()
+        
+        match = '%s%s%s\n' % (bashvar_one,self.prompt,bashvar_one)
         sent = 'echo %s${PS1}%s\n' % (bashvar_one,bashvar_one)
+        
         self.p.send(sent)
         done = False
         while done == False:
@@ -159,13 +162,13 @@ class runnershell:
                     pexpect.EOF, 
                     pexpect.TIMEOUT],timeout=50)
             if index == 0:
-                second = self.p.expect ([bashvar_one, 
+                second = self.p.expect ([match, 
                     pexpect.EOF, 
                     pexpect.TIMEOUT],timeout=50)
                 if second == 0:
                     cleaned = self.p.before.strip()
                     done = True
-                    if cleaned == bashvar_one:
+                    if cleaned == match:
                         self.log.error("priompt set goot %s" % (cleaned))
                     else:
                         self.log.error("Somethign went wrong entering chroot %s=%s" % (index,self.chrootCmd))
