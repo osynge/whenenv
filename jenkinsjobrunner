@@ -871,12 +871,24 @@ def runJob (jobname):
                     "command" : { "template" : "chroot %CHROOT%",
                         "envimeroment" : ["CHROOT"]
                         },
+                    "dependancies" :{ "Scientific" : ["subversion", "python","rpm","make","git", "python-setuptools","python-m2crypto" ] },
+                    },
+                "artifacts" : ["artifacts.tgz"],
+                "flags" : ["chroot"],
+                },
+                {"script" : "transfer/chroot-debian-wheezy-buildup.sh"}],
+        "chrootbuilder-debian-wheezy-prod": [{"script" : "transfer/chroot-scientific-6-buildup-prod.sh"},
+                {   "script" : "transfer/chrootbuilder-debian-wheezy-prod.sh",
+                    "shell" : { "type" : "chroot",
+                    "command" : { "template" : "chroot %CHROOT%",
+                        "envimeroment" : ["CHROOT"]
+                        },
                     "dependancies" :{ "Debian" : ["subversion", "python","rpm","make","git", "python-setuptools","python-m2crypto" ] },
                     },
                 "artifacts" : ["artifacts.tgz"],
                 "flags" : ["chroot"],
                 },
-                {"script" : "transfer/chroot-scientific-6-teardown.sh"}],
+                {"script" : "chroot-debian-wheezy-teardown.sh"}],
         }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
