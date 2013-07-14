@@ -226,7 +226,7 @@ class runnershell:
         self.p.send("export\n")
         self.p.flush()
         index = self.p.expect ([bashvar_one,pexpect.EOF, pexpect.TIMEOUT],timeout=100)
-        match = '\r\ndeclare -x '
+        match = 'declare -x '
         
         souldloop = True
         foundEnv = {}
