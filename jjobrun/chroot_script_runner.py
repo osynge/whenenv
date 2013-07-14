@@ -196,18 +196,20 @@ class runnershell:
     def runscript_beve_callback(self,before,userdata):
         self.watcherTimedDecrement()
     
-        messageDiff = before[self.lastMessageLen:]
+        messageDiff = before[self.lastMessageLen:].strip()
         self.lastMessageLen = len(before)
-        #print 'diff="%s"' % (messageDiff)
-        firstLine = messageDiff.split('\n')[0].strip()
-        #print 'firstLine="%s"' % (firstLine)
-        #print self.AliveChecks.keys()
-        if firstLine in self.AliveChecks:
-            print 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+        if len(messageDiff) > 0:
+            print 'diff="%s"' % (messageDiff)
         slive = False
-        for key in self.AliveChecks:
-            if key == firstLine:
-                slive = True
+        for Line in messageDiff.split('\n'):
+            firstLine = Line.strip()
+            print 'firstLine="%s"' % (firstLine)
+            print self.AliveChecks
+            if firstLine in self.AliveChecks:
+                print 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+            for key in self.AliveChecks:
+                if key == firstLine:
+                    slive = True
         if slive:
             # We know the terminal is back
             self.scriptReturned = True
@@ -233,7 +235,7 @@ class runnershell:
         #print 'here=%s' % (self.readingline)
         if len(self.lines) > self.readingline:
             line2send = self.lines[self.readingline]
-            self.log.info("sent=%s" % (line2send))
+            self.log.info("sent=%s" % (line2send.strip()))
             self.p.send(line2send)
             self.readingline += 1
         else:
