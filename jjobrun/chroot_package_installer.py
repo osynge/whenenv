@@ -320,7 +320,7 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
                 self.log.info("whatsDaProb=%s" % (index))
                 if index == 0:
                     self.p.send("Y\n")
-                if index >= 5:
+                if index == 5:
                     self.p.send(cmd + '\n')
                     self.p.send("echo %s\n" % bashvar_two)
                 if index >= 6:
