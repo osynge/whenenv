@@ -285,7 +285,7 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
                 needtoInstall.append(package)
         for package in needtoInstall:
             self.p.flush()
-            cmd = "apt-get install -y --force-yes %s\n" % (package)
+            cmd = "apt-get install -y --force-yes -q 2 %s\n" % (package)
             self.log.info("running :%s" % (cmd))
             self.p.send(cmd + '\n')
             done = False
