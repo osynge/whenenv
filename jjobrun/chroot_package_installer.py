@@ -249,28 +249,40 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
         if self.p == None:
             self.log.error("programming error no p")
             return False
-        self.p.flush()
+        self.log.info("updatePackages")
         match_one =  uuid.uuid1()
         bashvar_one = base64.b32encode(str(match_one).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
-        self.p.send("/usr/bin/dpkg-query -W -f '${Package}\t${Status}xxxxx\n'")
+        match_two =  uuid.uuid1()
+        bashvar_two = base64.b32encode(str(match_two).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
+        match_tree =  uuid.uuid1()
+        bashvar_three = base64.b32encode(str(match_tree).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
+        
+        cmd = "/usr/bin/dpkg-query -W -f '${Package}%s${Status}%s\n'\necho %s\n" % (bashvar_three,bashvar_one,bashvar_two)
+        self.p.send(cmd)
+        
+        
         match1 = "\tinstall ok installed\r\n"
         match1 = "deinstall ok config-files\r\n"
         done = False
         packagelist = []
         while done == False:
-            index = self.p.expect ([match1,bashvar_one,
-                    'xxxxx', 
+            index = self.p.expect ([bashvar_one,
+                    bashvar_two, 
                     pexpect.EOF, 
-                    pexpect.TIMEOUT],timeout=500)
+                    pexpect.TIMEOUT],timeout=5)
             if index == 0:
-                self.log.info("xxbefore=%s" % (self.p.before))
-                self.log.debug("xxafter=%s" % (self.p.after))
+                self.log.debug("before=%s,%s" % (index,self.p.before))
+                cleaned = self.p.before.strip()
+                multiline = cleaned.split("\n")
+                spplitline = multiline[-1].split(bashvar_three)
+                if len(spplitline) != 2:
+                    continue
+                if spplitline[1] != "install ok installed":
+                    continue
+                packagelist.append(spplitline[0])
             elif index == 1:
+                self.log.info("Finished listing packages")
                 done = True
-            elif index == 2:
-                packagelist.append(self.p.before)
-                self.log.debug("before=%s" % (self.p.before))
-                self.log.debug("after=%s" % (self.p.after))
             else:
                 self.log.error("Somethign went wrong entering chroot%s" % (index))
                 self.p = None
