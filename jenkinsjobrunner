@@ -214,15 +214,19 @@ class runnershell:
     def getEnv(self):
         self.log.info("getEnv")
         env_ignored = set(["PATH","SHLVL","OLDPWD",])
-
+        match_one =  uuid.uuid1()
+        bashvar_one = base64.b32encode(str(match_one).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
+        
         reuslts = {}
         self.p.send("\n")
         self.p.send("set +e\n")
         self.p.send("set +x\n")
         self.p.flush()
-        self.p.send("export\n\n")
+        self.p.send("echo %s\n" % bashvar_one)
+        self.p.send("export\n")
         self.p.flush()
-        match = 'declare -x '
+        index = self.p.expect ([bashvar_one,pexpect.EOF, pexpect.TIMEOUT],timeout=100)
+        match = '\r\ndeclare -x '
         
         souldloop = True
         foundEnv = {}
@@ -239,7 +243,7 @@ class runnershell:
                 if len(imput) == 0:
                     continue
                 self.log.info("dinggga=%s" % (imput))
-                secondlevel = self.p.expect (['"\r\n',pexpect.EOF, pexpect.TIMEOUT],timeout=2)
+                secondlevel = self.p.expect (['"\r\n',pexpect.EOF, pexpect.TIMEOUT],timeout=20)
                 imput = self.p.before
                 self.log.info("secondlevel=%s=%s" % (secondlevel,imput))
                 if secondlevel == 0:
