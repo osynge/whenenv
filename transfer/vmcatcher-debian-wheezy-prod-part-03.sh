@@ -1,4 +1,4 @@
-chroot chroot
+chroot $CHROOT
 
 id
 hostname -f
