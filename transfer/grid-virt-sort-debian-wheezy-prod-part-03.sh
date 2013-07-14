@@ -1,5 +1,4 @@
-chroot chroot
-
+pwd
 id
 hostname -f
 
