@@ -217,6 +217,8 @@ class runnershell:
 
         reuslts = {}
         self.p.send("\n")
+        self.p.send("set +e\n")
+        self.p.send("set +x\n")
         self.p.flush()
         self.p.send("export\n\n")
         self.p.flush()
