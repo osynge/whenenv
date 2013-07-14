@@ -3,6 +3,7 @@ import uuid
 import base64
 import string
 import pexpect
+import re
 transtbl = string.maketrans(
           'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
           'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
