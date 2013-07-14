@@ -216,6 +216,8 @@ class runnershell:
         env_ignored = set(["PATH","SHLVL","OLDPWD",])
         match_one =  uuid.uuid1()
         bashvar_one = base64.b32encode(str(match_one).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
+        match_two =  uuid.uuid1()
+        bashvar_two = base64.b32encode(str(match_one).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
         
         reuslts = {}
         self.p.send("\n")
@@ -224,6 +226,7 @@ class runnershell:
         self.p.flush()
         self.p.send("echo %s\n" % bashvar_one)
         self.p.send("export\n")
+        self.p.send("echo %s\n" % bashvar_two)
         self.p.flush()
         #index = self.p.expect ([bashvar_one,pexpect.EOF, pexpect.TIMEOUT],timeout=100)
         match = 'declare -x '
@@ -237,7 +240,7 @@ class runnershell:
                 self.log.info("exitstatus=%s" % (exitstatus))
                 self.log.info("self.p.env=%s" % self.p.env)
                 break
-            index = self.p.expect ([match,pexpect.EOF, pexpect.TIMEOUT,bashvar_one],timeout=20)
+            index = self.p.expect ([match,pexpect.EOF, pexpect.TIMEOUT,bashvar_two],timeout=20)
             self.log.critical("index=%s" %(index))
             if index == 0:
                 imput = self.p.before
