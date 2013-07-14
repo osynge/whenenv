@@ -302,7 +302,7 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
             
             done = False
             while done == False:
-                index = p.expect (["Do you want to continue",
+                index = self.p.expect (["Do you want to continue",
                     bashvar_two,
                     "%s is already the newest version." % (package),
                     "additional disk space will be used", 
@@ -319,17 +319,17 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
                     timeout=50)
                 self.log.info("whatsDaProb=%s" % (index))
                 if index == 0:
-                    p.send("Y\n")
+                    self.p.send("Y\n")
                     
                 if index >= 6:
-                    imput = p.before
+                    imput = self.p.before
                     striped = imput.strip()
                     if len(striped) > 0:
                         self.log.info(imput.strip())
                 if index in [2,4]:
                     done = True
                 if index == 3:
-                    p.send("Y\n")
+                    self.p.send("Y\n")
                 if index == 1:
                     self.p.send(cmd + '\n')
                     self.p.send("echo %s\n" % bashvar_two)
