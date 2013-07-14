@@ -1,5 +1,3 @@
-chroot $CHROOT
-
 id
 hostname -f
 GITLOCATION="git://github.com/hepix-virtualisation/vmcatcher.git"
