@@ -335,13 +335,8 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
                 if index in [0,5]:
                     done = True
                 if index == 1:
-                    sending = "%s\necho %s\n" % (cmd,bashvar_one)
-                    self.log.error("sending=%s" % (sending))
-                    self.p.send(sending)
-                if index == 2:
-                    sending = "%s\necho %s\n" % (cmd,bashvar_two)
-                    self.log.error("sending=%s" % (sending))
-                    self.p.send(sending)
+                    done = True
+                
         # Now we check all packages are installed
         packagesFound = self.updatePackages()
         needtoInstall = []
