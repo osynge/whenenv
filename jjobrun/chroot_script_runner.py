@@ -198,12 +198,12 @@ class runnershell:
     
         messageDiff = before[self.lastMessageLen:]
         self.lastMessageLen = len(before)
-        print 'diff="%s"' % (messageDiff)
+        #print 'diff="%s"' % (messageDiff)
         firstLine = messageDiff.split('\n')[0].strip()
-        print 'firstLine="%s"' % (firstLine)
-        print self.AliveChecks.keys()
+        #print 'firstLine="%s"' % (firstLine)
+        #print self.AliveChecks.keys()
         if firstLine in self.AliveChecks.keys():
-            print  'ddddddddddddddddd'
+            print '$'
         slive = False
         for key in self.AliveChecks.keys():
             if key == firstLine:
