@@ -231,7 +231,7 @@ class runnershell:
         index = self.p.expect ([bashvar_one,pexpect.EOF, pexpect.TIMEOUT],timeout=100)
         match = 'declare -x '
         #ouput = self.p.read_nonblocking(timeout=100)
-        self.log.critical("ouput=%s" %(ouput))
+        #self.log.critical("ouput=%s" %(ouput))
         souldloop = True
         foundEnv = {}
         while souldloop == True:
