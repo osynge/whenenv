@@ -137,7 +137,7 @@ class ChrootPackageInstaller:
 class ChrootPackageInstallerRedhat(ChrootPackageInstaller):
 
     def __init__(self,  *args, **kwargs):
-        super(SubClass, self).__init__(*args, **kwargs)
+        ChrootPackageInstaller.__init__(self,*args, **kwargs)
         self.log = logging.getLogger("ChrootPackageInstallerRedhat")
         
  
