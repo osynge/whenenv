@@ -30,10 +30,10 @@ class runnershell:
             return True
         return False
     def watcherTimedIncrement(self):
-        self.watchTimer += 1
+        self.watchTimer += 2
     def watcherTimedDecrement(self):
-        self.watchTimer = 0
-        self.AliveChecks = {}
+        self.watchTimer -= 1
+        #self.AliveChecks = {}
 
     def genWatcher(self):
         self.watch = True
@@ -202,18 +202,19 @@ class runnershell:
         firstLine = messageDiff.split('\n')[0].strip()
         #print 'firstLine="%s"' % (firstLine)
         #print self.AliveChecks.keys()
-        if firstLine in self.AliveChecks.keys():
-            print '$'
+        if firstLine in self.AliveChecks:
+            print 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
         slive = False
-        for key in self.AliveChecks.keys():
+        for key in self.AliveChecks:
             if key == firstLine:
                 slive = True
         if slive:
             # We know the terminal is back
             self.scriptReturned = True
-            self.AliveChecks = {}
+            self.AliveChecks = []
         
         
+    
         
     
     
@@ -222,19 +223,20 @@ class runnershell:
         bashvar_one = base64.b32encode(str(match_one).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
         line2send = "echo %s\n" % (bashvar_one)
         self.p.send(line2send)
-        self.AliveChecks[bashvar_one] = self.watchTimer
+        self.AliveChecks.append(bashvar_one)
+        if len (self.AliveChecks) > 10:
+            self.AliveChecks.pop(0)
         
         
     def runscript_timeout_callback(self,userdata):
         self.watcherTimedIncrement()
-        print 'here=%s' % (self.readingline)
+        #print 'here=%s' % (self.readingline)
         if len(self.lines) > self.readingline:
             line2send = self.lines[self.readingline]
             self.log.info("sent=%s" % (line2send))
             self.p.send(line2send)
             self.readingline += 1
         else:
-            self.log.info("sent script")
             if self.scriptReturned:
                 self.delWatcher()
             if self.scriptReturnedCheck():
@@ -250,7 +252,7 @@ class runnershell:
         self.readingline = 0
         self.scriptReturned = False
         self.lastMessageLen = 0
-        self.AliveChecks = {}
+        self.AliveChecks = []
         
         fp = open(script)
         for line in fp:
