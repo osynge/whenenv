@@ -642,6 +642,7 @@ def runJob (jobname):
                         },
                     "dependancies" :{ "Debian" : ["git", "python","rpm","make", "python-setuptools","python-m2crypto", ] },
                     }
+                "artifacts" : ["artifacts.tgz"],
             },
             {   "script" : "transfer/chroot-debian-wheezy-teardown.sh"},
             ],
