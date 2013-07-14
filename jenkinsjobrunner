@@ -871,7 +871,7 @@ def runJob (jobname):
                     "command" : { "template" : "chroot %CHROOT%",
                         "envimeroment" : ["CHROOT"]
                         },
-                    "dependancies" :{ "Scientific" : ["subversion", "python","rpm","make","git", "python-setuptools","python-m2crypto" ] },
+                    "dependancies" :{ "Debian" : ["subversion", "python","rpm","make","git", "python-setuptools","python-m2crypto" ] },
                     },
                 "artifacts" : ["artifacts.tgz"],
                 "flags" : ["chroot"],
