@@ -246,7 +246,9 @@ class runnershell:
                         continue
                     #self.log.info("secondlevel=%s" % (striped))
                     splitline = striped.split('="')
+                    self.log.info("splitline=%s" % (splitline))
                     if len(splitline) < 2:
+                        
                         continue
                     key = splitline[0]
                     value = splitline[1]
