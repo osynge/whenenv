@@ -400,7 +400,7 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
                 if index == 3:
                     p.send("Y\n")
                 if index == 1:
-                    p.send(cmd)]
+                    p.send(cmd)
            
             exitstatus = p.exitstatus
             if p.isalive() == True:
