@@ -328,7 +328,7 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
                     imput = self.p.before
                     striped = imput.strip()
                     if len(striped) > 0:
-                        self.log.info("current=%s,%s" % (index,striped)
+                        self.log.info("current=%s,%s" % (index,striped))
                 if index in [2,4]:
                     done = True
                 if index == 3:
