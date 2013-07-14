@@ -236,7 +236,7 @@ class runnershell:
                 imput = self.p.before.strip()
                 if len(imput) == 0:
                     continue
-                elf.log.info("dinggga=%s" % (imput))
+                self.log.info("dinggga=%s" % (imput))
                 secondlevel = self.p.expect (['"\r\n',pexpect.EOF, pexpect.TIMEOUT],timeout=2)
                 imput = self.p.before
                 self.log.info("secondlevel=%s=%s" % (secondlevel,imput))
