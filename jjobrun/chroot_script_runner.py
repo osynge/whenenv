@@ -120,15 +120,15 @@ class runnershell:
                 self.log.info("self.p.env=%s" % self.p.env)
                 break
             index = self.p.expect ([match,pexpect.EOF, pexpect.TIMEOUT,bashvar_two],timeout=20)
-            self.log.critical("index=%s" %(index))
+            self.log.debug("index=%s" %(index))
             if index == 0:
                 imput = self.p.before
                 if len(imput) == 0:
                     continue
-                self.log.info("dinggga=%s" % (imput))
+                self.log.debug("dinggga=%s" % (imput))
                 secondlevel = self.p.expect (['"\r\n',pexpect.EOF, pexpect.TIMEOUT],timeout=20)
                 imput = self.p.before
-                self.log.info("secondlevel=%s=%s" % (secondlevel,imput))
+                self.log.debug("secondlevel=%s=%s" % (secondlevel,imput))
                 if secondlevel == 0:
                     imput = self.p.before
                     striped = imput.strip()
@@ -136,7 +136,7 @@ class runnershell:
                         continue
                     #self.log.info("secondlevel=%s" % (striped))
                     splitline = striped.split('="')
-                    self.log.info("splitline=%s" % (splitline))
+                    self.log.debug("splitline=%s" % (splitline))
                     if len(splitline) < 2:
                         
                         continue
