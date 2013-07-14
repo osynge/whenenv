@@ -12,7 +12,7 @@ import re
 import base64
 import shutil
 
-from jjobrun.chroot_package_installer import ChrootPackageInstaller
+from jjobrun.chroot_package_installer import ChrootPackageInstallerRedhatRedhat as ChrootPackageInstallerRedhat
 
 
 def subphandling(cmd,timeout = 10):   
@@ -510,7 +510,7 @@ class jobPartRun:
         alreadyinstalled = []
         chrootdir = env['CHROOT']
         cmd = "/usr/sbin/chroot %s" % (chrootdir)
-        pi = ChrootPackageInstaller(cmd,env)
+        pi = ChrootPackageInstallerRedhat(cmd,env)
         initok = pi.initialise()
         if  initok == False:
             return False
