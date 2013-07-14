@@ -130,31 +130,7 @@ class ChrootPackageInstallerRedhat(ChrootPackageInstaller):
         super(SubClass, self).__init__(*args, **kwargs)
         self.log = logging.getLogger("ChrootPackageInstallerRedhat")
         
-        
-        
-    def initialise(self):
-        self.log.info("Initialising:%s" % (self.chrootCmd))
-        self.p = pexpect.spawn(self.chrootCmd)
-        self.p.send("\nstty -echo\n")
-        self.p.flush()
-        
-        self.p.send("PS1=%s\n" % (self.prompt))
-        done = False
-        while done == False:
-            index = self.p.expect ([self.prompt, 
-                    pexpect.EOF, 
-                    pexpect.TIMEOUT],timeout=500)
-            if index == 0:
-                done = True
-            else:
-                self.log.error("Somethign went wrong entering chroot %s=%s" % (index,self.chrootCmd))
-                self.p = None
-                return False
-        self.p.flush()
-        self.log.info("Initialising succeded")
-        return True
-    
-        
+ 
     def updatePackages(self):
         if self.p == None:
             self.log.error("programming error no p")
@@ -180,6 +156,7 @@ class ChrootPackageInstallerRedhat(ChrootPackageInstaller):
                 return False
         self.packagelist = packagelist
         return self.packagelist
+        
     def installPackages(self,packagelist):
         packagesFound = self.updatePackages()
         needtoInstall = []
@@ -252,3 +229,103 @@ class ChrootPackageInstallerDebian():
         super(SubClass, self).__init__(*args, **kwargs)
         
         self.log = logging.getLogger("ChrootPackageInstaller")
+    
+    
+    def packagesDebain(self,jobpart,env):
+        depnedacylist = []
+        if "shell" in jobpart.keys():
+            
+            if "dependancies" in jobpart["shell"].keys():
+                
+                if "Debian" in jobpart["shell"]["dependancies"].keys():
+                    self.log.info("foundthe answer")
+                    depnedacylist = list(jobpart["shell"]["dependancies"]["Debian"])
+        if len(depnedacylist) == 0:
+            return True
+        
+        #script_filename = "foo"
+        #if os.path.isfile(script_filename):
+        #    fout = file (script_filename, "ab")
+        #else:
+        #    fout = file (script_filename, "wb")
+        #self.p.logfile = fout
+        match_prompt = uuid.uuid1()
+        prompt = str(match_prompt)
+        packagesmissing = []
+        alreadyinstalled = []
+        for package in depnedacylist:
+            self.log.info("todo=%s" % (package))
+            cmd = "/usr/sbin/chroot $CHROOT /usr/bin/dpkg-query -W --showformat='${Status}\n' %s\n" % (package)
+            p = pexpect.spawn(cmd)
+            p.send("PS1=%s\n" % (prompt)) 
+            p.send(cmd)
+            
+            done = False
+            while done == False:
+                
+                index = p.expect (["install ok installed",
+                    "dpkg-query: no packages found matching %s" % (package),
+                    prompt, 
+                    pexpect.EOF, 
+                    pexpect.TIMEOUT],timeout=500)
+                self.log.debug("result ddxd=%s`" % (index))
+                if index == 0:
+                    done = True
+                    alreadyinstalled.append(package)
+                if index == 1:
+                    packagesmissing.append(package)
+                    done = True
+                if index == 3:
+                    done = True
+           
+            exitstatus = p.exitstatus
+            if p.isalive() == True:
+                p.send("exit 0\n")
+            if p.isalive() == True:
+                p.wait()
+                
+        for package in depnedacylist:
+            #self.log.info("ssssssssssssssssssssssssssssssssss")
+            cmd = "/usr/sbin/chroot $CHROOT  /usr/bin/apt-get install -y --force-yes %s\n" % (package)
+            self.log.info(cmd)
+            p = pexpect.spawn(cmd)
+            p.send("PS1=%s\n" % (self.prompt)) 
+            p.send(cmd)
+            done = False
+            while done == False:
+                index = p.expect (["Do you want to continue",
+                    prompt,
+                    "%s is already the newest version." % (package),
+                    "additional disk space will be used", 
+                    pexpect.EOF, 
+                    pexpect.TIMEOUT,
+                    'Reading package lists',
+                    'The following NEW packages will be installed',
+                    'Get:.*\r\n',
+                    'Selecting previously unselected package',
+                    'Fetched',
+                    'Unpacking',
+                    'Setting',
+                    'Processing triggers for ', '\r\n'],
+                    timeout=500)
+                self.log.info("whatsDaProb=%s" % (index))
+                if index == 0:
+                    p.send("Y\n")
+                    
+                if index >= 6:
+                    imput = p.before
+                    striped = imput.strip()
+                    if len(striped) > 0:
+                        self.log.info(imput.strip())
+                if index in [2,4]:
+                    done = True
+                if index == 3:
+                    p.send("Y\n")
+                if index == 1:
+                    p.send(cmd)
+            if p.isalive() == True:
+                p.send("exit 0\n")
+            if p.isalive() == True:
+                p.wait()
+            exitstatus = p.exitstatus
+            self.log.error("exit status=%s, cmd=%s" % (exitstatus,cmd))
