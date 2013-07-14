@@ -299,7 +299,8 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
             self.p.send("echo %s\n" % bashvar_two)
             self.log.info("running :%s" % (cmd))
             
-            
+            timeoutCountMax = 10
+            timeoutCount = 0
             done = False
             while done == False:
                 index = self.p.expect (["%s is already the newest version." % (package),
@@ -325,6 +326,7 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
                     sending = "%s\necho %s\n" % (cmd,bashvar_two)
                     self.log.error("sending=%s" % (sending))
                     self.p.send(sending)
+                    timeoutCount += 1
                 if index >= 7:
                     imput = self.p.before
                     striped = imput.strip()
