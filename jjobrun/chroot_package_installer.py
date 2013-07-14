@@ -22,6 +22,9 @@ class ChrootPackageInstaller:
         self.p = None
     def initialise(self):
         self.log.info("Initialising:%s" % (self.chrootCmd))
+        if self.chrootCmd == None:
+            self.log.error("chrootCmd=None")
+            return False
         self.p = pexpect.spawn(self.chrootCmd)
         self.p.send("\nstty -echo\n")
         self.p.flush()
@@ -247,27 +250,29 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
             self.log.error("programming error no p")
             return False
         self.p.flush()
-        self.p.send("/usr/bin/dpkg-query -W ${Package}\t${Status}\n")
+        match_one =  uuid.uuid1()
+        bashvar_one = base64.b32encode(str(match_one).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
+        self.p.send("/usr/bin/dpkg-query -W -f '${Package}\t${Status}xxxxx\n'")
         match1 = "\tinstall ok installed\r\n"
         match1 = "deinstall ok config-files\r\n"
         done = False
         packagelist = []
         while done == False:
-            index = self.p.expect ([match1,self.prompt,
-                    '\r\n', 
+            index = self.p.expect ([match1,bashvar_one,
+                    'xxxxx', 
                     pexpect.EOF, 
                     pexpect.TIMEOUT],timeout=500)
             if index == 0:
-                self.log.debug("xxbefore=%s" % (self.p.before))
+                self.log.info("xxbefore=%s" % (self.p.before))
                 self.log.debug("xxafter=%s" % (self.p.after))
-            if index == 1:
+            elif index == 1:
                 done = True
             elif index == 2:
                 packagelist.append(self.p.before)
                 self.log.debug("before=%s" % (self.p.before))
                 self.log.debug("after=%s" % (self.p.after))
             else:
-                self.log.error("Somethign went wrong entering chroot")
+                self.log.error("Somethign went wrong entering chroot%s" % (index))
                 self.p = None
                 return False
         self.packagelist = packagelist

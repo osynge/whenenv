@@ -20,8 +20,5 @@ newname=$( echo ${src} | sed -e "s/tar\.gz/bin\.tar\.gz/")
 mv $src $newname
 done
 cd ..
-python /root/chrootbuilder \
-  --dest  chroot \
-  --clean
 rm -f artifacts.tgz
 tar -zcvf artifacts.tgz build/dist

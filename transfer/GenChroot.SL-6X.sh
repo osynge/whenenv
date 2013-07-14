@@ -38,3 +38,4 @@ find . -print |cpio -o -Hnewc |bzip2 -9 -z -q -f > ${dirStart}/sl6.cpio.bz2
 popd
 rm -rf ${CROOT_DIR}
 du -h sl6.cpio.bz2
+exit 0
