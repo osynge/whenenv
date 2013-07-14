@@ -231,14 +231,14 @@ class runnershell:
                 self.log.info("self.p.env=%s" % self.p.env)
                 break
             index = self.p.expect ([match,pexpect.EOF, pexpect.TIMEOUT],timeout=10)
-            self.log.debug("index=%s" %(index))
+            self.log.critical("index=%s" %(index))
             if index == 0:
                 imput = self.p.before.strip()
                 if len(imput) == 0:
                     continue
                 secondlevel = self.p.expect (['"\r\n',pexpect.EOF, pexpect.TIMEOUT],timeout=2)
                 imput = self.p.before
-                #self.log.info("secondlevel=%s=%s" % (secondlevel,imput))
+                self.log.info("secondlevel=%s=%s" % (secondlevel,imput))
                 if secondlevel == 0:
                     imput = self.p.before
                     striped = imput.strip()
