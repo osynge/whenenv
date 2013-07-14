@@ -865,7 +865,7 @@ def runJob (jobname):
         "vmcatcher-scientific-6-prod" : [{"script" : "transfer/chroot-scientific-6-buildup-prod.sh"},
                 {"script" : "transfer/vmcatcher-scientific-6-prod.sh"},
                 {"script" : "transfer/chroot-scientific-6-teardown.sh"}],
-        "dirvacua-debian-wheezy-prod" : [{"script" : "transfer/chroot-scientific-6-buildup-prod.sh"},
+        "dirvacua-debian-wheezy-prod" : [{"script" : "transfer/chroot-debian-wheezy-buildup.sh"},
                 {   "script" : "transfer/dirvacua-debian-wheezy-prod-chrooted.sh",
                     "shell" : { "type" : "chroot",
                     "command" : { "template" : "chroot %CHROOT%",
@@ -876,7 +876,7 @@ def runJob (jobname):
                 "artifacts" : ["artifacts.tgz"],
                 "flags" : ["chroot"],
                 },
-                {"script" : "transfer/chroot-debian-wheezy-buildup.sh"}],
+                {"script" : "transfer/chroot-debian-wheezy-teardown.sh"}],
         "chrootbuilder-debian-wheezy-prod": [{"script" : "transfer/chroot-debian-wheezy-buildup.sh"},
                 {   "script" : "transfer/chrootbuilder-debian-wheezy-prod.sh",
                     "shell" : { "type" : "chroot",
@@ -888,7 +888,7 @@ def runJob (jobname):
                 "artifacts" : ["artifacts.tgz"],
                 "flags" : ["chroot"],
                 },
-                {"script" : "chroot-debian-wheezy-teardown.sh"}],
+                {"script" : "transfer/chroot-debian-wheezy-teardown.sh"}],
         }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
