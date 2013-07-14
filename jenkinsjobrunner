@@ -227,7 +227,8 @@ class runnershell:
         self.p.flush()
         index = self.p.expect ([bashvar_one,pexpect.EOF, pexpect.TIMEOUT],timeout=100)
         match = 'declare -x '
-        
+        ouput = self.p.read_nonblocking(timeout=10)
+        self.log.critical("ouput=%s" %(ouput))
         souldloop = True
         foundEnv = {}
         while souldloop == True:
@@ -239,7 +240,7 @@ class runnershell:
             index = self.p.expect ([match,pexpect.EOF, pexpect.TIMEOUT],timeout=100)
             self.log.critical("index=%s" %(index))
             if index == 0:
-                imput = self.p.before.strip()
+                imput = self.p.before
                 if len(imput) == 0:
                     continue
                 self.log.info("dinggga=%s" % (imput))
