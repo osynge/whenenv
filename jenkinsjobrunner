@@ -630,7 +630,7 @@ def runJob (jobname):
                         "envimeroment" : ["CHROOT"]
                         },
                     "dependancies" :{ "Debian" : ["make", "subversion","openjdk-6-jre-lib","libservlet2.5-java", "openjdk-6-jre","openjdk-6-jre-headless", "fop", "xsltproc","docbook-xml","docbook-xsl" ] },
-                    }
+                    },
                 "artifacts" : ["artifacts.tgz"],
                 "flags" : ["chroot"],
             },
@@ -656,7 +656,7 @@ def runJob (jobname):
                         "envimeroment" : ["CHROOT"]
                         },
                     "dependancies" :{ "Debian" : ["git", "python","rpm","make", "python-setuptools","python-m2crypto", ] },
-                    }
+                    },
                 "artifacts" : ["artifacts.tgz"],
                 "flags" : ["chroot"],
             },
@@ -669,7 +669,7 @@ def runJob (jobname):
                         "envimeroment" : ["CHROOT"]
                         },
                     "dependancies" :{ "Debian" : ["git", "python","git-buildpackage","devscripts", "python-all",  "python-setuptools","python-m2crypto",] },
-                    }
+                    },
                 "artifacts" : ["artifacts.tgz"],
                 "flags" : ["chroot"],
             },
@@ -682,7 +682,7 @@ def runJob (jobname):
                         "envimeroment" : ["CHROOT"]
                         },
                     "dependancies" :{ "Debian" : ["subversion", "python","rpm","make" ] },
-                    }
+                    },
                 "artifacts" : ["artifacts.tgz"],
                 "flags" : ["chroot"],
             },
