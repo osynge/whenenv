@@ -237,7 +237,7 @@ class runnershell:
                 self.log.info("exitstatus=%s" % (exitstatus))
                 self.log.info("self.p.env=%s" % self.p.env)
                 break
-            index = self.p.expect ([match,pexpect.EOF, pexpect.TIMEOUT],timeout=20)
+            index = self.p.expect ([match,pexpect.EOF, pexpect.TIMEOUT,bashvar_one],timeout=20)
             self.log.critical("index=%s" %(index))
             if index == 0:
                 imput = self.p.before
@@ -268,7 +268,7 @@ class runnershell:
             elif index == 2:
                 break
             elif index == 3:
-                self.log.info("timeout")
+                self.log.info("ended")
                 break
             else:
                 self.log.info("error=%s" % (index))
