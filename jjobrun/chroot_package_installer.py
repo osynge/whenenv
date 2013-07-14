@@ -224,10 +224,10 @@ class ChrootPackageInstallerRedhat(ChrootPackageInstaller):
             return False
         return True
         
-class ChrootPackageInstallerDebian():
+class ChrootPackageInstallerDebian(ChrootPackageInstaller):
 
     def __init__(self,  *args, **kwargs):
-        super(SubClass, self).__init__(*args, **kwargs)
+        super(ChrootPackageInstallerDebian, self).__init__(*args, **kwargs)
         
         self.log = logging.getLogger("ChrootPackageInstaller")
         
