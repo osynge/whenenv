@@ -1,4 +1,5 @@
 id
+pwd
 hostname -f
 GITLOCATION="git://github.com/hepix-virtualisation/vmcatcher.git"
 rm -rf build
