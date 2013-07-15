@@ -199,8 +199,10 @@ class runnershell:
         lastlinelen = len(self.lastDispalyedLine)
         lines = message.split('\n')
         for line in lines:
-            if lastlinelen == len(line):
+            clenaline = line.strip()
+            if lastlinelen == len(clenaline):
                 print "match"
+            self.lastDispalyedLine = clenaline
         
     def runscript_beve_callback(self,before,userdata):
         self.watcherTimedDecrement()
