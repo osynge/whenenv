@@ -191,7 +191,7 @@ class runnershell:
         return foundEnv
     
     def runscript(self,script):
-        self.runscript3(script)
+        return self.runscript3(script)
         
     def runscript_beve_callback(self,before,userdata):
         self.watcherTimedDecrement()
