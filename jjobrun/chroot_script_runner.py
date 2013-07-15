@@ -265,7 +265,12 @@ class runnershell:
             self.lines.append(line)
         
         self.genWatcher()
-    
+        exitstatus = self.p.exitstatus
+        if exitstatus != None:
+            output = exitstatus
+        else:
+            output = 255
+        return output
     def runscript2(self,script):
         self.log.info("runscript(%s)" % (script))
         # Now load script
