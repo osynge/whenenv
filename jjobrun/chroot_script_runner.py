@@ -194,7 +194,13 @@ class runnershell:
         return self.runscript3(script)
     
     def displayMessage(self,message):
+        
         print 'diff="%s"' % (message)
+        lastlinelen = len(self.lastDispalyedLine)
+        lines = message.split('\n')
+        for line in lines:
+            if lastlinelen == len(line):
+                print "match"
         
     def runscript_beve_callback(self,before,userdata):
         self.watcherTimedDecrement()
