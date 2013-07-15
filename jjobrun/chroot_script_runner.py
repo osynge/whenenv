@@ -106,7 +106,11 @@ class runnershell:
         
         if self.p.isalive() == True:
             self.log.info("waiting")
-            self.p.wait()
+            try:
+                self.p.wait()
+            except pexpect.ExceptionPexpect,E:
+                self.log.error("pexpect.ExceptionPexpect:%s" % (E))
+            
         exitstatus = self.p.exitstatus
         self.p = None
         self.log.info("finalising done")
