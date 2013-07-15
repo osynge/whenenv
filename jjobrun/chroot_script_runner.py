@@ -268,6 +268,7 @@ class runnershell:
         exitstatus = self.p.exitstatus
         output = 0
         if exitstatus != None:
+            self.log.info("runscript returns(%s)" % (exitstatus))
             output = exitstatus
         return output
     def runscript2(self,script):
