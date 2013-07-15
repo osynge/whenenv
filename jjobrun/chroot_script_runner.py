@@ -194,12 +194,11 @@ class runnershell:
         return self.runscript3(script)
     
     def displayMessage(self,message):
-        
-        print 'diff="%s"' % (message)
         lastlinelen = len(self.lastDispalyedLine)
         lines = message.split('\n')
         for line in lines:
             clenaline = line.strip()
+            print 'diff="%s"' % (clenaline)
             if lastlinelen == len(clenaline):
                 print "match"
             self.lastDispalyedLine = clenaline
