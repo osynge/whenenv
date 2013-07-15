@@ -203,13 +203,10 @@ class runnershell:
         slive = False
         for Line in messageDiff.split('\n'):
             firstLine = Line.strip()
-            print 'firstLine="%s"' % (firstLine)
-            print self.AliveChecks
+            #print 'firstLine="%s"' % (firstLine)
+            #print self.AliveChecks
             if firstLine in self.AliveChecks:
-                print 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-            for key in self.AliveChecks:
-                if key == firstLine:
-                    slive = True
+                slive = True
         if slive:
             # We know the terminal is back
             self.scriptReturned = True
@@ -241,8 +238,13 @@ class runnershell:
         else:
             if self.scriptReturned:
                 self.delWatcher()
-            if self.scriptReturnedCheck():
-                self.log.info("sent scriptreturnCheck")
+            else:
+                self.reminderCounter += 1
+                if self.reminderCounter > self.reminderCounterMax:
+                    self.reminderCounter = 0
+                    self.reminderCounterMax += 10
+                    if self.scriptReturnedCheck():
+                        self.log.info("sent scriptreturnCheck")
         #self.p.send("echo ls\n")
         
         
@@ -255,6 +257,8 @@ class runnershell:
         self.scriptReturned = False
         self.lastMessageLen = 0
         self.AliveChecks = []
+        self.reminderCounter = 0
+        self.reminderCounterMax = 10
         
         fp = open(script)
         for line in fp:
