@@ -192,6 +192,9 @@ class runnershell:
     
     def runscript(self,script):
         return self.runscript3(script)
+    
+    def displayMessage(self,message):
+        print 'diff="%s"' % (message)
         
     def runscript_beve_callback(self,before,userdata):
         self.watcherTimedDecrement()
@@ -199,7 +202,7 @@ class runnershell:
         messageDiff = before[self.lastMessageLen:].strip()
         self.lastMessageLen = len(before)
         if len(messageDiff) > 0:
-            print 'diff="%s"' % (messageDiff)
+            self.displayMessage(messageDiff)
         slive = False
         for Line in messageDiff.split('\n'):
             firstLine = Line.strip()
@@ -207,6 +210,7 @@ class runnershell:
             #print self.AliveChecks
             if firstLine in self.AliveChecks:
                 slive = True
+                break
         if slive:
             # We know the terminal is back
             self.scriptReturned = True
@@ -259,7 +263,7 @@ class runnershell:
         self.AliveChecks = []
         self.reminderCounter = 0
         self.reminderCounterMax = 10
-        
+        self.lastDispalyedLine = ""
         fp = open(script)
         for line in fp:
             self.lines.append(line)
