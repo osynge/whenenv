@@ -19,8 +19,8 @@ class runnershell2(object):
         #self.log.info("chrootCmd=%s" % (self.chrootCmd))
         self.env = kwargs.get('env', {})
         self.running = None
-        self.logOut = logging.getLogger("sr.out")
-        self.logErr = logging.getLogger("sr.err")
+        self.logOut = logging.getLogger("sr2.out")
+        self.logErr = logging.getLogger("sr2.err")
         self.state = observable.Observable(None)
     def logOutput(self,fd,data,args,keys):
         log = self.log
