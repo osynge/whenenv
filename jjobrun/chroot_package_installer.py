@@ -511,11 +511,11 @@ class ChrootPackageInstallerDebian2(object):
         
     
     def initialise(self):
-        self.shell = watcher.LogRunShell(command=self.chrootCmd)
-        self.shell.Write("set -x\n")
+        pass
     
     def updatePackages(self):
-        self.shell.Write("apt-get update -y\n")
+        #self.shell.Write("apt-get update -y\n")
+        pass
     def installPackages(self,packages):
         for package in packages:
             
