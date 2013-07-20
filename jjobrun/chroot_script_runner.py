@@ -6,6 +6,8 @@ import string
 import watcher
 import prompts
 import re
+import observable
+
 transtbl = string.maketrans(
           'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
           'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
@@ -383,7 +385,7 @@ class runnershell2(object):
         self.running = None
         self.logOut = logging.getLogger("sr.out")
         self.logErr = logging.getLogger("sr.err")
-        
+        self.state = observable.Observable(None)
     def logOutput(self,fd,data,args,keys):
         log = self.log
         if fd == 1:
@@ -496,7 +498,7 @@ class runnershell2(object):
         self.running.Write("set -e \n")
         return True
     def runscript(self,script):
-        self.running.CbAddOnFdRead(self.logOutputRunScript)
+        
         self.running.CbAddOnExit(self.ScriptOnExit)
         startPrompt = prompts.GeneratePrompt()
         endPrompt = prompts.GeneratePrompt()
@@ -504,18 +506,26 @@ class runnershell2(object):
         self.promptRunScriptEnd = re.compile(endPrompt)
         self.waitingOnPromptRunScriptStart = True
         self.waitingOnPromptRunScriptEnd = False
+        self.running.CbAddOnFdRead(self.logOutputRunScript)
         self.running.Write("echo %s\n" % (startPrompt))
         while self.waitingOnPromptRunScriptStart == True:
             self.running.Comunicate(timeout = 1)
+        
         fp = open(script)
         for line in fp:
             cleanline = line.strip()
-            self.log.debug("run+%s" %(cleanline))
+            self.log.info("run+%s" %(cleanline))
             self.running.Write(line)
         self.running.Write("echo %s\n" % (endPrompt))
         while self.waitingOnPromptRunScriptEnd == True:
             self.running.Comunicate()
-        return True
+        self.running.CbDelOnFdRead(self.logOutputRunScript)
+        self.running.CbDelOnExit(self.ScriptOnExit)
+        rc = 0
+        
+        if not self.running.returncode() == None:
+             rc = self.running.returncode()
+        return rc
         
         
         
@@ -529,8 +539,14 @@ class runnershell2(object):
         self.waitingOnPromptSetEnvStart = True
         self.waitingOnPromptSetEnvEnd = False
         self.running.Write("echo %s\n" % (startPrompt))
+        counter = 0
         while self.waitingOnPromptSetEnvStart == True:
             self.running.Comunicate(timeout = 1)
+            counter += 1
+            if counter > 100:
+                counter = 0
+                self.log.info("d")
+                self.running.Write("echo %s\n" % (startPrompt))
         for enviroment in env.keys():
             if enviroment in passenv_ignored:
                 continue
@@ -539,7 +555,8 @@ class runnershell2(object):
             self.running.Write(cmd)
         self.running.Write("echo %s\n" % (endPrompt))
         while self.waitingOnPromptSetEnvEnd == True:
-            self.running.Comunicate()
+            self.running.Comunicate(timeout = 1)
+        self.running.CbDelOnFdRead(self.logOutputSetEnv)
         return True
         
     def getEnv(self):

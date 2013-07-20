@@ -70,11 +70,12 @@ class runshell(object):
     
     def CbAddOnExit(self,functionPtr,*args, **kwargs):
         self.OnExitCb[functionPtr] =  (args, kwargs)
-        
+    def CbDelOnExit(self,functionPtr):
+        del self.OnExitCb[functionPtr]  
     def CbAddOnFdRead(self,functionPtr,*args, **kwargs):
         self.OnFd[functionPtr] =  (args, kwargs)
     def CbDelOnFdRead(self,functionPtr):
-        self.OnFd[functionPtr]
+        del self.OnFd[functionPtr]
     
     def doCallBackFileDescriptor(self,Fd,Data):
         #self.log.info("out=%s,%s" % (Fd,Data))
