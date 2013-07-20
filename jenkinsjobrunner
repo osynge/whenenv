@@ -10,6 +10,11 @@ import string
 import uuid
 import re
 import base64
+import shutil
+
+from jjobrun.chroot_package_installer import ChrootPackageInstallerRedhat ,ChrootPackageInstallerDebian
+from jjobrun.chroot_script_runner import runnershell
+
 
 def subphandling(cmd,timeout = 10):   
     log = logging.getLogger("sub")
@@ -75,54 +80,6 @@ def exit_with_usage():
     print globals()['__doc__']
     os._exit(1)
 
-def oldmain():
-
-    ######################################################################
-    # Parse the options, arguments, get ready, etc.
-    ######################################################################
-    try:
-        optlist, args = getopt.getopt(sys.argv[1:], 'h?ac:', ['help','h','?'])
-    except Exception, e:
-        print str(e)
-        exit_with_usage()
-    options = dict(optlist)
-    if len(args) > 1:
-        exit_with_usage()
-        
-    if [elem for elem in options if elem in ['-h','--h','-?','--?','--help']]:
-        print "Help:"
-        exit_with_usage()
-
-    if len(args) == 1:
-        script_filename = args[0]
-    else:
-        script_filename = "script.log"
-    if '-a' in options:
-        fout = file (script_filename, "ab")
-    else:
-        fout = file (script_filename, "wb")
-    if '-c' in options:
-        command = options['-c']
-    else:
-        command = "sh"
-
-    # Begin log with date/time in the form CCCCyymm.hhmmss
-    fout.write ('# %4d%02d%02d.%02d%02d%02d \n' % time.localtime()[:-3])
-    
-    ######################################################################
-    # Start the interactive session
-    ######################################################################
-    p = pexpect.spawn(command)
-    p.logfile = fout
-    global global_pexpect_instance
-    global_pexpect_instance = p
-    signal.signal(signal.SIGWINCH, sigwinch_passthrough)
-
-    print "Script recording started. Type ^] (ASCII 29) to escape from the script shell."
-    p.interact(chr(29))
-    fout.close()
-    return 0
-
 def sigwinch_passthrough (sig, data):
 
     # Check for buggy platforms (see pexpect.setwinsize()).
@@ -150,9 +107,34 @@ def jumpstrart():
         traceback.print_exc()
         os._exit(1)
 
-class runnershell:
+
+
+def lsb_release():
+    log = logging.getLogger("lsb_release")
+    cmd = "lsb_release -a"
+    processRc,stdout,stderr = subphandling(cmd,timeout = 10)
+    if processRc != 0:
+        log.error("'%s' returned an error" % (cmd))
+        return None
+    magicLines = ["Distributor ID",
+        "Description",
+        "Release",
+        "Codename"]
+    output = {}
+    for line in stdout.split('\n'):
+        splitline = line.strip().split(':')
+        if len(splitline) <= 1:
+            continue
+        if splitline[0] in magicLines:
+            value = splitline[1].strip()
+            output[splitline[0]] = value
+    log.info(output)
+    
+    return output
+
+class jobPartRun:
     def __init__(self, shell="/bin/bash"):
-        self.log = logging.getLogger("runnershell")
+        self.log = logging.getLogger("jobPartRun")
         self.shell = shell
         
         
@@ -171,8 +153,29 @@ class runnershell:
         if len(striped) > 0:
             self.log.info("endofline=%s" % (imput.strip()))
         #infomration = self.p.read()
-
-    def packages(self,jobpart):
+    
+    
+    def getArtifacts(self,jobpart,env):
+        if not "artifacts" in jobpart.keys():
+            self.log.debug("No artifacts in chroot script so no chroot artifacts")
+            return True
+            RawartifactsList = list(jobpart["artifacts"])
+        if not "CHROOT" in env.keys():
+            self.log.debug("No CHROOT variable, so no chroot artifacts")
+            return True
+        prefix =  env["CHROOT"]
+        RawartifactsList = list(jobpart["artifacts"])
+        rc = 0
+        for artifact in RawartifactsList:
+            directory = os.path.dirname(artifact)
+            src = "%s/%s" %( prefix,artifact)
+            dest = artifact
+            self.log.info("Copying directory=%s,src=%s,dest=%s" % (directory,src,dest))
+            shutil.copyfile(src, dest)
+        return True
+            
+    def packagesDebain(self,jobpart,env):
+        self.log.info("packagesDebain(%s,%s)" % (jobpart,env))
         depnedacylist = []
         if "shell" in jobpart.keys():
             
@@ -182,274 +185,146 @@ class runnershell:
                     self.log.info("foundthe answer")
                     depnedacylist = list(jobpart["shell"]["dependancies"]["Debian"])
         if len(depnedacylist) == 0:
+            self.log.info("no packages to install")
             return True
         
-        #script_filename = "foo"
-        #if os.path.isfile(script_filename):
-        #    fout = file (script_filename, "ab")
-        #else:
-        #    fout = file (script_filename, "wb")
-        #self.p.logfile = fout
         match_prompt = uuid.uuid1()
         prompt = str(match_prompt)
         packagesmissing = []
         alreadyinstalled = []
-        for package in depnedacylist:
-            self.log.info("todo=%s" % (package))
-            cmd = "/usr/sbin/chroot chroot /usr/bin/dpkg-query -W --showformat='${Status}\n' %s\n" % (package)
-            p = pexpect.spawn(cmd)
-            p.send("PS1=%s\n" % (prompt)) 
-            p.send(cmd)
+        chrootdir = env['CHROOT']
+        cmd = "/usr/sbin/chroot %s" % (chrootdir)
+        pi = ChrootPackageInstallerDebian(command = cmd,enviroment = env)
+        initok = pi.initialise()
+        if  initok == False:
+            self.log.info("INITIALISATION FAILED")
+            return False
+        initok = pi.updatePackages()
+        if  initok == False:
+            return False
+        initok = pi.installPackages(depnedacylist)
+        if  initok == False:
+            return False
+        return True
+        
+    def packagesScientific(self,jobpart,env):
+        self.log.info("packagesScientific(%s,%s)" % (jobpart,env))
+        depnedacylist = []
+        if "shell" in jobpart.keys():
             
-            done = False
-            while done == False:
+            if "dependancies" in jobpart["shell"].keys():
                 
-                index = p.expect (["install ok installed",
-                    "dpkg-query: no packages found matching %s" % (package),
-                    prompt, 
-                    pexpect.EOF, 
-                    pexpect.TIMEOUT, 
-                    '\r\n'],timeout=500)
-                self.log.info("result ddxd=%s`" % (index))
-                if index == 0:
-                    done = True
-                    alreadyinstalled.append(package)
-                if index == 1:
-                    packagesmissing.append(package)
-                    done = True
-                if index == 3:
-                    done = True
-            print p.exitstatus
-                
-        for package in depnedacylist:
-            self.log.info("ssssssssssssssssssssssssssssssssss")
-            cmd = "/usr/sbin/chroot chroot /usr/bin/apt-get install -y %s\n" % (package)
-            self.log.info(cmd)
-            p = pexpect.spawn(cmd)
-            p.send("PS1=%s\n" % (prompt)) 
-            p.send(cmd)
-            done = False
-            while done == False:
-                index = p.expect (["Do you want to continue",
-                    prompt,
-                    "%s is already the newest version." % (package),
-                    "additional disk space will be used", 
-                    pexpect.EOF, 
-                    pexpect.TIMEOUT,
-                    'Reading package lists',
-                    'The following NEW packages will be installed',
-                    'Get:',
-                    'Selecting previously unselected package',
-                    'Fetched',
-                    'Unpacking',
-                    'Setting',
-                    'Processing triggers for '],
-                    timeout=500)
-                self.log.debug("aptitude insstall=%s" % (index))
-                if index == 0:
-                    p.send("Y\n")
-                    
-                if index >= 6:
-                    imput = p.before
-                    striped = imput.strip()
-                    if len(striped) > 0:
-                        self.log.info(imput.strip())
-                if index in [2,4]:
-                    done = True
-                if index == 3:
-                    p.send("Y\n")
-                if index == 1:
-                    p.send(cmd)
+                if "Scientific" in jobpart["shell"]["dependancies"].keys():
+                    self.log.info("foundthe answer")
+                    depnedacylist = list(jobpart["shell"]["dependancies"]["Scientific"])
+        if len(depnedacylist) == 0:
+            self.log.info("no packages to install")
+            return True
+        
+        match_prompt = uuid.uuid1()
+        prompt = str(match_prompt)
+        packagesmissing = []
+        alreadyinstalled = []
+        chrootdir = env['CHROOT']
+        cmd = "/usr/sbin/chroot %s" % (chrootdir)
+        pi = ChrootPackageInstallerRedhat(command = cmd,enviroment = env)
+        initok = pi.initialise()
+        if  initok == False:
+            self.log.info("INITIALISATION FAILED")
+            return False
+        initok = pi.updatePackages()
+        if  initok == False:
+            self.log.info("updatePackages failed")
+            return False
+        initok = pi.installPackages(depnedacylist)
+        if  initok == False:
+            return False
+        return True
+        
+        
+        
+    def packages(self,jobpart,env):
+        self.log.error("packages")
+        release =  lsb_release()
+        self.log.error("Distributor=%s" % (release["Distributor ID"]))
+        done = False
+        if release["Distributor ID"] == "Debian":
+            self.packagesDebain(jobpart,env)
+            done = True
+        if release["Distributor ID"] == "Scientific":
+            self.packagesScientific(jobpart,env)
+            done = True
+        self.log.error("Distributor Matched=%s" % (done))
                     
         
         
     def executabingo(self,jobpart,env = {}):
-        self.packages(jobpart)
+        self.log.error("executabingo")
         inputenv = os.environ
         inputenv.update(env)
         output = {"rc" :  255 , "env" : {}}
         knownKeys = set(inputenv)
         env_ignored = set(["PATH","SHLVL","OLDPWD",]).union(set(env.keys()))
+        
+        if not "flags" in jobpart.keys():
+            self.log.error("no flags specified")
+            return output
+        
+        if not "script" in jobpart.keys():
+            sel.log.error("no script specified")
+            return output
+        self.packages(jobpart,env)
         command = "/bin/bash"
-        
-        
-        
-        
-        
-        
-        
-        if "shell" in jobpart.keys():
-            chootdir = "chroot"
-            if "CHROOT" in inputenv.keys():
-                chootdir = inputenv["CHROOT"]
+        allfliages =  jobpart["flags"]
+        self.log.error("flags=%s" % (allfliages))
+        if "chroot" in allfliages:
+            if not "CHROOT" in inputenv.keys():
+                self.log.error("no CHROOT enviroment_valiable set")
+                return output
+            chootdir = inputenv["CHROOT"]
             command = "%s %s /bin/bash"  % ("/usr/sbin/chroot" , chootdir)
-
+        self.log.error("command=%s" % (command))
         #chroot /workspace/docbook-production/chroot/ /bin/bash
-
-        
-        self.p = pexpect.spawn(command)
-        #script_filename = "foo"
-        #if os.path.isfile(script_filename):
-        #    fout = file (script_filename, "ab")
-        #else:
-        #    fout = file (script_filename, "wb")
-        #self.p.logfile = fout
-        match_prompt = uuid.uuid1()
-        prompt = str(match_prompt)
-        self.p.send("PS1=%s\n" % (prompt)) 
-        index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
-        self.p.send("stty -echo\n")
-        index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
-        
-        # Now load enviroment
-        
-        for enviroment in env.keys():
-            self.p.send('%s="%s"\n' % (enviroment,env[enviroment]))
-            index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
-        
-        # Now load build deps
-        
-        self.packages(jobpart)
-
-        
+        sr = runnershell(command,env)
+        rc = sr.initialise()
+        if rc != True:
+            sel.log.error("failed to init CHROOT")
+            return output
+        rc = sr.setEnv(env)
+        if rc != True:
+            sel.log.error("failed to set env in CHROOT")
+            return output
         # Now load script
         script = "%s/%s" % (os.path.dirname(os.path.realpath(__file__)),jobpart["script"])
-        fp = open(script)
-        
-
-        match_one =  uuid.uuid1()
-        bashvar_one = base64.b32encode(str(match_one).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
-        match_two =  uuid.uuid1()
-        bashvar_two = base64.b32encode(str(match_two).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)
-        
-        
-        
-        
-        self.p.send("%s=%s\n" % (bashvar_one,match_one))
-        index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
-        self.p.send("%s=%s\n" % (bashvar_two,match_two))
-        index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
-        #self.p.send("set -x\n")
-        #index = self.p.expect ([prompt, pexpect.EOF, pexpect.TIMEOUT, '\r\n'])
-        
-        commandstack = []
-        for line in fp:
-            self.p.send(line)
-           
-        
-        self.p.send("echo ${%s}=${?}\n" % (bashvar_one))
-        
-        self.p.send("\n")
-        self.souldloop = True
-        ready = False
-        state = 0
-        returnCode = None
-        
-        nextlinecount = 3
-        timeouts = 0
-        while self.souldloop == True:
-            index = self.p.expect ([prompt,'%s=.*\r\n' % (match_one),pexpect.EOF, pexpect.TIMEOUT, 'Unpacking', '\r\n','\n'],timeout=500)
-            self.log.debug("indexxx=%s" % (index))
-            if index == 0:
-                timeouts = 0
-            if index == 1:
-                timeouts = 0
-                after = self.p.after.split('\n')
-                print self.p.after
-                print dir(self.p.after)
-                SplitLine = after[0].strip().split('=')
-                print SplitLine
-                if len(SplitLine) < 2:
-                    self.log.error("Failed retriving RC")
-                    return output
-                returnCode = int(SplitLine[1])
-                self.log.debug("scriptrc=%s" % (returnCode))
-                break
-            if index == 2:
-                
-                self.log.error("Unexpected EOF")
-                exitstatus = self.p.exitstatus
-                if exitstatus != None:
-                    output["rc"] = exitstatus
-                else:
-                    output["rc"] = 255
-                self.log.error("Quit")
-                return output
-                    
-                
-            if index == 3:
-                self.log.error("TimeOut")
-                self.p.send("\n")
-                timeouts = timeouts +1
-                if timeouts > 100:
-                    self.log.error("timedout")
-                    return output
-            if index == 4:
-                timeouts = 0
-                imput = self.p.before
-                striped = imput.strip()
-                if len(striped) > 0:
-                    self.log.info(imput.strip())
-            
-            if index == 5:
-                timeouts = 0
-                imput = self.p.before
-                striped = imput.strip()
-                if len(striped) > 0:
-                    self.log.info(imput.strip())
-            
-        self.p.send("export\n")
-        self.p.send("echo ${%s}=${?}\n" % (bashvar_two))
-        self.souldloop = True
+        initialEnv = sr.getEnv()
+        #self.log.info("initialEnv '%s'" % (initialEnv))
+        rc = sr.runscript(script)
+        self.log.info("runscript rc '%s'" % (rc))
         foundEnv = {}
-        while self.souldloop == True:
-            exitstatus = self.p.exitstatus
-            if exitstatus != None:
-                self.log.info("exitstatus=%s" % (exitstatus))
-                self.log.info(self.p.env)
-                break
-            index = self.p.expect ([prompt,'%s.*\r\n' % (match_two),pexpect.EOF, pexpect.TIMEOUT, '\r\n'],timeout=200)
-            if index == 1:
-                after = self.p.after.split('\n')
-                self.log.info("sdfsdfsdf=%s,%s" % (after[0].strip(),index))
-                break
+        if rc == 0:
+            self.log.info("Updating env")
+            afterEnv = sr.getEnv()
+            self.log.info("initialEnv '%s'" % (initialEnv))
+            self.log.info("afterEnv '%s'" % (afterEnv))
+            keysInitial = set(initialEnv.keys()).difference()
+            keysFinal = set(afterEnv.keys()).difference()
+            keysnew = keysFinal.difference(keysInitial)
             
-            if index == 4:
-                imput = self.p.before
-                striped = imput.strip()
-                if len (striped) == 0:
-                    continue
-                if "declare -x " != (striped[:11]):
-                    continue
-                regdelexp = re.compile('=')
-                shellline = striped[11:]
-                matches = regdelexp.search(shellline)
-                if matches == None:
-                    continue
-                key = shellline[:matches.start()]
-                value = shellline[matches.end():][1:-1]
-                if key in env_ignored:
-                    continue
-                if key in knownKeys:
-                    if inputenv[key] != value:
-                        self.log.info("Ignoring variable change %s=%s','%s" % (key,inputenv[key] , value))
-                    continue
-                
+            for key in keysnew:
+                value = afterEnv[key]
+                self.log.info("Exported '%s=%s'" % (key,value))
                 foundEnv[key] = value
-        
-        exitstatus = self.p.exitstatus
-        if exitstatus != None:
-            self.p.send("exit\n")
-        
-        return {"rc" :  returnCode , "env" : foundEnv}
+        returnCode = sr.finalise()
+        self.log.info("finalise rc '%s'" % (returnCode))
+        return {"rc" :  rc , "env" : foundEnv}
 
 def runJob (jobname):
     log = logging.getLogger("runJob")
     mappings = {
         "GenChroot.SL-6X" : ["transfer/GenChroot.SL-6X.sh"],
-        "vmcatcher-scientific-6-prod" : ["transfer/chroot-scientific-6-buildup-prod.sh",
-            "transfer/vmcatcher-scientific-6-prod.sh",
-            "transfer/chroot-scientific-6-teardown.sh"],
+        #"vmcatcher-scientific-6-prod" : ["transfer/chroot-scientific-6-buildup-prod.sh",
+        #    "transfer/vmcatcher-scientific-6-prod.sh",
+        #    "transfer/chroot-scientific-6-teardown.sh"],
         "vmcatcher-scientific-6-trunk" : ["transfer/chroot-scientific-6-buildup-trunk.sh",
             "transfer/vmcatcher-scientific-6-trunk.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
@@ -459,10 +334,7 @@ def runJob (jobname):
         "vmcatcher-scientific-6-prod-test" : ["transfer/chroot-scientific-6-buildup-prod.sh",
             "transfer/vmcatcher-scientific-6-prod-test.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
-        "vmcatcher-debian-wheezy-prod" :["transfer/chroot-debian-wheezy-buildup.sh",
-            "transfer/vmcatcher-debian-wheezy-prod-part-02.sh",
-            "transfer/vmcatcher-debian-wheezy-prod-part-03.sh",
-            "transfer/chroot-debian-wheezy-teardown.sh"],
+        
         "vmcatcher_eventHndlExpl_ON-scientific-6-prod" : ["transfer/chroot-scientific-6-buildup-prod.sh",
             "transfer/vmcatcher_eventHndlExpl_ON-scientific-6-prod-part-01.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
@@ -487,38 +359,25 @@ def runJob (jobname):
         "dirvacua-scientific-6-trunk" : [ "transfer/chroot-scientific-6-buildup-trunk.sh",
             "transfer/dirvacua-scientific-6-trunk.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
-        "smimeX509validation-debian-wheezy-prod" : ["transfer/chroot-debian-wheezy-buildup.sh",
-            "transfer/chroot-debian-wheezy-freshen.sh",
-            "transfer/smimeX509validation-debian-wheezy-prod-part-03.sh",
-            "transfer/smimeX509validation-debian-wheezy-prod-part-04.sh",
-            "transfer/chroot-debian-wheezy-teardown.sh"],
-        "grid-virt-sort-debian-wheezy-prod" : ["transfer/chroot-debian-wheezy-buildup.sh",
-            "transfer/chroot-debian-wheezy-freshen.sh",
-            "transfer/grid-virt-sort-debian-wheezy-prod-part-02.sh",
-            "transfer/grid-virt-sort-debian-wheezy-prod-part-03.sh",
-            "transfer/chroot-debian-wheezy-teardown.sh"],
-        "grid-virt-sort-debian-wheezy-prod-deb" : ["transfer/chroot-debian-wheezy-buildup.sh",
-            "transfer/chroot-debian-wheezy-freshen.sh",
-            "transfer/grid-virt-sort-debian-wheezy-prod-deb-dependencies.sh",
-            "transfer/grid-virt-sort-debian-wheezy-prod-deb-build.sh",
-            "transfer/grid-virt-sort-debian-wheezy-prod-deb-export.sh",
-            "transfer/chroot-debian-wheezy-teardown.sh"],
         "vmcaster-scientific-6-prod" : ["transfer/chroot-scientific-6-buildup-prod.sh",
             "transfer/vmcaster-scientific-6-prod-part-02.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
-        "vmcaster-debian-wheezy-prod" : ["transfer/vmcaster-debian-wheezy-prod-part-01.sh",
-            "transfer/vmcaster-debian-wheezy-prod-part-02.sh",
-            "transfer/vmcaster-debian-wheezy-prod-part-03.sh",
-            "transfer/vmcaster-debian-wheezy-prod-part-04.sh",
-            "transfer/vmcaster-debian-wheezy-prod-part-05.sh"],
+        "chrootbuilder-scientific-6-prod" : ["transfer/chroot-scientific-6-buildup-prod.sh",
+            "transfer/chrootbuilder-scientific-6-prod.sh",
+            "transfer/chroot-scientific-6-teardown.sh"],
+        #"vmcaster-debian-wheezy-prod" : ["transfer/vmcaster-debian-wheezy-prod-part-01.sh",
+        #    "transfer/vmcaster-debian-wheezy-prod-part-02.sh",
+        #    "transfer/vmcaster-debian-wheezy-prod-part-03.sh",
+        #    "transfer/vmcaster-debian-wheezy-prod-part-04.sh",
+        #    "transfer/vmcaster-debian-wheezy-prod-part-05.sh"],
         "hepixvmitrust-scientific-6-trunk" : ["transfer/chroot-scientific-6-buildup-trunk.sh",
             "transfer/hepixvmitrust-scientific-6-trunk.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
         "repo-scientific" : ["transfer/repo-scientific.sh"],
-        "hepixvmitrust-debian-wheezy-prod" : ["transfer/hepixvmitrust-debian-wheezy-prod-part-01.sh",
-            "transfer/hepixvmitrust-debian-wheezy-prod-part-02.sh",
-            "transfer/hepixvmitrust-debian-wheezy-prod-part-03.sh",
-            "transfer/hepixvmitrust-debian-wheezy-prod-part-04.sh"],
+        #"hepixvmitrust-debian-wheezy-prod" : ["transfer/chroot-debian-wheezy-buildup.sh",
+        #    "transfer/hepixvmitrust-debian-wheezy-prod-part-02.sh",
+        #    "transfer/hepixvmitrust-debian-wheezy-prod-part-03.sh",
+        #    "transfer/hepixvmitrust-debian-wheezy-prod-part-04.sh"],
         "grid-virt-sort-scientific-6-trunk" : ["transfer/chroot-scientific-6-buildup-trunk.sh",
             "transfer/grid-virt-sort-scientific-6-trunk.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
@@ -526,11 +385,11 @@ def runJob (jobname):
             "transfer/GenChroot.debian-wheezy-part-02.sh",
             "transfer/GenChroot.debian-wheezy-part-03.sh",
             "transfer/GenChroot.debian-wheezy-part-04.sh"],
-        "dirvacua-debian-wheezy-prod" : ["transfer/dirvacua-debian-wheezy-prod-part-01.sh",
-            "transfer/dirvacua-debian-wheezy-prod-part-02.sh",
-            "transfer/dirvacua-debian-wheezy-prod-part-03.sh",
-            "transfer/dirvacua-debian-wheezy-prod-part-04.sh",
-            "transfer/dirvacua-debian-wheezy-prod-part-05.sh"],
+        #"dirvacua-debian-wheezy-prod" : ["transfer/dirvacua-debian-wheezy-prod-part-01.sh",
+        #    "transfer/dirvacua-debian-wheezy-prod-part-02.sh",
+        #    "transfer/dirvacua-debian-wheezy-prod-part-03.sh",
+        #    "transfer/dirvacua-debian-wheezy-prod-part-04.sh",
+        #    "transfer/dirvacua-debian-wheezy-prod-part-05.sh"],
         "dirvacua-scientific-6-prod" : ["transfer/chroot-scientific-6-buildup-prod.sh",
             "transfer/dirvacua-scientific-6-prod.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
@@ -546,38 +405,161 @@ def runJob (jobname):
                     "command" : { "template" : "chroot %CHROOT%",
                         "envimeroment" : ["CHROOT"]
                         },
-                    "dependancies" :{ "Debian" : ["make", "subversion", "fop", "xsltproc","docbook-xml","docbook-xsl" ] },
-                    }
+                    "dependancies" :{ "Debian" : ["make", "subversion","openjdk-6-jre-lib","libservlet2.5-java", "openjdk-6-jre","openjdk-6-jre-headless", "fop", "xsltproc","docbook-xml","docbook-xsl" ] },
+                    },
+                "artifacts" : ["artifacts.tgz"],
+                "flags" : ["chroot"],
             },
             {   "script" : "transfer/chroot-debian-wheezy-teardown.sh"},
             ],
+        "vmcatcher-debian-wheezy-prod" : [{  "script" : "transfer/chroot-debian-wheezy-buildup.sh"},
+            {   "script" : "transfer/vmcatcher-debian-wheezy-prod-part-03.sh",
+                "shell" : { "type" : "chroot",
+                    "command" : { "template" : "chroot %CHROOT%",
+                        "envimeroment" : ["CHROOT"]
+                        },
+                    "dependancies" :{ "Debian" : ["git", "python","rpm","make", "python-setuptools","python-m2crypto", ] },
+                    },
+                "artifacts" : ["artifacts.tgz"],
+                "flags" : ["chroot"],
+            },
+            {   "script" : "transfer/chroot-debian-wheezy-teardown.sh"},
+            ],
+        "smimeX509validation-debian-wheezy-prod": [{  "script" : "transfer/chroot-debian-wheezy-buildup.sh"},
+            {   "script" : "transfer/smimeX509validation-debian-wheezy-prod-part-04.sh",
+                "shell" : { "type" : "chroot",
+                    "command" : { "template" : "chroot %CHROOT%",
+                        "envimeroment" : ["CHROOT"]
+                        },
+                    "dependancies" :{ "Debian" : ["git", "python","rpm","make", "python-setuptools","python-m2crypto", ] },
+                    },
+                "artifacts" : ["artifacts.tgz"],
+                "flags" : ["chroot"],
+            },
+            {   "script" : "transfer/chroot-debian-wheezy-teardown.sh"},
+            ],
+        "grid-virt-sort-debian-wheezy-prod-deb": [{  "script" : "transfer/chroot-debian-wheezy-buildup.sh"},
+            {   "script" : "transfer/smimeX509validation-debian-wheezy-prod-part-04.sh",
+                "shell" : { "type" : "chroot",
+                    "command" : { "template" : "chroot %CHROOT%",
+                        "envimeroment" : ["CHROOT"]
+                        },
+                    "dependancies" :{ "Debian" : ["git", "python","git-buildpackage","devscripts", "python-all",  "python-setuptools","python-m2crypto",] },
+                    },
+                "artifacts" : ["artifacts.tgz"],
+                "flags" : ["chroot"],
+            },
+            {   "script" : "transfer/chroot-debian-wheezy-teardown.sh"},
+            ],
+        "grid-virt-sort-debian-wheezy-prod": [{  "script" : "transfer/chroot-debian-wheezy-buildup.sh"},
+            {   "script" : "transfer/grid-virt-sort-debian-wheezy-prod-part-03.sh",
+                "shell" : { "type" : "chroot",
+                    "command" : { "template" : "chroot %CHROOT%",
+                        "envimeroment" : ["CHROOT"]
+                        },
+                    "dependancies" :{ "Debian" : ["subversion", "python","rpm","make" ] },
+                    },
+                "artifacts" : ["artifacts.tgz"],
+                "flags" : ["chroot"],
+            },
+            {   "script" : "transfer/chroot-debian-wheezy-teardown.sh"},
+            ],
+        "chroot-test-vmcatcher-scientific-6-prod" : [{"script" : "transfer/chroot-scientific-6-buildup-prod.sh"},
+            {   "script" : "transfer/chroot-test-vmcatcher-scientific-6-prod.sh",
+                "shell" : { "type" : "chroot",
+                    "command" : { "template" : "chroot %CHROOT%",
+                        "envimeroment" : ["CHROOT"]
+                        },
+                    "dependancies" :{ "Scientific" : ["org-desy-grid-virt-sort-release" ,"hepixvmitrust","git", "python","rpm","make","python-setuptools","m2crypto" ] },
+                    },
+                "artifacts" : ["artifacts.tgz"],
+                "flags" : ["chroot"],
+            },
+            {"script" : "transfer/chroot-scientific-6-teardown.sh"}],
+        "vmcatcher-scientific-6-prod" : [{"script" : "transfer/chroot-scientific-6-buildup-prod.sh"},
+                {"script" : "transfer/vmcatcher-scientific-6-prod.sh"},
+                {"script" : "transfer/chroot-scientific-6-teardown.sh"}],
+        "dirvacua-debian-wheezy-prod" : [{"script" : "transfer/chroot-debian-wheezy-buildup.sh"},
+                {   "script" : "transfer/dirvacua-debian-wheezy-prod-chrooted.sh",
+                    "shell" : { "type" : "chroot",
+                    "command" : { "template" : "chroot %CHROOT%",
+                        "envimeroment" : ["CHROOT"]
+                        },
+                    "dependancies" :{ "Debian" : ["subversion", "python","rpm","make","git", "python-setuptools","python-m2crypto" ] },
+                    },
+                "artifacts" : ["artifacts.tgz"],
+                "flags" : ["chroot"],
+                },
+                {"script" : "transfer/chroot-debian-wheezy-teardown.sh"}],
+        "chrootbuilder-debian-wheezy-prod": [{"script" : "transfer/chroot-debian-wheezy-buildup.sh"},
+                {   "script" : "transfer/chrootbuilder-debian-wheezy-prod.sh",
+                    "shell" : { "type" : "chroot",
+                    "command" : { "template" : "chroot %CHROOT%",
+                        "envimeroment" : ["CHROOT"]
+                        },
+                    "dependancies" :{ "Debian" : ["subversion", "python","rpm","make","git", "python-setuptools","python-m2crypto" ] },
+                    },
+                "artifacts" : ["artifacts.tgz"],
+                "flags" : ["chroot"],
+                },
+                {"script" : "transfer/chroot-debian-wheezy-teardown.sh"}],
+        "hepixvmitrust-debian-wheezy-prod": [{"script" : "transfer/chroot-debian-wheezy-buildup.sh"},
+                {   "script" : "transfer/hepixvmitrust-debian-wheezy-prod-chroot.sh",
+                    "shell" : { "type" : "chroot",
+                    "command" : { "template" : "chroot %CHROOT%",
+                        "envimeroment" : ["CHROOT"]
+                        },
+                    "dependancies" :{ "Debian" : ["git","python","rpm","make", "python-simplejson"  ,"python-m2crypto", "python-setuptools"] },
+                    },
+                "artifacts" : ["artifacts.tgz"],
+                "flags" : ["chroot"],
+                },
+                {"script" : "transfer/chroot-debian-wheezy-teardown.sh"}],
+        "vmcaster-debian-wheezy-prod": [{"script" : "transfer/chroot-debian-wheezy-buildup.sh"},
+                {   "script" : "transfer/vmcaster-debian-wheezy-prod-chroot.sh",
+                    "shell" : { "type" : "chroot",
+                    "command" : { "template" : "chroot %CHROOT%",
+                        "envimeroment" : ["CHROOT"]
+                        },
+                    "dependancies" :{ "Debian" : ["git","python","rpm","make", "python-simplejson"  ,"python-m2crypto", "python-setuptools"] },
+                    },
+                "artifacts" : ["artifacts.tgz"],
+                "flags" : ["chroot"],
+                },
+                {"script" : "transfer/chroot-debian-wheezy-teardown.sh"}],
         }
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
         return 1
     enviroment = {}
     for jobpart in mappings[jobname]:
+        jobDetails = {}
         if type(jobpart) == str:
+            
             log.info("running jobpart '%s' " % (jobpart) )
-            script = "%s/%s" % (os.path.dirname(os.path.realpath(__file__)),jobpart)
-            cmd = ". %s" % (script)
-            processRc,stdout,stderr = subphandling(cmd,timeout = 360)
-            log.info(" '%s' " % (processRc) )
-            if processRc != 0:
-                log.error("cmd '%s' returned '%s'." % (cmd,processRc) )
-                return processRc
+            jobDetails["script"] = jobpart 
         if type(jobpart) == dict:
-            foo = runnershell()
-            cmd = jobpart["script"]
-            #requires = set(jobpart["requires"])
-            log.info("running jobpart '%s' " % (cmd))
-            resetMap = foo.executabingo(jobpart,enviroment)
-            if resetMap["env"] != 0:
-                enviroment.update(resetMap["env"])
-                log.info("Job Enviroment='%s'" % (enviroment) )
-            if resetMap["rc"] != 0:
-                log.error("cmd '%s' returned '%s'." % (cmd,resetMap["rc"]))
-                return resetMap["rc"]
+            jobDetails.update(jobpart)
+
+        foo = jobPartRun()
+        #requires = set(jobDetails["requires"])
+        log.info("running jobDetails '%s' " % (jobDetails))
+        if not "flags" in jobDetails.keys():
+            jobDetails["flags"] = []
+        resetMap = foo.executabingo(jobDetails,enviroment)
+        if resetMap["env"] != 0:
+            enviroment.update(resetMap["env"])
+            log.debug("Job Enviroment='%s'" % (enviroment) )
+        if resetMap["rc"] != 0:
+            log.error("cmd '%s' returned '%s'." % (jobDetails,resetMap["rc"]))
+            return resetMap["rc"]
+        else:
+            if "artifacts" in jobDetails.keys():
+                rc = foo.getArtifacts(jobDetails,enviroment)
+                if rc != True:
+                    return rc
+            else:
+                log.info("No artifacts '%s' " % (jobDetails))
     return 0
         
         
@@ -611,6 +593,10 @@ def main():
     
     if 'VMCHNDL_ON_LOG_CONF' in os.environ:
         logFile = os.environ['VMCHNDL_ON_LOG_CONF']
+    if 'CHROOT' in os.environ:
+        log.error("CHROOT in environ")
+        sys.exit(1)
+    
     # Set up log file
     LoggingLevel = logging.WARNING
     LoggingLevelCounter = 2

@@ -18,8 +18,8 @@ mkdir -p ${CROOT_DIR}
 # Install the release data for yum
 rpm -i --root="${CROOT_DIR}" --nodeps sl-release*.rpm
 #Now install the essentials.
-yum --installroot=${CROOT_DIR} -y install basesystem filesystem bash kernel passwd yum
-
+#echo `yum --installroot=${CROOT_DIR} -y -q install basesystem filesystem bash kernel passwd yum`
+yum --installroot=${CROOT_DIR} -y -d 1 install basesystem filesystem bash kernel passwd yum
 pushd ${CROOT_DIR}
 	
 # This next line is important, your system won't boot without it
@@ -38,3 +38,4 @@ find . -print |cpio -o -Hnewc |bzip2 -9 -z -q -f > ${dirStart}/sl6.cpio.bz2
 popd
 rm -rf ${CROOT_DIR}
 du -h sl6.cpio.bz2
+exit 0
