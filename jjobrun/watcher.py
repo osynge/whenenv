@@ -111,15 +111,16 @@ class runshell(object):
         #self.process.stdin.write("echo jam\n")
         #self.process.stdin.write("exit 0\n")
         
-    def Comunicate(self):
+    def Comunicate(self,**kwargs):
         #cout,cerr = self.process.communicate()
         #self.doCallBackFileDescriptor(0,cout)
         #self.doCallBackFileDescriptor(1,cerr)
+        timeout = kwargs.get('timeout', None)
         self.log.debug("her%s" % (self.process))
         self.log.debug("cmd='%s'" % (self.cmd.get()))
         self.log.debug("returncode='%s'" % (self.returncode()))
         self.log.debug("poll='%s'" % ( self.process.poll()))
-        readFds,writeWds,exFds = select.select([ self.process.stdout,self.process.stderr],[],[],0)
+        readFds,writeWds,exFds = select.select([ self.process.stderr,self.process.stdout],[],[],timeout)
         
         self.log.debug("selected_read='%s'" % (readFds))
         self.log.debug("selected_write='%s'" % (writeWds))

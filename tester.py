@@ -44,6 +44,8 @@ def callbackExit(rc,args,keys):
 
 def t3():
     command="set -e\n"
+    command="set -x\n"
+    
     command="ls\n"
     #command="echo tessssssssst && sleep 1 && exit 1\n"
     command="bash\n"
@@ -52,10 +54,15 @@ def t3():
     shell.CbAddOnExit(callbackExit)
     shell.Start()
     shell.Write("set -e\n")
+    shell.Write("set -x\n")
+    
     shell.Write("PS1=hello\n")
     
     shell.Write("apt-get update\n")
-    shell.Write("echo dddddd=$?\n")
+    shell.Write("export dddddd=$?\n")
+    
+    shell.Write("export\n")
+    shell.Write("exit 0\n")
     #shell.Write("apt-get upgrade -y\n")
     #shell.Write("apt-get remove -y expat\n")
     #shell.Write("apt-get clean\n")
@@ -73,7 +80,7 @@ def t3():
     
     counter = 0
     while shell.returncode() == None:
-        shell.Comunicate()
+        shell.Comunicate(timeout=1)
         time.sleep(0.1)
         counter += 1
         if counter > 400:
