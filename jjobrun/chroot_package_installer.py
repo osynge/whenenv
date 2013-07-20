@@ -499,7 +499,7 @@ class ChrootPackageInstallerDebian2(object):
         self.logErr = logging.getLogger("stdout")
         
     
-    def logOutput(self,fd,data):
+    def logOutput(self,fd,data,args,keys):
         log = self.log
         if fd == 0:
             log = self.logOut
