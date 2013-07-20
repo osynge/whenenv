@@ -82,10 +82,10 @@ class runshell(object):
             return
         for func in self.OnFd:
             func(Fd,Data,self.OnFd[func][0],self.OnFd[func][1])
-    def doCallBackExit(self,exitcode):
+    def doCallBackExit(self,pid,exitcode):
         #self.log.info("out=%s,%s" % (Fd,Data))
         for func in self.OnExitCb:
-            func(exitcode,self.OnExitCb[func][0],self.OnExitCb[func][1])
+            func(pid,exitcode,self.OnExitCb[func][0],self.OnExitCb[func][1])
     
     
     
@@ -134,7 +134,7 @@ class runshell(object):
             self.doCallBackFileDescriptor(recivedFd,newdata)
         rc = self.returncode()
         if None != rc:
-            self.doCallBackExit(rc)
+            self.doCallBackExit(self.process.pid,rc)
         self.log.debug("returncode='%s'" % (self.returncode()))
         #stdOutfd = self.process.stdout.fileno()
         #self.log.info("stdOutfd='%s'" % (stdOutfd))

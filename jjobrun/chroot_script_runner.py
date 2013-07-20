@@ -393,7 +393,13 @@ class runnershell2(object):
         for line in data.split('\n'):
             if len(line) > 0:
                 log.info(line)
-    
+        
+    def ScriptOnExit(self,pid,rc,args,keys):
+        self.log.info("Script %s exited early with %s" %(pid,rc))
+        self.waitingOnPromptRunScriptEnd = False
+        
+        
+        
     def logOutputSetEnv(self,fd,data,args,keys):
         #self.logOutput(fd,data,args,keys)
         lines = data.split('\n')
@@ -422,29 +428,25 @@ class runnershell2(object):
         
         
     def logOutputRunScript(self,fd,data,args,keys):
-        #self.logOutput(fd,data,args,keys)
+        self.logOutput(fd,data,args,keys)
+        
         lines = data.split('\n')
         for line in lines:
             if len(line) == 0:
                 continue
-            if self.waitingOnPromptSetEnvEnd == True:
-                matches = self.promptSetEnvEnd.match(line)
+            if self.waitingOnPromptRunScriptEnd == True:
+                matches = self.promptRunScriptEnd.match(line)
                 if matches != None:
-                    self.waitingOnPromptSetEnvEnd = False
+                    self.waitingOnPromptRunScriptEnd = False
                     continue
-            if self.waitingOnPromptSetEnvStart == True:
-                matches = self.promptSetEnvStart.match(line)
+            if self.waitingOnPromptRunScriptStart == True:
+                matches = self.promptRunScriptStart.match(line)
                 if matches != None:
-                    self.waitingOnPromptSetEnvStart = False
-                    self.waitingOnPromptSetEnvEnd = True
+                    self.waitingOnPromptRunScriptStart = False
+                    self.waitingOnPromptRunScriptEnd = True
                     continue
                 
-            else:
-                if not self.waitingOnPromptSetEnvEnd == True:
-                    # We only want lines after the start
-                    continue
-                # Any line that gets here is a suprise
-                
+            self.logOutput(fd,data,args,keys)
             
          
         
@@ -492,7 +494,26 @@ class runnershell2(object):
         self.running.Start()
         return True
     def runscript(self,script):
-        print 'here'
+        self.running.CbAddOnFdRead(self.logOutputRunScript)
+        self.running.CbAddOnExit(self.ScriptOnExit)
+        startPrompt = prompts.GeneratePrompt()
+        endPrompt = prompts.GeneratePrompt()
+        self.promptRunScriptStart = re.compile(startPrompt)
+        self.promptRunScriptEnd = re.compile(endPrompt)
+        self.waitingOnPromptRunScriptStart = True
+        self.waitingOnPromptRunScriptEnd = False
+        self.running.Write("echo %s\n" % (startPrompt))
+        while self.waitingOnPromptRunScriptStart == True:
+            self.running.Comunicate(timeout = 1)
+        fp = open(script)
+        for line in fp:
+            cleanline = line.strip()
+            self.log.info("+%s" %(cleanline))
+            self.running.Write(line)
+        self.running.Write("echo %s\n" % (endPrompt))
+        while self.waitingOnPromptRunScriptEnd == True:
+            self.running.Comunicate()
+        return True
         
         
         
