@@ -1,6 +1,6 @@
 
 from jjobrun.chroot_package_installer import ChrootPackageInstallerRedhat ,ChrootPackageInstallerDebian
-from jjobrun.chroot_script_runner import runnershell,runnershell2
+from jjobrun.chroot_script_runner import runnershellOld,runnershell2
 import jjobrun.watcher
 import logging
 import time

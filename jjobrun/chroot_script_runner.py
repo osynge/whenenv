@@ -11,7 +11,7 @@ transtbl = string.maketrans(
           'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
         )
 
-class runnershell:
+class runnershellOld:
     def __init__(self, chrootCmd, env):
         self.log = logging.getLogger("runnershell")
         self.chrootCmd = chrootCmd
@@ -428,7 +428,7 @@ class runnershell2(object):
         
         
     def logOutputRunScript(self,fd,data,args,keys):
-        self.logOutput(fd,data,args,keys)
+        #self.logOutput(fd,data,args,keys)
         
         lines = data.split('\n')
         for line in lines:
@@ -492,6 +492,8 @@ class runnershell2(object):
             return False
         self.running = watcher.LogRunShell(command=self.chrootCmd)
         self.running.Start()
+        self.running.Write("set -x \n")
+        self.running.Write("set -e \n")
         return True
     def runscript(self,script):
         self.running.CbAddOnFdRead(self.logOutputRunScript)
@@ -508,7 +510,7 @@ class runnershell2(object):
         fp = open(script)
         for line in fp:
             cleanline = line.strip()
-            self.log.info("+%s" %(cleanline))
+            self.log.debug("run+%s" %(cleanline))
             self.running.Write(line)
         self.running.Write("echo %s\n" % (endPrompt))
         while self.waitingOnPromptRunScriptEnd == True:
@@ -561,3 +563,6 @@ class runnershell2(object):
             self.running.Comunicate()
         self.running.CbDelOnFdRead(self.logOutputGetEnv)
         return self.FoundEnv
+    def finalise(self):
+
+        self.running.Write("exit 0\n")

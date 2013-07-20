@@ -529,5 +529,4 @@ class ChrootPackageInstallerDebian2(object):
                 shell.Comunicate()
                 time.sleep(0.1)
             
-    
-        
+

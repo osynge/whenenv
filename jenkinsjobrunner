@@ -13,7 +13,7 @@ import base64
 import shutil
 
 from jjobrun.chroot_package_installer import ChrootPackageInstallerRedhat ,ChrootPackageInstallerDebian,ChrootPackageInstallerDebian2
-from jjobrun.chroot_script_runner import runnershell
+from jjobrun.chroot_script_runner import runnershell2  as runnershell
 
 
 def subphandling(cmd,timeout = 10):   
@@ -285,7 +285,7 @@ class jobPartRun:
             command = "%s %s /bin/bash"  % ("/usr/sbin/chroot" , chootdir)
         self.log.error("command=%s" % (command))
         #chroot /workspace/docbook-production/chroot/ /bin/bash
-        sr = runnershell(command,env)
+        sr = runnershell(command=command)
         rc = sr.initialise()
         if rc != True:
             sel.log.error("failed to init CHROOT")
