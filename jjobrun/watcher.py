@@ -57,7 +57,8 @@ class runshell(object):
         
         self.env = kwargs.get('enviroment', None)
         self.p = None
-        self.OnFd= {}
+        self.OnFd = {}
+        self.OnExitCb = {}
         
         
         command = None
@@ -68,8 +69,8 @@ class runshell(object):
         self.cmd = observable.Observable(command)
     
     def CbAddOnExit(self,functionPtr,*args, **kwargs):
-        print self.OnExitCb
-    
+        self.OnExitCb[functionPtr] =  (args, kwargs)
+        
     def CbAddOnFdRead(self,functionPtr,*args, **kwargs):
         self.OnFd[functionPtr] =  (args, kwargs)
         
@@ -80,7 +81,15 @@ class runshell(object):
             return
         for func in self.OnFd:
             func(Fd,Data,self.OnFd[func][0],self.OnFd[func][1])
-        
+    def doCallBackExit(self,exitcode):
+        #self.log.info("out=%s,%s" % (Fd,Data))
+        for func in self.OnExitCb:
+            func(exitcode,self.OnExitCb[func][0],self.OnExitCb[func][1])
+    
+    
+    
+    
+    
     def Start(self):
         log = logging.getLogger("sub")
     
@@ -99,8 +108,8 @@ class runshell(object):
         stdErrfd = self.process.stderr.fileno()
         fl = fcntl.fcntl(stdErrfd, fcntl.F_GETFL)
         fcntl.fcntl(stdErrfd, fcntl.F_SETFL, fl | os.O_NONBLOCK)
-        self.process.stdin.write("echo jam\n")
-        self.process.stdin.write("exit 0\n")
+        #self.process.stdin.write("echo jam\n")
+        #self.process.stdin.write("exit 0\n")
         
     def Comunicate(self):
         #cout,cerr = self.process.communicate()
@@ -119,6 +128,9 @@ class runshell(object):
             recivedFd = self.fdMapping[item.fileno()]
             newdata = item.read()
             self.doCallBackFileDescriptor(recivedFd,newdata)
+        rc = self.returncode()
+        if None != rc:
+            self.doCallBackExit(rc)
         self.log.debug("returncode='%s'" % (self.returncode()))
         #stdOutfd = self.process.stdout.fileno()
         #self.log.info("stdOutfd='%s'" % (stdOutfd))
@@ -133,6 +145,9 @@ class runshell(object):
         if self.process.returncode == None:
             return None
         return self.process.returncode
+    
+    def Write(self,text):
+        self.process.stdin.write(text)
 
 class LogRunShell(runshell):
     def __init__(self, *args, **kwargs):
