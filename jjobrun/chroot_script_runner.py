@@ -219,4 +219,9 @@ class runnershell2(object):
     def finalise(self):
         if self.running.returncode == None:
             self.running.Write("exit 0\n")
-        self.running.wait()
+        self.running.Comunicate(timeout=1)
+        if self.running.returncode == None:
+            self.running.Write("exit 0\n")
+        self.running.Comunicate(timeout=1)
+        
+        

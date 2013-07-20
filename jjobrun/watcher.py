@@ -153,6 +153,8 @@ class runshell(object):
     
     def Write(self,text):
         self.process.stdin.write(text)
+    def wait(self):
+        self.process.wait()
 
 class LogRunShell(runshell):
     def __init__(self, *args, **kwargs):

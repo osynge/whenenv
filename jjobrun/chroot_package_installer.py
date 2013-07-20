@@ -575,7 +575,8 @@ class ChrootPackageInstallerDebian2(object):
         
         
         return True
-        
+    def logOutputPkginstall(self,fd,data,args,keys):    
+        pass
     def initialise(self):
         if self.chrootCmd == None:
             self.log.error("No chroot command set")
@@ -609,7 +610,41 @@ class ChrootPackageInstallerDebian2(object):
             self.running.Comunicate(timeout = 1)
         self.running.CbDelOnFdRead(self.logOutputPkgCatUpdate)
         return self.PkgCatInstalled
+    def installPackage(self,package):  
         
+        
+        self.running.CbAddOnFdRead(self.logOutputPkg)
+        passenv_ignored = set(["PATH","SHLVL","OLDPWD","PS1"])
+        startPrompt = prompts.GeneratePrompt()
+        endPrompt = prompts.GeneratePrompt()
+        self.promptPkgInstallStart = re.compile(startPrompt)
+        self.promptPkgInstallEnd = re.compile(endPrompt)
+        self.log.info("promptPkgInstallStart %s" %(startPrompt))
+        self.log.info("promptPkgInstallEnd %s" %(endPrompt))
+        
+        self.waitingOnPromptPkgInstallStart = True
+        self.waitingOnPromptPkgInstallEnd = False
+        self.running.Write("echo %s\n" % (startPrompt))
+        counter = 0
+        
+
+
+        cmd = 'apt-get install -y %s\n' % (package)
+        self.log.info("PkgInstall %s" %(cmd.strip()))
+        self.running.Write(cmd)
+        self.log.info("PkgInstall %s" %(cmd.strip()))
+        self.running.Comunicate(timeout = 1)
+        self.running.Comunicate(timeout = 1)
+        self.running.Write("echo %s\n" % (endPrompt))
+        
+        while self.waitingOnPromptPkgInstallEnd == True:
+            self.running.Comunicate(timeout = 1)
+        self.running.CbDelOnFdRead(self.logOutputPkg)
+        
+        return True
+    
+    
+    
     def installPackages(self,packages):
         notinstalled = set([])
         insalledPkg = self.updatePackages()
@@ -624,35 +659,9 @@ class ChrootPackageInstallerDebian2(object):
         missing = set(packages).difference(insalledPkg)
         self.log.info("notinstalled %s" %(notinstalled))
         self.log.info("extra %s" %(extra))
+        for pack in missing:
+            self.installPackage(pack)
         
-        
-        self.running.CbAddOnFdRead(self.logOutput)
-        passenv_ignored = set(["PATH","SHLVL","OLDPWD","PS1"])
-        startPrompt = prompts.GeneratePrompt()
-        endPrompt = prompts.GeneratePrompt()
-        self.promptPkgInstallStart = re.compile(startPrompt)
-        self.promptPkgInstallEnd = re.compile(endPrompt)
-        self.log.info("promptPkgInstallStart %s" %(startPrompt))
-        self.log.info("promptPkgInstallEnd %s" %(endPrompt))
-        
-        self.waitingOnPromptPkgInstallStart = True
-        self.waitingOnPromptPkgInstallEnd = False
-        self.running.Write("echo %s\n" % (startPrompt))
-        counter = 0
-        
-        for enviroment in notinstalled:
-            
-            cmd = 'apt-get install -y %s\n' % (enviroment)
-            self.log.info("PkgInstall %s" %(cmd))
-            self.running.Write(cmd)
-            self.running.Comunicate(timeout = 1)
-        self.running.Comunicate(timeout = 1)
-        self.running.Write("echo %s\n" % (endPrompt))
-        while self.waitingOnPromptPkgInstallEnd == True:
-            self.running.Comunicate(timeout = 1)
-        self.running.CbDelOnFdRead(self.logOutput)
-        
-        return True
     def finalise(self):
         if self.running.returncode == None:
             self.running.Write("exit 0\n")
