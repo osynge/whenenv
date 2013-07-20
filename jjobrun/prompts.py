@@ -8,5 +8,5 @@ transtbl = string.maketrans(
         )
 
 def GeneratePrompt():
-    match_prompt = uuid.uuid1()
+    match_prompt = uuid.uuid4()
     return base64.b32encode(str(match_prompt).replace('-', '').decode('hex')).rstrip('=').translate(transtbl)

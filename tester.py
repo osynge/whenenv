@@ -1,6 +1,6 @@
 
 from jjobrun.chroot_package_installer import ChrootPackageInstallerRedhat ,ChrootPackageInstallerDebian
-from jjobrun.chroot_script_runner import runnershell
+from jjobrun.chroot_script_runner import runnershell,runnershell2
 import jjobrun.watcher
 import logging
 import time
@@ -86,5 +86,16 @@ def t3():
         if counter > 400:
             exit (0)
     print shell.returncode()
-t3()
+
+
+def t4():
+    foo = runnershell2(command = "/bin/bash")
+    foo.initialise()
+    foo.setEnv({ 'tang' : 'ssss'})
+    script = "transfer/GenChroot.SL-6X.sh"
+    print foo.getEnv()
+    foo.runscript(script)
+
+
+t4()
 

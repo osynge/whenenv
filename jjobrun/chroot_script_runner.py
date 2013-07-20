@@ -3,6 +3,9 @@ import uuid
 import base64
 import pexpect
 import string
+import watcher
+import prompts
+import re
 transtbl = string.maketrans(
           'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
           'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
@@ -371,3 +374,169 @@ class runnershell:
                     self.log.info(imput.strip())
         return output
             
+class runnershell2(object):
+    def __init__(self, *args, **kwargs):
+        self.log = logging.getLogger("runshell")
+        self.chrootCmd = kwargs.get('command', None)
+        #self.log.info("chrootCmd=%s" % (self.chrootCmd))
+        self.env = kwargs.get('env', {})
+        self.running = None
+        self.logOut = logging.getLogger("sr.out")
+        self.logErr = logging.getLogger("sr.err")
+        
+    def logOutput(self,fd,data,args,keys):
+        log = self.log
+        if fd == 1:
+            log = self.logOut
+        if fd == 2:
+            log = self.logErr
+        for line in data.split('\n'):
+            if len(line) > 0:
+                log.info(line)
+    
+    def logOutputSetEnv(self,fd,data,args,keys):
+        #self.logOutput(fd,data,args,keys)
+        lines = data.split('\n')
+        for line in lines:
+            if len(line) == 0:
+                continue
+            if self.waitingOnPromptSetEnvEnd == True:
+                matches = self.promptSetEnvEnd.match(line)
+                if matches != None:
+                    self.waitingOnPromptSetEnvEnd = False
+                    continue
+            if self.waitingOnPromptSetEnvStart == True:
+                matches = self.promptSetEnvStart.match(line)
+                if matches != None:
+                    self.waitingOnPromptSetEnvStart = False
+                    self.waitingOnPromptSetEnvEnd = True
+                    continue
+                
+            else:
+                if not self.waitingOnPromptSetEnvEnd == True:
+                    # We only want lines after the start
+                    continue
+                # Any line that gets here is a suprise
+                
+            
+        
+        
+    def logOutputRunScript(self,fd,data,args,keys):
+        #self.logOutput(fd,data,args,keys)
+        lines = data.split('\n')
+        for line in lines:
+            if len(line) == 0:
+                continue
+            if self.waitingOnPromptSetEnvEnd == True:
+                matches = self.promptSetEnvEnd.match(line)
+                if matches != None:
+                    self.waitingOnPromptSetEnvEnd = False
+                    continue
+            if self.waitingOnPromptSetEnvStart == True:
+                matches = self.promptSetEnvStart.match(line)
+                if matches != None:
+                    self.waitingOnPromptSetEnvStart = False
+                    self.waitingOnPromptSetEnvEnd = True
+                    continue
+                
+            else:
+                if not self.waitingOnPromptSetEnvEnd == True:
+                    # We only want lines after the start
+                    continue
+                # Any line that gets here is a suprise
+                
+            
+         
+        
+        
+    def logOutputGetEnv(self,fd,data,args,keys):
+        lines = data.split('\n')
+        for line in lines:
+            if len(line) == 0:
+                continue
+            if self.waitingOnPromptGetEnvEnd == True:
+                matches = self.promptGetEnvEnd.match(line)
+                if matches != None:
+                    self.waitingOnPromptGetEnvEnd = False
+                    continue
+            if self.waitingOnPromptGetEnvStart == True:
+                matches = self.promptGetEnvStart.match(line)
+                if matches != None:
+                    self.waitingOnPromptGetEnvStart = False
+                    self.waitingOnPromptGetEnvEnd = True
+                    continue
+            else:
+                if not self.waitingOnPromptGetEnvEnd == True:
+                    # We only want lines after the start
+                    continue
+                if not line[:11] == "declare -x ":
+                    # We only want declair lines
+                    continue
+                end = line[11:].split('="')
+                if len(end) < 2:
+                    continue
+                
+                tail = '="'.join(end[1:])
+                head = end[0]
+                
+                self.FoundEnv[head] = tail[:-1]
+            
+            
+        
+    
+    def initialise(self):
+        if self.chrootCmd == None:
+            self.log.error("No chroot command set")
+            return False
+        self.running = watcher.LogRunShell(command=self.chrootCmd)
+        self.running.Start()
+        return True
+    def runscript(self,script):
+        print 'here'
+        
+        
+        
+    def setEnv(self,env):
+        self.running.CbAddOnFdRead(self.logOutputSetEnv)
+        passenv_ignored = set(["PATH","SHLVL","OLDPWD","PS1"])
+        startPrompt = prompts.GeneratePrompt()
+        endPrompt = prompts.GeneratePrompt()
+        self.promptSetEnvStart = re.compile(startPrompt)
+        self.promptSetEnvEnd = re.compile(endPrompt)
+        self.waitingOnPromptSetEnvStart = True
+        self.waitingOnPromptSetEnvEnd = False
+        self.running.Write("echo %s\n" % (startPrompt))
+        while self.waitingOnPromptSetEnvStart == True:
+            self.running.Comunicate(timeout = 1)
+        for enviroment in env.keys():
+            if enviroment in passenv_ignored:
+                continue
+            cmd = '%s="%s"\n' % (enviroment,env[enviroment])
+            #self.log.info("setEnv %s" %(cmd))
+            self.running.Write(cmd)
+        self.running.Write("echo %s\n" % (endPrompt))
+        while self.waitingOnPromptSetEnvEnd == True:
+            self.running.Comunicate()
+        return True
+        
+    def getEnv(self):
+        self.FoundEnv = {}
+        output = {}
+        self.running.CbAddOnFdRead(self.logOutputGetEnv)
+        startPrompt = prompts.GeneratePrompt()
+        endPrompt = prompts.GeneratePrompt()
+        self.promptGetEnvStart = re.compile(startPrompt)
+        self.promptGetEnvEnd = re.compile(endPrompt)
+        
+        self.waitingOnPromptGetEnvStart = True
+        self.waitingOnPromptGetEnvEnd = True
+        self.running.Write("echo %s\n" % (startPrompt))
+        while self.waitingOnPromptGetEnvStart == True:
+            self.running.Comunicate()
+        self.FoundEnv = {}
+        self.running.Write("declare -x\n")
+        self.running.Write("echo %s\n" % (endPrompt))
+        while self.waitingOnPromptGetEnvEnd == True:
+            self.running.Comunicate()
+        self.running.CbDelOnFdRead(self.logOutputGetEnv)
+        return self.FoundEnv

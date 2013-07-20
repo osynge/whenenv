@@ -73,7 +73,8 @@ class runshell(object):
         
     def CbAddOnFdRead(self,functionPtr,*args, **kwargs):
         self.OnFd[functionPtr] =  (args, kwargs)
-        
+    def CbDelOnFdRead(self,functionPtr):
+        self.OnFd[functionPtr]
     
     def doCallBackFileDescriptor(self,Fd,Data):
         #self.log.info("out=%s,%s" % (Fd,Data))
@@ -120,6 +121,8 @@ class runshell(object):
         self.log.debug("cmd='%s'" % (self.cmd.get()))
         self.log.debug("returncode='%s'" % (self.returncode()))
         self.log.debug("poll='%s'" % ( self.process.poll()))
+        self.log.debug("timeout='%s'" % (type(timeout)))
+        
         readFds,writeWds,exFds = select.select([ self.process.stderr,self.process.stdout],[],[],timeout)
         
         self.log.debug("selected_read='%s'" % (readFds))

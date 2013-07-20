@@ -496,7 +496,7 @@ class ChrootPackageInstallerDebian2(object):
         self.log = logging.getLogger("ChrootPackageInstallerDebian2")
         self.chrootCmd = kwargs.get('command', None)
         self.logOut = logging.getLogger("stdout")
-        self.logErr = logging.getLogger("stdout")
+        self.logErr = logging.getLogger("stderr")
         
     
     def logOutput(self,fd,data,args,keys):
