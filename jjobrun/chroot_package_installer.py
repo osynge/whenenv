@@ -520,6 +520,7 @@ class ChrootPackageInstallerDebian2(object):
         for package in packages:
             
             shell = watcher.LogRunShell(command=self.chrootCmd)
+            shell.Start()
             shell.Write("apt-get install -y %s\nexit 0\n" % (package))
             while shell.returncode() == None:
                 shell.Comunicate()
