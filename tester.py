@@ -33,6 +33,8 @@ def callback(inpute,data,args,keys):
     
 def callbackExit(rc,args,keys):
     log = logging.getLogger("callbackExit")
+    if rc != 0:
+        log.error("rc=%s" % (rc))
     log.info("values=len(%s)" % (len(args)))
     log.info("keys=%s" % (keys))
     
@@ -49,19 +51,21 @@ def t3():
     shell.CbAddOnFdRead(callback,1,2,cmd="sdsdsd")
     shell.CbAddOnExit(callbackExit)
     shell.Start()
-    shell.Write("set -x\n")
+    shell.Write("set -e\n")
     shell.Write("PS1=hello\n")
     
-    #shell.Write("apt-get update\n")
+    shell.Write("apt-get update\n")
+    shell.Write("echo dddddd=$?\n")
     #shell.Write("apt-get upgrade -y\n")
     #shell.Write("apt-get remove -y expat\n")
     #shell.Write("apt-get clean\n")
     #shell.Write("apt-get install -y expat\n")
-    script = "transfer/GenChroot.SL-6X.sh"
-    script = "transfer/GenChroot.debian-wheezy-part-03.sh"
+    #script = "transfer/GenChroot.SL-6X.sh"
+    #script = "transfer/GenChroot.debian-wheezy-part-03.sh"
     
-    for line in open(script):
-        shell.Write(line)
+    #for line in open(script):
+    #    shell.Write(line)
+    
     shell.Write("exit 0\n")
     
     #shell.process.stdin.write("echo jam\n")
