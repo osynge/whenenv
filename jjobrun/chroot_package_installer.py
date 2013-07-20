@@ -8,6 +8,11 @@ transtbl = string.maketrans(
           'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
           'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
         )
+
+
+
+
+
 class ChrootPackageInstaller:
     def __init__(self, *args, **kwargs):
         # we still need these things chrootCmd, env):
