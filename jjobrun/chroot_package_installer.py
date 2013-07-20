@@ -493,10 +493,22 @@ class ChrootPackageInstallerDebian2(object):
         # we still need these things chrootCmd, env):
         self.log = logging.getLogger("ChrootPackageInstallerDebian2")
         self.chrootCmd = kwargs.get('command', None)
-       
+        self.logOut = logging.getLogger("stdout")
+        self.logErr = logging.getLogger("stdout")
         
     
-    
+    def logOutput(self,fd,data):
+        log = self.log
+        if fd == 0:
+            log = self.logOut
+        if fd == 1:
+            log = self.logErr
+        for line in data.split('\n'):
+            if len(line) > 0:
+                log.info(line)
+        
+            
+        
     
     def initialise(self):
         self.shell = watcher.LogRunShell(command=self.chrootCmd)
