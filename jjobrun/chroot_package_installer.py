@@ -12,6 +12,8 @@ transtbl = string.maketrans(
 
 import watcher
 
+import time
+
 
 class ChrootPackageInstaller:
     def __init__(self, *args, **kwargs):
