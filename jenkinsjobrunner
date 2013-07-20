@@ -12,7 +12,7 @@ import re
 import base64
 import shutil
 
-from jjobrun.chroot_package_installer import ChrootPackageInstallerRedhat ,ChrootPackageInstallerDebian
+from jjobrun.chroot_package_installer import ChrootPackageInstallerRedhat ,ChrootPackageInstallerDebian,ChrootPackageInstallerDebian2
 from jjobrun.chroot_script_runner import runnershell
 
 
@@ -194,7 +194,7 @@ class jobPartRun:
         alreadyinstalled = []
         chrootdir = env['CHROOT']
         cmd = "/usr/sbin/chroot %s" % (chrootdir)
-        pi = ChrootPackageInstallerDebian(command = cmd,enviroment = env)
+        pi = ChrootPackageInstallerDebian2(command = cmd,enviroment = env)
         initok = pi.initialise()
         if  initok == False:
             self.log.info("INITIALISATION FAILED")

@@ -26,7 +26,7 @@ def callback(inpute,data,args,keys):
     log = logging.getLogger("callbackFd")
     #log.info("inpute=%s" % (inpute))
 
-    log.info("data=%s" % (data.strip()))
+    log.info("%s:%s" % (inpute,data.strip()))
     #log.info("values=len(%s)" % (len(args)))
     #log.info("keys=%s" % (keys))
     
@@ -52,12 +52,14 @@ def t3():
     shell.Write("set -x\n")
     shell.Write("PS1=hello\n")
     
-    shell.Write("apt-get update\n")
-    shell.Write("apt-get upgrade -y\n")
-    shell.Write("apt-get remove -y expat\n")
-    shell.Write("apt-get clean\n")
-    shell.Write("apt-get install -y expat\n")
+    #shell.Write("apt-get update\n")
+    #shell.Write("apt-get upgrade -y\n")
+    #shell.Write("apt-get remove -y expat\n")
+    #shell.Write("apt-get clean\n")
+    #shell.Write("apt-get install -y expat\n")
     script = "transfer/GenChroot.SL-6X.sh"
+    script = "transfer/GenChroot.debian-wheezy-part-03.sh"
+    
     for line in open(script):
         shell.Write(line)
     shell.Write("exit 0\n")
@@ -65,7 +67,6 @@ def t3():
     #shell.process.stdin.write("echo jam\n")
     #shell.process.stdin.write("exit 2\n")
     
-    shell.returncode()
     counter = 0
     while shell.returncode() == None:
         shell.Comunicate()
@@ -73,6 +74,6 @@ def t3():
         counter += 1
         if counter > 400:
             exit (0)
-
+    print shell.returncode()
 t3()
 

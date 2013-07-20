@@ -486,3 +486,33 @@ class ChrootPackageInstallerDebian(ChrootPackageInstaller):
                 p.wait()
             exitstatus = p.exitstatus
             self.log.error("exit status=%s, cmd=%s" % (exitstatus,cmd))
+
+class ChrootPackageInstallerDebian2(object):
+
+    def __init__(self, *args, **kwargs):
+        # we still need these things chrootCmd, env):
+        self.log = logging.getLogger("ChrootPackageInstallerDebian2")
+        self.chrootCmd = kwargs.get('command', None)
+       
+        shell = jjobrun.watcher.LogRunShell(command=self.chrootCmd)
+    
+    
+    
+    
+    def initialise(self):
+        self.shell = jjobrun.watcher.LogRunShell(command=self.chrootCmd)
+        self.shell.Write("set -x\n")
+    
+    def updatePackages(self):
+        self.shell.Write("apt-get update -y\n")
+    def installPackages(self,packages):
+        for package in packages:
+            
+            shell = jjobrun.watcher.LogRunShell(command=self.chrootCmd)
+            shell.Write("apt-get install -y %s\nexit 0\n" % (package))
+            while shell.returncode() == None:
+                shell.Comunicate()
+                time.sleep(0.1)
+            
+    
+        
