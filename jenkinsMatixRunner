@@ -4,6 +4,9 @@ import os
 import sys
 import optparse
 
+def runJob():
+    return 0
+
 
 def main():
     reload(sys)
