@@ -1,5 +1,6 @@
 set -x
 CHROOT="/tmp/chroot/executor_${EXECUTOR_NUMBER}"
+export ${CHROOT}
 mkdir -p ${CHROOT}
 chrootbuilder \
 --input \
