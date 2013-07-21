@@ -1,6 +1,6 @@
-export CROOT_DIR="/root/sl6"
-#chroot ${CROOT_DIR}
-CHROOT_SCRIPT=${CROOT_DIR}/script
+CHROOT="/tmp/chroot/executor_${EXECUTOR_NUMBER}"
+#chroot ${CHROOT}
+CHROOT_SCRIPT=${CHROOT}/script
 cat > ${CHROOT_SCRIPT} <<-EOF
 #!/bin/bash
 export HOME=/root
@@ -45,4 +45,4 @@ EOF
 echo xx
 cat ${CHROOT_SCRIPT}
 echo xx
-chroot ${CROOT_DIR} /bin/bash /script
+chroot ${CHROOT} /bin/bash /script

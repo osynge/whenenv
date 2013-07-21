@@ -1,6 +1,6 @@
 
-from jjobrun.chroot_package_installer import ChrootPackageInstallerRedhat ,ChrootPackageInstallerDebian
-from jjobrun.chroot_script_runner import runnershellOld,runnershell2
+from jjobrun.chroot_package_installer import ChrootPackageInstallerRedhat ,ChrootPackageInstallerDebian2
+from jjobrun.chroot_script_runner import runnershell2
 import jjobrun.watcher
 import logging
 import time
@@ -95,7 +95,15 @@ def t4():
     script = "transfer/GenChroot.SL-6X.sh"
     print foo.getEnv()
     foo.runscript(script)
+    
+def t5():
+    chroot = "/workspace/chroot/executor_"
+    foo = ChrootPackageInstallerDebian2(command = "chroot %s /bin/sh" % (chroot))
+    foo.initialise()
+    #foo.updatePackages()
+    foo.installPackages(["git","make","rpm"])
+    #foo.finalise()
 
-
-t4()
+#t4()
+t5()
 

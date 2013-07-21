@@ -1,5 +1,7 @@
 set -x
-export CHROOT="/root/sl6"
+CHROOT="/tmp/chroot/executor_${EXECUTOR_NUMBER}"
+export CHROOT
+mkdir -p ${CHROOT}
 chrootbuilder \
 --input \
 /var/cache/vmcatcher/endorsed/aa42ca85-179b-4873-b12e-32d549bf02b6 \
