@@ -12,7 +12,7 @@ import re
 import base64
 import shutil
 
-from jjobrun.chroot_package_installer import ChrootPackageInstallerRedhat ,ChrootPackageInstallerDebianOld,ChrootPackageInstallerDebian2
+from jjobrun.chroot_package_installer import ChrootPackageInstallerRedhat ,ChrootPackageInstallerDebian2
 from jjobrun.chroot_script_runner import runnershell2  as runnershell
 
 
