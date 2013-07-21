@@ -92,7 +92,7 @@ def main():
     if product == None:
         log.error("No PRODUCT Enviroment variable set")
         sys.exit(2)
-    log.info("JOB_NAME=%s" % jobname )
+    
 
     if release == None:
         log.error("No RELEASE Enviroment variable set")
@@ -108,8 +108,10 @@ def main():
     envDir = "%s/enviroments/" % (currentDir)
     jobsDir = "%s/jobs/" % (currentDir)
 
-    
-    runnerObj = jjobrun.configManager(product=product,
+    log.info("PRODUCT=%s" % product )
+    log.info("RELEASE=%s" % release )
+    log.info("OPERATING_SYSTEM=%s" %  operatingSystem)
+    runnerObj = jjobrun.configManager.matrixRunner(product=product,
         release=release,
         operatingSystem=operatingSystem,
         dirEnviroments=envDir,

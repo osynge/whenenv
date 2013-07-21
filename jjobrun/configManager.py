@@ -6,4 +6,6 @@ class matrixRunner(object):
         self.dirEnviroments = kwargs.get('dirEnviroments', None)
         self.dirJobs = kwargs.get('dirJobs', None)
         
-        
+    def loadconfig(self):
+        print "here"
+        return True
