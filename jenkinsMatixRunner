@@ -78,17 +78,19 @@ def main():
     log = logging.getLogger("main")
 
 
-    jobname = None
+    
     release = None
     product = None
     operatingSystem = None
-    if 'JOB_NAME' in os.environ:
-        jobname=os.environ['JOB_NAME']
+    if 'PRODUCT' in os.environ:
+        product = os.environ['PRODUCT']
     if 'RELEASE' in os.environ:
-        release=os.environ['RELEASE']
+        release = os.environ['RELEASE']
+    if 'OPERATING_SYSTEM' in os.environ:
+        operatingSystem = os.environ['OPERATING_SYSTEM']
     
-    if jobname == None:
-        log.error("No JOB_NAME Enviroment variable set")
+    if product == None:
+        log.error("No PRODUCT Enviroment variable set")
         sys.exit(2)
     log.info("JOB_NAME=%s" % jobname )
 
@@ -97,8 +99,8 @@ def main():
         sys.exit(2)
     log.info("RELEASE=%s" % release )
     
-    if product == None:
-        log.error("No PRODUCT Enviroment variable set")
+    if operatingSystem == None:
+        log.error("No OPERATING_SYSTEM Enviroment variable set")
         sys.exit(2)
     log.info("RELEASE=%s" % release )
     currentDir = os.path.dirname(os.path.realpath(__file__))
