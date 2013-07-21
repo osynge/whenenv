@@ -1,4 +1,8 @@
 set -x
+if [ "X${CHROOT}" == "X" ] ; then
+echo "no CHROOT set"
+exit 1
+fi
 CHROOT_SCRIPT=${CHROOT}/script
 cat > ${CHROOT_SCRIPT} <<-EOF
 #!/bin/bash
