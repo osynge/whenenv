@@ -491,32 +491,17 @@ def runJob (jobname):
             {"script" : "transfer/chroot-scientific-6-teardown.sh"}],
         "vmcatcher-scientific-6-prod" : [{"script" : "transfer/chroot-scientific-6-buildup-prod.sh"},
                 {"script" : "transfer/vmcatcher-scientific-6-prod.sh",
-<<<<<<< HEAD
-                "shell" : { "type" : "chroot",
-                    "command" : { "template" : "chroot %CHROOT%",
-                        "envimeroment" : ["CHROOT"]
-                        },
-                    "dependancies" :{ "Scientific" : ["org-desy-grid-virt-sort-release" ,"hepixvmitrust","git", "python","rpm-build","make","python-setuptools","m2crypto" ] },
-=======
                     "shell" : { "type" : "chroot",
                     "command" : { "template" : "chroot %CHROOT%",
                         "envimeroment" : ["CHROOT"]
                         },
                     "dependancies" :{ "Scientific" : ["subversion", "python","rpm-build","make","git",
                     "python-setuptools","python-m2crypto", "org_desy_grid_virt_sort_release" ] },
->>>>>>> 82e7fcbf632c0fb0199ebbb47f4dea3fdf680004
                     },
                 "artifacts" : ["artifacts.tgz"],
                 "flags" : ["chroot"],
                 },
-<<<<<<< HEAD
-=======
-                
-                
-                
-                
-                
->>>>>>> 82e7fcbf632c0fb0199ebbb47f4dea3fdf680004
+
                 {"script" : "transfer/chroot-scientific-6-teardown.sh"}],
         "dirvacua-debian-wheezy-prod" : [{"script" : "transfer/chroot-debian-wheezy-buildup.sh"},
                 {   "script" : "transfer/dirvacua-debian-wheezy-prod-chrooted.sh",
