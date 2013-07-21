@@ -78,15 +78,22 @@ def main():
 
 
     jobname = None
-    
+    release = None
     if 'JOB_NAME' in os.environ:
         jobname=os.environ['JOB_NAME']
+    if 'RELEASE' in os.environ:
+        release=os.environ['RELEASE']
+    
     if jobname == None:
         log.error("No JOB_NAME Enviroment variable set")
         sys.exit(2)
     log.info("JOB_NAME=%s" % jobname )
 
-
+    if release == None:
+        log.error("No RELEASE Enviroment variable set")
+        sys.exit(2)
+    log.info("JOB_NAME=%s" % jobname )
+    
     rc = runJob(jobname,'sss')
     if rc != 0:
         log.error("runJob returned '%s'" % (rc) )
