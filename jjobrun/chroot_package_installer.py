@@ -299,7 +299,7 @@ class ChrootPackageInstallerRedhat(object):
         self.running.CbDelOnFdRead(self.logOutputPkgCatUpdate)
         return self.PkgCatInstalled
     def installPackage(self,package):  
-        
+        self.log.info("installPackage")
         
         self.running.CbAddOnFdRead(self.logOutputPkg)
         passenv_ignored = set(["PATH","SHLVL","OLDPWD","PS1"])
@@ -316,7 +316,7 @@ class ChrootPackageInstallerRedhat(object):
         counter = 0
         
         cmd = "yum install -y -q %s\n" % (package)
-
+        self.log.info(cmd.strip())
         self.log.info("PkgInstall %s" %(cmd.strip()))
         self.running.Write(cmd)
         self.log.info("PkgInstall %s" %(cmd.strip()))
