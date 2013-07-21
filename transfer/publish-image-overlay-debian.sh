@@ -8,7 +8,7 @@ cd vm_overlays
 branches="debian-7-yokel-prod sl-6-yokel-testing-prod sl-6-yokel-testing-trunk"
 
 for this in $branches ; do
-rm ${this}.cpio.bz2
+rm -f ${this}.cpio.bz2
 done
 
 for this in $branches ; do
