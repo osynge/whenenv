@@ -14,8 +14,8 @@ do
 newname=$( echo ${src} | sed -e "s/tar\.gz/src\.tar\.gz/")
 mv $src $newname
 done
-#python setup.py bdist_rpm \
-#    --requires  "m2crypto python-simplejson python-hashlib python-uuid"
+python setup.py bdist_rpm \
+    --requires  "m2crypto python-simplejson python-hashlib python-uuid"
 python setup.py bdist
 architecture=$(arch)
 for src in $(ls dist/*.tar.gz | grep $architecture )
