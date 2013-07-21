@@ -119,8 +119,8 @@ def main():
         
         )
     rc = runnerObj.loadconfig()
-    if rc != 0:
-        log.error("runJob returned '%s'" % (rc) )
+    if rc != True:
+        log.error("Loading config failed")
         sys.exit(2)
 
 if __name__ == '__main__':
