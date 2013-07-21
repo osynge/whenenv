@@ -154,8 +154,13 @@ class runnershell2(object):
             self.log.info("run+%s" %(cleanline))
             self.running.Write(line)
         self.running.Write("echo %s\n" % (endPrompt))
+        counter = 0
         while self.waitingOnPromptRunScriptEnd == True:
-            self.running.Comunicate()
+            self.running.Comunicate(timeout=1)
+            counter += 1
+            if counter > 100:
+                counter = 0
+                self.running.Write("echo %s\n" % (endPrompt))
         self.running.CbDelOnFdRead(self.logOutputRunScript)
         self.running.CbDelOnExit(self.ScriptOnExit)
         rc = 0
