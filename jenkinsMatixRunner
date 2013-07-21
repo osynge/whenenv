@@ -92,7 +92,7 @@ def main():
     if release == None:
         log.error("No RELEASE Enviroment variable set")
         sys.exit(2)
-    log.info("JOB_NAME=%s" % jobname )
+    log.info("RELEASE=%s" % release )
     
     rc = runJob(jobname,'sss')
     if rc != 0:
