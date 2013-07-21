@@ -1,7 +1,5 @@
 set -x
-export CROOT_DIR="/root/sl6"
-set -x
-CHROOT_SCRIPT=${CROOT_DIR}/script
+CHROOT_SCRIPT=${CHROOT}/script
 cat > ${CHROOT_SCRIPT} <<-EOF
 #!/bin/bash
 yum install git  org_desy_grid_virt_sort_release \
@@ -34,8 +32,8 @@ EOF
 echo xx
 cat ${CHROOT_SCRIPT}
 echo xx
-chroot ${CROOT_DIR} /bin/bash /script
+chroot ${CHROOT} /bin/bash /script
 rm -rf build
-mv ${CROOT_DIR}/build build
+mv ${CHROOT}/build build
 rm -f artifacts.tgz
 tar -zcvf artifacts.tgz build/dist
