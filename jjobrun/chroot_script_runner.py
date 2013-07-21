@@ -70,7 +70,8 @@ class runnershell2(object):
         
         lines = data.split('\n')
         for line in lines:
-            if len(line) == 0:
+            cleanline = line.strip()
+            if len(cleanline) == 0:
                 continue
             if self.waitingOnPromptRunScriptEnd == True:
                 matches = self.promptRunScriptEnd.match(line)
@@ -84,7 +85,7 @@ class runnershell2(object):
                     self.waitingOnPromptRunScriptEnd = True
                     continue
                 
-            self.logOutput(fd,data,args,keys)
+            self.logOutput(fd,cleanline,args,keys)
             
          
         
