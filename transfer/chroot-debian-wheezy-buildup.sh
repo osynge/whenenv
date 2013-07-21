@@ -2,7 +2,8 @@
 UUID="aa7016b0-6508-41d2-bce0-c1724cb3d3e2"
 UUID_Overlay="333fe448-28c9-44da-a9cb-402818d433bb"
 set +e
-CHROOT="/tmp/chroot/executor_${EXECUTOR_NUMBER}"
+CHROOT="/tmp/chroot/executor_${EXECUTOR_NUMBER}_number"
+mkdir -p ${CHROOT}
 echo presetvalue=${CHROOT}
 export CHROOT
 chrootbuilder \

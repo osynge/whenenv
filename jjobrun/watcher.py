@@ -152,7 +152,12 @@ class runshell(object):
         return self.process.returncode
     
     def Write(self,text):
-        self.process.stdin.write(text)
+        if self.process.returncode == None:
+            self.process.stdin.write(text)
+            self.log.debug("writing to a closed process")
+            return True
+        return False
+            
     def wait(self):
         self.process.wait()
 

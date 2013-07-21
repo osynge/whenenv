@@ -90,7 +90,7 @@ class ChrootPackageInstallerDebian2(object):
                 deinstalledPackages.add(str(fred["Package"]))
                 continue
             #print fred
-            #self.logOutput(fd,data,args,keys)
+            self.logOutput(fd,data,args,keys)
         
         missing = foundpackages.difference(self.PkgCatInstalled)
         for item in missing:
@@ -130,10 +130,14 @@ class ChrootPackageInstallerDebian2(object):
         while self.promptPkgCatUpdateStart == True:
             self.running.Comunicate(timeout = 1)
         self.running.Write("%s\n" % (cmd))
-        self.running.Write("echo %s\n" % (endPrompt))
         self.waitingOnPromptPkgCatUpdateEnd = True
+        counter = 0
+        self.running.Write("echo %s\n" % (endPrompt))
         while self.waitingOnPromptPkgCatUpdateEnd == True:
             self.running.Comunicate(timeout = 1)
+            counter += 1
+            if counter > 10:
+                self.running.Write("echo %s\n" % (endPrompt))
         self.running.CbDelOnFdRead(self.logOutputPkgCatUpdate)
         return self.PkgCatInstalled
     def installPackage(self,package):  
