@@ -1,14 +1,6 @@
 set -x
 export http_proxy=http://squid:3128
 
-id
-hostname -f
-yum install git \
-  org-desy-grid-virt-sort-release \
-  rpmbuild \
-  python-setuptools \
-  rpm-build \
-  -y
 GITLOCATION="https://github.com/osynge/dirvacua.git"
 rm -rf build
 git clone ${GITLOCATION} build
@@ -22,14 +14,15 @@ do
 newname=$( echo ${src} | sed -e "s/tar\.gz/src\.tar\.gz/")
 mv $src $newname
 done
-python setup.py bdist_rpm \
-    --requires  "m2crypto python-simplejson python-hashlib python-uuid"
+#python setup.py bdist_rpm \
+#    --requires  "m2crypto python-simplejson python-hashlib python-uuid"
 python setup.py bdist
 architecture=$(arch)
-for src in $(ls dist/*.tar.gz | grep \$architecture )
+for src in $(ls dist/*.tar.gz | grep $architecture )
 do
-newname=$( echo \${src} | sed -e "s/tar\.gz/bin\.tar\.gz/")
+newname=$( echo ${src} | sed -e "s/tar\.gz/bin\.tar\.gz/")
 mv $src $newname
 done
+cd ..
 rm -f artifacts.tgz
 tar -zcvf artifacts.tgz build/dist
