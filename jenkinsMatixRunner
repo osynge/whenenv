@@ -3,6 +3,7 @@ import logging
 import os
 import sys
 import optparse
+import jjobrun.configManager
 
 def runJob(os,release):
     return 0
@@ -79,6 +80,8 @@ def main():
 
     jobname = None
     release = None
+    product = None
+    operatingSystem = None
     if 'JOB_NAME' in os.environ:
         jobname=os.environ['JOB_NAME']
     if 'RELEASE' in os.environ:
@@ -94,7 +97,24 @@ def main():
         sys.exit(2)
     log.info("RELEASE=%s" % release )
     
-    rc = runJob(jobname,'sss')
+    if product == None:
+        log.error("No PRODUCT Enviroment variable set")
+        sys.exit(2)
+    log.info("RELEASE=%s" % release )
+    currentDir = os.path.dirname(os.path.realpath(__file__))
+    
+    envDir = "%s/enviroments/" % (currentDir)
+    jobsDir = "%s/jobs/" % (currentDir)
+
+    
+    runnerObj = jjobrun.configManager(product=product,
+        release=release,
+        operatingSystem=operatingSystem,
+        dirEnviroments=envDir,
+        dirJobs=jobsDir,
+        
+        )
+    rc = runnerObj.loadconfig()
     if rc != 0:
         log.error("runJob returned '%s'" % (rc) )
         sys.exit(2)
