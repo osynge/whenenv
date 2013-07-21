@@ -4,7 +4,7 @@ import os
 import sys
 import optparse
 
-def runJob():
+def runJob(os,release):
     return 0
 
 
@@ -87,7 +87,7 @@ def main():
     log.info("JOB_NAME=%s" % jobname )
 
 
-    rc = runJob(jobname)
+    rc = runJob(jobname,'sss')
     if rc != 0:
         log.error("runJob returned '%s'" % (rc) )
         sys.exit(2)
