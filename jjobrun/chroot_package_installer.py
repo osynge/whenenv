@@ -661,6 +661,11 @@ class ChrootPackageInstallerDebian2(object):
         self.log.info("extra %s" %(extra))
         for pack in missing:
             self.installPackage(pack)
+        insalledPkg = self.updatePackages()
+        missing = set(packages).difference(insalledPkg)
+        for pack in missing:
+            self.installPackage(pack)
+        
         
     def finalise(self):
         if self.running.returncode == None:
