@@ -3,6 +3,6 @@ su exporter -c 'vmcaster \
    --select-imagelist ab1754cd-7d59-4851-c333-c96cb6545aaa \
    --upload-imagelist \
    --verbose \
-   --verbose'
+   --verbose && exit'
 exit 0
 
