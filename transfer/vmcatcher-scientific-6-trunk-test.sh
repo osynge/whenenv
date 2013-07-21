@@ -1,6 +1,5 @@
 set -x
-export CROOT_DIR="/root/sl6"
-CHROOT_SCRIPT=${CROOT_DIR}/script
+CHROOT_SCRIPT=${CHROOT}/script
 cat > ${CHROOT_SCRIPT} <<-EOF
 #!/bin/bash
 set -x
@@ -52,4 +51,4 @@ EOF
 echo xx
 cat ${CHROOT_SCRIPT}
 echo xx
-chroot ${CROOT_DIR} /bin/bash /script
+chroot ${CHROOT} /bin/bash /script
