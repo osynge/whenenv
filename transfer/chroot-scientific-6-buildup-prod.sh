@@ -1,5 +1,6 @@
 set -x
-CHROOT="/root/sl6"
+CHROOT="${WORKSPACE}/chroot/executor_${EXECUTOR_NUMBER}"
+mkdir -p ${CHROOT}
 rm -rf artifacts.tgz
 /usr/bin/chrootbuilder \
 --input \
