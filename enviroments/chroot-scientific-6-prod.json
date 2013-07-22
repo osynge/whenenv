@@ -2,7 +2,7 @@
     "name" : "chroot-scientific-6-prod",
     "provides" : "chroot",
     "variables" : {
-        "require_values" : { "OS" : "scientific" },
+        "require_values" : { "OS" : "el" },
         "require_keys" : ["CHROOT"]
     },
     "lifecycle" : {
