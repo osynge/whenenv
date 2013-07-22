@@ -186,7 +186,6 @@ class runnershell2(object):
             counter += 1
             if counter > 100:
                 counter = 0
-                self.log.info("d")
                 self.running.Write("echo %s\n" % (startPrompt))
         for enviroment in env.keys():
             if enviroment in passenv_ignored:
@@ -226,7 +225,6 @@ class runnershell2(object):
         self.log.error("getEnv now send end")
         while self.waitingOnPromptGetEnvEnd == True:
             counter += 1
-            self.log.error("counter %s\n" % (counter))
             if counter > 100:
                 counter = 0
                 self.running.Write("echo %s\n" % (endPrompt))
