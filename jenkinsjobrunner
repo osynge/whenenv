@@ -304,8 +304,8 @@ class jobPartRun:
         if rc == 0:
             self.log.info("Updating env")
             afterEnv = sr.getEnv()
-            self.log.info("initialEnv '%s'" % (initialEnv))
-            self.log.info("afterEnv '%s'" % (afterEnv))
+            self.log.debug("initialEnv '%s'" % (initialEnv))
+            self.log.debug("afterEnv '%s'" % (afterEnv))
             keysInitial = set(initialEnv.keys()).difference()
             keysFinal = set(afterEnv.keys()).difference()
             keysnew = keysFinal.difference(keysInitial)
