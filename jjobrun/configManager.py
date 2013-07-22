@@ -291,7 +291,9 @@ class loaderJobs(loaderBase):
             tree[plan] = [plan]
         resolutionStack = {}
         dependacyStack = {}
-        
+        if len(tree.keys()) == 0:
+            self.log.error("No matching jobs for")
+            return []
         for key in tree.keys():
             DoneJob = set()
             DoneStack = set()
@@ -389,11 +391,13 @@ class loaderJobs(loaderBase):
         for key in badkeys:
             self.log.error("Skipping %s : %s" %(key,unifiedTree))
             del unifiedTree[key]
-        self.log.error("unifiedTree %s" %(    unifiedTree))
+        #self.log.error("unifiedTree %s" %(    unifiedTree))
         #self.log.error("dependacyStack=%s" % (dependacyStack))  
         #self.log.error("resolutionStack=%s" % (resolutionStack))  
         unifiedTreeKeyLen = len(unifiedTree.keys())
         if unifiedTreeKeyLen == 0:
+            self.log.error("dependacyStack=%s" % (dependacyStack))
+            self.log.error("resolutionStack=%s" % (resolutionStack))
             return []
         if unifiedTreeKeyLen > 1:
             self.log.error("to many solutions both %s" % (unifiedTree))
@@ -474,6 +478,7 @@ class matrixRunner(object):
     def Run(self,enviroment):
         
         jobplan = self.jobs.getJobsPlan(enviroment)
+        self.log.info("job plan developed %s" % (jobplan))
         if len(jobplan) == 0:
             self.log.error("no job plan developed")
             return 1
