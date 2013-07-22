@@ -128,7 +128,7 @@ def lsb_release():
         if splitline[0] in magicLines:
             value = splitline[1].strip()
             output[splitline[0]] = value
-    log.info(output)
+    #log.info(output)
     
     return output
 
