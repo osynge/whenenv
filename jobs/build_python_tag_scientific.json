@@ -4,7 +4,7 @@
     "script" : "transfer/build_python_tag_scientific.sh",
     "inherits" : ["branch_testing"],
     "variables" : {
-        "require_values" : { "RELEASE" : "production" },
+        "require_values" : { "RELEASE" : "production", "OPERATING_SYSTEM" : "el"},
         "require_keys" : []
     }
 }

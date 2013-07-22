@@ -1,5 +1,9 @@
 {
     "name" : "squeezetray",
-    "script" : "transfer/squeezetray.sh",
-    "enviroment" : "chroot"
+    "variables" : {
+        "require_values" : { "PRODUCT" : "squeezetray"},
+        "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
+    },
+    "provides" : ["execution"],
+    "depends" : ["squeezetray_source","checkout_source","build_package"]
 }

@@ -1,0 +1,14 @@
+{
+    "name" : "chroot-scientific-6",
+    "provides" : ["chroot"],
+    "variables" : {
+        "require_values" : { "OS" : "scientific","RELEASE" : "production"},
+        "require_keys" : ["CHROOT"]
+    },
+    "lifecycle" : {
+        "create" : "transfer/chroot-debian-wheezy-buildup.sh",
+        "teardown" : "transfer/chroot-debian-wheezy-teardown.sh",
+        "access" : "transfer/chroot-enter.sh"
+    },
+    "artifcats" : ["artifacts.tgz"]
+}
