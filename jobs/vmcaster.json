@@ -1,0 +1,9 @@
+{
+    "name" : "vmcaster",
+    "variables" : {
+        "require_values" : { "PRODUCT" : "vmcaster"},
+        "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
+    },
+    "provides" : ["execution"],
+    "depends" : ["vmcaster_source","checkout_source","build_package"]
+}

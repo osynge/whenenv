@@ -1,5 +1,5 @@
 set -x
-CHROOT="/tmp/chroot/executor_${EXECUTOR_NUMBER}"
+CHROOT="/tmp/chroot/executor_${EXECUTOR_NUMBER}_dir"
 mkdir -p ${CHROOT}
 rm -rf artifacts.tgz
 /usr/bin/chrootbuilder \

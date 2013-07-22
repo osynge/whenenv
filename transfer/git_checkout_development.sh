@@ -1,4 +1,4 @@
-if [ "X${GIT_SRC}" == "X" ] ; then
+if [  "X${GIT_SRC}" == "X" ] ; then
     echo "GIT_SRC not defined"
     exit 1
 fi

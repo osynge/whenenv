@@ -126,9 +126,9 @@ class runshell(object):
         
         readFds,writeWds,exFds = select.select([ self.process.stderr,self.process.stdout],[],[],timeout)
         
-        self.log.debug("selected_read='%s'" % (readFds))
-        self.log.debug("selected_write='%s'" % (writeWds))
-        self.log.debug("selected_ex='%s'" % (exFds))
+        #self.log.debug("selected_read='%s'" % (readFds))
+        #self.log.debug("selected_write='%s'" % (writeWds))
+        #self.log.debug("selected_ex='%s'" % (exFds))
         for item in readFds:
             recivedFd = self.fdMapping[item.fileno()]
             newdata = item.read()
