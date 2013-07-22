@@ -275,7 +275,7 @@ class jobPartRun:
         self.packages(jobpart,env)
         command = "/bin/bash"
         allfliages =  jobpart["flags"]
-        self.log.error("flags=%s" % (allfliages))
+        #self.log.error("flags=%s" % (allfliages))
         if "chroot" in allfliages:
             if not "CHROOT" in inputenv.keys():
                 self.log.error("no CHROOT enviroment_valiable set")
