@@ -322,9 +322,7 @@ def runJob (jobname):
     log = logging.getLogger("runJob")
     mappings = {
         "GenChroot.SL-6X" : ["transfer/GenChroot.SL-6X.sh"],
-        #"vmcatcher-scientific-6-prod" : ["transfer/chroot-scientific-6-buildup-prod.sh",
-        #    "transfer/vmcatcher-scientific-6-prod.sh",
-        #    "transfer/chroot-scientific-6-teardown.sh"],
+
         "vmcatcher-scientific-6-trunk" : ["transfer/chroot-scientific-6-buildup-trunk.sh",
             "transfer/vmcatcher-scientific-6-trunk.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
@@ -334,7 +332,6 @@ def runJob (jobname):
         "vmcatcher-scientific-6-prod-test" : ["transfer/chroot-scientific-6-buildup-prod.sh",
             "transfer/vmcatcher-scientific-6-prod-test.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
-        
         "vmcatcher_eventHndlExpl_ON-scientific-6-prod" : ["transfer/chroot-scientific-6-buildup-prod.sh",
             "transfer/vmcatcher_eventHndlExpl_ON-scientific-6-prod-part-01.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
@@ -365,19 +362,10 @@ def runJob (jobname):
         "chrootbuilder-scientific-6-prod" : ["transfer/chroot-scientific-6-buildup-prod.sh",
             "transfer/chrootbuilder-scientific-6-prod.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
-        #"vmcaster-debian-wheezy-prod" : ["transfer/vmcaster-debian-wheezy-prod-part-01.sh",
-        #    "transfer/vmcaster-debian-wheezy-prod-part-02.sh",
-        #    "transfer/vmcaster-debian-wheezy-prod-part-03.sh",
-        #    "transfer/vmcaster-debian-wheezy-prod-part-04.sh",
-        #    "transfer/vmcaster-debian-wheezy-prod-part-05.sh"],
         "hepixvmitrust-scientific-6-trunk" : ["transfer/chroot-scientific-6-buildup-trunk.sh",
             "transfer/hepixvmitrust-scientific-6-trunk.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
         "repo-scientific" : ["transfer/repo-scientific.sh"],
-        #"hepixvmitrust-debian-wheezy-prod" : ["transfer/chroot-debian-wheezy-buildup.sh",
-        #    "transfer/hepixvmitrust-debian-wheezy-prod-part-02.sh",
-        #    "transfer/hepixvmitrust-debian-wheezy-prod-part-03.sh",
-        #    "transfer/hepixvmitrust-debian-wheezy-prod-part-04.sh"],
         "grid-virt-sort-scientific-6-trunk" : ["transfer/chroot-scientific-6-buildup-trunk.sh",
             "transfer/grid-virt-sort-scientific-6-trunk.sh",
             "transfer/chroot-scientific-6-teardown.sh"],
@@ -385,19 +373,9 @@ def runJob (jobname):
             "transfer/GenChroot.debian-wheezy-part-02.sh",
             "transfer/GenChroot.debian-wheezy-part-03.sh",
             "transfer/GenChroot.debian-wheezy-part-04.sh"],
-        #"dirvacua-debian-wheezy-prod" : ["transfer/dirvacua-debian-wheezy-prod-part-01.sh",
-        #    "transfer/dirvacua-debian-wheezy-prod-part-02.sh",
-        #    "transfer/dirvacua-debian-wheezy-prod-part-03.sh",
-        #    "transfer/dirvacua-debian-wheezy-prod-part-04.sh",
-        #    "transfer/dirvacua-debian-wheezy-prod-part-05.sh"],
-        #"dirvacua-scientific-6-prod" : ["transfer/chroot-scientific-6-buildup-prod.sh",
-        #    "transfer/dirvacua-scientific-6-prod.sh",
-        #    "transfer/chroot-scientific-6-teardown.sh"],
         "chroot-imagelist-update" : ["transfer/chroot-imagelist-update.sh"],
         "chroot-scientific-6-repo" : ["transfer/chroot-scientific-6-repo.sh"],
         "publish-image-overlay" : ["transfer/publish-image-overlay-debian.sh"],
-        
-        
         "docbook-production" : [{   "script" : "transfer/chroot-debian-wheezy-buildup.sh"},
         
             {   "script" : "transfer/docbook-production.sh",
