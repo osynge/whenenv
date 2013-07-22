@@ -1,5 +1,5 @@
 {
     "name" : "squeezetray",
     "script" : "transfer/squeezetray.sh",
-    "enviroment" : "chroot",
+    "enviroment" : "chroot"
 }

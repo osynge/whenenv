@@ -97,20 +97,18 @@ def main():
     if release == None:
         log.error("No RELEASE Enviroment variable set")
         sys.exit(2)
-    log.info("RELEASE=%s" % release )
     
     if operatingSystem == None:
         log.error("No OPERATING_SYSTEM Enviroment variable set")
         sys.exit(2)
-    log.info("RELEASE=%s" % release )
     currentDir = os.path.dirname(os.path.realpath(__file__))
-    
     envDir = "%s/enviroments/" % (currentDir)
     jobsDir = "%s/jobs/" % (currentDir)
 
     log.info("PRODUCT=%s" % product )
     log.info("RELEASE=%s" % release )
     log.info("OPERATING_SYSTEM=%s" %  operatingSystem)
+    
     runnerObj = jjobrun.configManager.matrixRunner(product=product,
         release=release,
         operatingSystem=operatingSystem,

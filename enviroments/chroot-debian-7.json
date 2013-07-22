@@ -2,17 +2,15 @@
     "name" : "chroot-debian-7",
     "script" : "transfer/squeezetray.sh",
     "provides" : {
-        "enviroment" : ["chroot"],
+        "enviroment" : ["chroot"]
         },
-    }
     "requires" : {
-        "OS" : "debian",
-        }
+        "OS" : "debian"
+        },
     "lifecycle" : {
         "create" : "transfer/chroot-debian-wheezy-buildup.sh",
         "teardown" : "transfer/chroot-debian-wheezy-teardown.sh",
-        "access" : "transfer/chroot-enter.sh",
-    }
-    
-    "artifcats" : ["artifacts.tgz"],
+        "access" : "transfer/chroot-enter.sh"
+    },
+    "artifcats" : ["artifacts.tgz"]
 }
