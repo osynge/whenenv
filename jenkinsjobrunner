@@ -254,7 +254,7 @@ class jobPartRun:
         if release["Distributor ID"] == "Scientific":
             self.packagesScientific(jobpart,env)
             done = True
-        return Done            
+        return done            
         
         
     def executabingo(self,jobpart,env = {}):
