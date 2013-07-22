@@ -76,7 +76,7 @@ def main():
         logging.basicConfig(level=LoggingLevel)
     log = logging.getLogger("main")
 
-
+    baseDir = os.path.dirname(os.path.realpath(__file__))
     
     release = None
     product = None
@@ -113,7 +113,7 @@ def main():
         operatingSystem=operatingSystem,
         dirEnviroments=envDir,
         dirJobs=jobsDir,
-        
+        basedir=baseDir
         )
     rc = runnerObj.loadconfig()
     if rc != True:

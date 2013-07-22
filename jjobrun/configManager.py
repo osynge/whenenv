@@ -416,6 +416,8 @@ class runner(object):
         self.JobContainer = kwargs.get('job_container', None)
         self.job_plan = kwargs.get('job_plan', None)
         self.log = logging.getLogger("runner")
+        self.basedir = kwargs.get('basedir', None)
+        
     def runstage(self,item):
         if not "script" in self.JobContainer.allcontianed[item].dictionary.keys():
             return 0
@@ -425,9 +427,12 @@ class runner(object):
         initialEnv = rs.getEnv()
         
         script = self.JobContainer.allcontianed[item].dictionary["script"]
+        fullpath = "%s/%s" % (self.basedir , script)
         self.log.info("Running Command '%s'" % (item))
         self.log.info("Running is script '%s'" % (script))
-        output = rs.runscript(script)
+        self.log.info("Running is script '%s'" % (fullpath))
+        
+        output = rs.runscript(fullpath)
         if output != 0:
             return output
         
@@ -462,7 +467,7 @@ class matrixRunner(object):
         self.enviroment = loaderEnviroment(cfgDir=dirEnviroments)
         self.log = logging.getLogger("matrixRunner")
         self.log = logging.getLogger("matrixRunner")
-        
+        self.basedir = kwargs.get('basedir', None)
         
     def loadconfig(self):
         successLoadingJobs = self.jobs.load()
@@ -485,6 +490,7 @@ class matrixRunner(object):
         runTool = runner(job_plan=jobplan,
             job_container = self.jobs.cfgContainer,
             env_container = self.enviroment.cfgContainer,
-            enviroment = {}
+            enviroment = {},
+            basedir = self.basedir
             )
         return runTool.run()
