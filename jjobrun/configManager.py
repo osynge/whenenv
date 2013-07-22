@@ -474,6 +474,9 @@ class matrixRunner(object):
     def Run(self,enviroment):
         
         jobplan = self.jobs.getJobsPlan(enviroment)
+        if len(jobplan) == 0:
+            self.log.error("no job plan developed")
+            return 1
         runTool = runner(job_plan=jobplan,
             job_container = self.jobs.cfgContainer,
             env_container = self.enviroment.cfgContainer,

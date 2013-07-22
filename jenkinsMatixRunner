@@ -120,6 +120,9 @@ def main():
         log.error("Loading config failed")
         sys.exit(2)
     rc = runnerObj.Run(os.environ)
+    if rc != 0:
+        log.error("Loading config failed")
+        sys.exit(rc)
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     main()
