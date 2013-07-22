@@ -1,0 +1,11 @@
+{
+    "name" : "build_python_branch_debian",
+    "provides" : ["build_package"],
+    "script" : "transfer/build_python_branch_debian.sh",
+    "inherits" : ["branch_testing"],
+    "variables" : {
+        "require_values" : { "RELEASE" : "development",
+              "OPERATING_SYSTEM" : "debian" },
+        "require_keys" : []
+    }
+}

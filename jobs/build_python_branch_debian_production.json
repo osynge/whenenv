@@ -1,0 +1,10 @@
+{
+    "name" : "build_python_branch_debian_production",
+    "provides" : ["build_package"],
+    "script" : "transfer/build_python_tag_scientific.sh",
+    "inherits" : ["branch_testing"],
+    "variables" : {
+        "require_values" : { "RELEASE" : "production", "OPERATING_SYSTEM" : "debian"},
+        "require_keys" : []
+    }
+}
