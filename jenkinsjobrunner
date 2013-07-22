@@ -254,8 +254,7 @@ class jobPartRun:
         if release["Distributor ID"] == "Scientific":
             self.packagesScientific(jobpart,env)
             done = True
-        self.log.error("Distributor Matched=%s" % (done))
-                    
+        return Done            
         
         
     def executabingo(self,jobpart,env = {}):
