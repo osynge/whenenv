@@ -4,3 +4,4 @@ GIT_TAG_FILTER="vmcatcher-"
 export GIT_SRC
 export GIT_DEST
 export GIT_TAG_FILTER
+echo billll

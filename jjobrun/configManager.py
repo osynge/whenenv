@@ -421,11 +421,14 @@ class runner(object):
     def runstage(self,item):
         if not "script" in self.JobContainer.allcontianed[item].dictionary.keys():
             return 0
+        self.log.info("Running Command '%s'" % (item))
         rs = chroot_script_runner.runnershell2(command="/bin/sh")
         rs.initialise()
+        self.log.info("Initisaalised Command '%s'" % (item))
         rs.setEnv(self.runenviroment)
+        self.log.info("setEnv Command '%s'" % (self.runenviroment))
         initialEnv = rs.getEnv()
-        
+        self.log.info("getEnv Command '%s'" % (item))
         script = self.JobContainer.allcontianed[item].dictionary["script"]
         fullpath = "%s/%s" % (self.basedir , script)
         self.log.info("Running Command '%s'" % (item))

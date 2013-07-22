@@ -7,6 +7,7 @@ import watcher
 import prompts
 import re
 import observable
+import time
 
 transtbl = string.maketrans(
           'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
@@ -36,6 +37,7 @@ class runnershell2(object):
         self.log.info("Script %s exited early with %s" %(pid,rc))
         self.waitingOnPromptRunScriptEnd = False
         
+        self.waitingOnPromptGetEnvEnd = False
         
         
     def logOutputSetEnv(self,fd,data,args,keys):
@@ -110,20 +112,17 @@ class runnershell2(object):
                 if not self.waitingOnPromptGetEnvEnd == True:
                     # We only want lines after the start
                     continue
-                if not line[:11] == "declare -x ":
-                    # We only want declair lines
+                if fd != 1:
                     continue
-                end = line[11:].split('="')
-                if len(end) < 2:
+                self.logOutput(fd,line,args,keys)
+                cleanline = line.strip()
+                splitline = cleanline.split('=')
+                if len(splitline) < 2:
                     continue
-                
-                tail = '="'.join(end[1:])
-                head = end[0]
-                
-                self.FoundEnv[head] = tail[:-1]
+                tail = splitline[1:]
+                #self.logOutput(fd,line,args,keys)
+                self.FoundEnv[splitline[0]] = splitline[1]
             
-            
-        
     
     def initialise(self):
         if self.chrootCmd == None:
@@ -135,7 +134,8 @@ class runnershell2(object):
         self.running.Write("set -e \n")
         return True
     def runscript(self,script):
-        
+        if None != self.running.returncode():
+            return None
         self.running.CbAddOnExit(self.ScriptOnExit)
         startPrompt = prompts.GeneratePrompt()
         endPrompt = prompts.GeneratePrompt()
@@ -202,25 +202,39 @@ class runnershell2(object):
         return True
         
     def getEnv(self):
+        if None != self.running.returncode():
+            self.log.info("returning none %s" %("ddd"))
+            return None
         self.FoundEnv = {}
         output = {}
+        self.running.CbAddOnExit(self.ScriptOnExit)
         self.running.CbAddOnFdRead(self.logOutputGetEnv)
         startPrompt = prompts.GeneratePrompt()
         endPrompt = prompts.GeneratePrompt()
         self.promptGetEnvStart = re.compile(startPrompt)
         self.promptGetEnvEnd = re.compile(endPrompt)
-        
+        self.running.Comunicate(timeout=1)
         self.waitingOnPromptGetEnvStart = True
-        self.waitingOnPromptGetEnvEnd = True
-        self.running.Write("echo %s\n" % (startPrompt))
+        self.waitingOnPromptGetEnvEnd = False
+        cmd = "echo %s\n" % (startPrompt)
+        self.running.Write(cmd)
         while self.waitingOnPromptGetEnvStart == True:
             self.running.Comunicate()
         self.FoundEnv = {}
-        self.running.Write("declare -x\n")
+        self.running.Write("env\n")
         self.running.Write("echo %s\n" % (endPrompt))
+        counter = 0 
+        self.log.error("getEnv now send end")
         while self.waitingOnPromptGetEnvEnd == True:
+            counter += 1
+            self.log.error("counter %s\n" % (counter))
+            if counter > 100:
+                counter = 0
+                self.running.Write("echo %s\n" % (endPrompt))
             self.running.Comunicate()
         self.running.CbDelOnFdRead(self.logOutputGetEnv)
+        self.running.CbDelOnExit(self.ScriptOnExit)
+        self.log.error("getEnv end")
         return self.FoundEnv
     def finalise(self):
         if self.running.returncode == None:
