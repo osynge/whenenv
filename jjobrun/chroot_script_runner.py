@@ -114,7 +114,6 @@ class runnershell2(object):
                     continue
                 if fd != 1:
                     continue
-                self.logOutput(fd,line,args,keys)
                 cleanline = line.strip()
                 splitline = cleanline.split('=')
                 if len(splitline) < 2:
