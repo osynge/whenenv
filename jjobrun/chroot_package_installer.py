@@ -186,8 +186,8 @@ class ChrootPackageInstallerDebian2(object):
         extra = insalledPkg.difference(packages)
         
         missing = set(packages).difference(insalledPkg)
-        self.log.info("notinstalled %s" %(notinstalled))
-        self.log.info("extra %s" %(extra))
+        #self.log.info("notinstalled %s" %(notinstalled))
+        #self.log.info("extra %s" %(extra))
         for pack in missing:
             self.installPackage(pack)
         insalledPkg = self.updatePackages()
