@@ -434,6 +434,7 @@ class runner(object):
         
         output = rs.runscript(fullpath)
         if output != 0:
+            self.log.info("rs.runscript'%s'" % (script))
             return output
         
         finalEnv = rs.getEnv()
