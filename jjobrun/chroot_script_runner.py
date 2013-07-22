@@ -222,7 +222,6 @@ class runnershell2(object):
         self.running.Write("env\n")
         self.running.Write("echo %s\n" % (endPrompt))
         counter = 0 
-        self.log.error("getEnv now send end")
         while self.waitingOnPromptGetEnvEnd == True:
             counter += 1
             if counter > 100:
