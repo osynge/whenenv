@@ -1,7 +1,7 @@
 import json
 import os
 import logging
-
+import chroot_script_runner
 
 class holderBase(object):
     def __init__(self, dictionary,*args, **kwargs):
@@ -26,24 +26,63 @@ class holderBase(object):
         return True
     
     def inheritProperties(self,holderBase):
+        #self.log.error("inheritProperties,%s,%s" % (self.getName(),holderBase.getName()))
         # Grab all properties not already defined
         newdict = dict(holderBase.dictionary)
-        updatedDict = newdict.update(self.dictionary)
-        self.dictionary = updatedDict
+        newdict.update(self.dictionary)
+        self.dictionary = newdict
         
         
     def getProvides(self):
         if u'provides' in self.dictionary.keys():
             value = self.dictionary["provides"]
-            print value
+            #print value
             if isinstance(value, basestring):
                 value = [value]
                 
             return list(value)
         return []
-
-
-
+    
+    
+    def getDepends(self):
+        if u'depends' in self.dictionary.keys():
+            value = self.dictionary["depends"]
+            #print value
+            if isinstance(value, basestring):
+                value = [value]
+                
+            return list(value)
+        return []
+    def getVariablesProvided(self):
+        if not u'variables' in self.dictionary.keys():
+            return []
+        if not 'provides_keys' in self.dictionary[u'variables'].keys():
+            return []
+        return list(self.dictionary[u'variables']['provides_keys'])
+    
+    def matchesVariablesValue(self,enviroment):
+        if not u'variables' in self.dictionary.keys():
+            self.log.error("no variables set for %s" % (self.getName()))
+            return False
+        if 'require_values' in self.dictionary[u'variables'].keys():
+            required = self.dictionary[u'variables']['require_values']
+            envKeys = set(enviroment.keys())
+            for key in required.keys():
+                if not key in envKeys:
+                    return False
+                if required[key] != enviroment[key]:
+                    return False
+        return True
+        
+    def matchesVariablesProvided(self,VariablesProvided):
+        if not u'variables' in self.dictionary.keys():
+            self.log.error("no variables set for %s" % (self.getName()))
+            return False
+        if 'require_keys' in self.dictionary[u'variables'].keys():
+            print VariablesProvided,self.dictionary[u'variables']['require_keys']
+            print VariablesProvided.issuperset(self.dictionary[u'variables']['require_keys'])
+            return set(VariablesProvided).issuperset(self.dictionary[u'variables']['require_keys'])
+        return True
 
 class holderJob(holderBase):
     def __init__(self, dictionary, *args, **kwargs):
@@ -67,12 +106,15 @@ class containerBase(object):
         self.log = logging.getLogger("containerBase")
         self.cfgDir = kwargs.get('dirJobs', None)
         self.allcontianed = {}
+        self.provides = {}
+        
     def addFromHolder(self,holder):
         holderName = holder.getName()
         if holderName == None:
             return False
-        if holder.isComplete() != True:
-            return False
+        allHolderNames = self.allcontianed.keys()
+        if holderName in allHolderNames:
+            self.log = logging.getLogger("over writing %s" % (holderName))
         self.allcontianed[holderName] = holder
         return True
         
@@ -82,20 +124,20 @@ class containerBase(object):
     def ListAvailable(self):
         return self.allcontianed.keys()
     
+    
     def Index(self):
         # Should be called aftert each block l
         # of items added to the dictionary
         available = set(self.allcontianed.keys())
-        print 'ssss',self.allcontianed.keys()
         provides = {}
         inherits = set([])
         for item in available:
-            if "inherits" in self.allcontianed[item].dictionary.keys():
+            inheritsList = self.allcontianed[item].getInheritance()
+            if len(inheritsList) > 0:
                 inherits.add(item)
             provideList = self.allcontianed[item].getProvides()
-            print provideList
             for value in provideList:
-                self.log.error("value=%s:%s" % (value, item))
+                #self.log.error("value=%s:%s" % (value, item))
                 if value in provides.keys():
                     provides[value].append(item)
                 else:
@@ -110,7 +152,6 @@ class containerBase(object):
         #self.log.error("InheritsPass=%s:%s" % (InheritsPass, lenInherits))
         while InheritsPass < lenInherits:
             InheritsPass += 1
-            self.log.error("here")
             lenInherits = len(inherits)
             if InheritsPass > lenInherits:
                 # Inherits tree max deapth found
@@ -121,20 +162,21 @@ class containerBase(object):
                 self.log.error("unresolved inherits")
                 break
             lenInheritsLastPass = lenInherits
-            print lenInheritsLastPass
+            #print lenInheritsLastPass
             # Now the loop safty is done we can get on fixinf inherited items
             for inheritor in set(inherits):
+                if not inheritor in inherits:
+                    continue
                 inheritasnceList = list(self.allcontianed[inheritor].dictionary["inherits"])
                 inheritasnceSet = set(inheritasnceList)
                 if inheritor in inheritasnceSet:
-                    self.log.error("Undefined inheritance:'%s':'%s'" % (inheritor,undefined))
+                    self.log.info("Undefined removed inheritance:'%s':'%s'" % (inheritor,inheritasnceList))
                     continue
-                undefined = complete.difference(inheritasnceSet)
+                undefined = inheritasnceSet.difference(complete)
                 if len(undefined) != 0:
                     self.log.error("Undefined inheritance:'%s':'%s'" % (inheritor,undefined))
                     continue
                 completeInherits = available.difference()
-                print completeInherits
                 missinginheritance = inheritasnceSet.difference(available)
                 if len(missinginheritance) != 0:
                     self.log.error("missinginheritance:%s" % (len(missinginheritance)))
@@ -143,22 +185,29 @@ class containerBase(object):
                     if not item in completeInherits:
                         self.log.error("missingItem:%s" % (item))
                         continue
-                    self.allcontianed[inheritor].inheritProperties(ancestor)
-                print "here:"
-                del self.allcontianed[item].dictionary["inherits"]
-                inherits.remove(item)
-                complete.add(item)
-                
-            
+                    
+                    self.allcontianed[inheritor].inheritProperties(self.allcontianed[ancestor])
+                    #self.log.error("allcontianed[%s] = %s" % (inheritor,ancestor))
+                if "inherits" in self.allcontianed[item].dictionary.keys():
+                    del self.allcontianed[item].dictionary["inherits"]
+                inherits.remove(inheritor)
+                complete.add(inheritor)
+
         if len(inherits) > 0:
             self.log.error("Invalid Inheritance:%s" % (inherits))
-            
+            for item in inherits:
+                self.log.info("item=%s:%s" % (item,self.allcontianed[item].dictionary))
+            #for item in available:
+            #    self.log.info("availableitem=%s:%s" % (item,self.allcontianed[item].dictionary))
         
         self.provides = provides
-        print "dddd",self.provides
+        self.log.info("provided=%s" % (self.provides.keys()))
             
-        
-        
+    def listJobsProvide(self,filer):
+        #self.log.error("getJobsPlan")
+        if not filer in self.provides.keys():
+            return []
+        return self.provides[filer]
         
     
 class containerJobs(containerBase):
@@ -171,6 +220,8 @@ class containerJobs(containerBase):
     
     def Index(self):
         super(containerJobs, self).Index()
+
+    
         
         
 class containerEnviroment(containerBase):
@@ -185,7 +236,7 @@ class loaderBase(object):
     def __init__(self, *args, **kwargs):
         self.log = logging.getLogger("loaderBase")
         self.cfgDir = kwargs.get('cfgDir', None)
-
+        self.cfgContainer = containerBase(dirJobs=self.cfgDir)
     def load(self):
         knownFiles = []
         if self.cfgDir == None:
@@ -206,8 +257,7 @@ class loaderBase(object):
                 continue
             self.cfgContainer.addFromDictionary(parsedJson)
         self.cfgContainer.Index()
-        return True
-        
+        return True  
 
 class loaderEnviroment(loaderBase):
     def __init__(self, *args, **kwargs):
@@ -223,7 +273,181 @@ class loaderJobs(loaderBase):
         self.log = logging.getLogger("loaderJobs")
         self.cfgContainer = containerJobs(dirJobs=self.cfgDir)
         
-    
+    def getJobsPlan(self,enviroment):
+        self.log.error("getJobsPlan=%s" % (enviroment))
+        # Now we test the plans
+        tree = {}
+        possiblePlans = self.cfgContainer.listJobsProvide("execution")
+        for plan in possiblePlans:
+            testEnv = dict(enviroment)
+            testKeys = set(testEnv.keys())
+            if True != self.cfgContainer.allcontianed[plan].matchesVariablesProvided(testKeys):
+                self.log.error("matchesVariablesProvided=%s" % (testKeys))
+                continue
+            
+            if True != self.cfgContainer.allcontianed[plan].matchesVariablesValue(testEnv):
+                self.log.error("matchesVariablesValue=%s" % (testKeys))
+                continue
+            tree[plan] = [plan]
+        resolutionStack = {}
+        dependacyStack = {}
+        
+        for key in tree.keys():
+            DoneJob = set()
+            DoneStack = set()
+            dependacyList =  key
+            depStack = []
+            JobStack = [key]
+            
+            self.log.error("JobStack=%s" % (JobStack))
+            self.log.error("depStack=%s" % (depStack))
+            
+            shouldRun = True
+            while shouldRun == True:
+                if len(JobStack) + len(depStack) == 0:
+                    shouldRun = False
+                    continue
+                JobNext = None
+                if len(JobStack) > 0:
+                    self.log.error("JobStack=%s" % (JobStack))
+                    tmpCommand = JobStack.pop(0)
+                    self.log.debug("JobStack=%s" % (JobStack))
+                    self.log.debug("tmpCommand=%s" % (tmpCommand))
+                    if not tmpCommand in DoneJob:
+                        JobNext = tmpCommand
+                        DoneJob.add(tmpCommand)
+                nextDepends = None 
+                if len(depStack) > 0:
+                    tmpStack = depStack.pop(0)
+                    if not tmpStack in DoneStack:
+                        nextDepends = tmpStack
+                        DoneStack.add(tmpStack)
+
+                if nextDepends != None:
+                    self.log.debug("nextDepends=%s" % (nextDepends))
+                    matchinJobs = []
+                    possibleJobs = self.cfgContainer.listJobsProvide(nextDepends)
+                    for job in possibleJobs:
+                        #self.log.error("job=%s=%s" % ())
+                        matchinJobs.append(job)
+                        JobStack.append(job)
+                    resolutionStack[nextDepends] = possibleJobs
+                    
+                 
+                if JobNext != None:
+                    self.log.debug("JobNext=%s" % (JobNext))   
+                    depends = self.cfgContainer.allcontianed[JobNext].getDepends()
+                    self.log.debug("depends=%s" % (depends))   
+                    
+                    for item in depends:
+                        if item in depStack:
+                            continue
+                        self.log.error("item=%s" % (item))
+                        depStack.append(item)
+                    if JobNext in dependacyStack.keys():
+                        dependacyStack[JobNext] = depends.union(dependacyStack[JobNext])
+                    else:
+                        dependacyStack[JobNext] = depends
+        
+        # now we have the dpeendacy tree
+        # We can try to pass it:
+        #self.log.error("dependacyStack=%s" % (dependacyStack))  
+        #self.log.error("resolutionStack=%s" % (resolutionStack))  
+        unifiedTree = {}
+        for key in tree.keys():
+            stack = [key]
+            matching = dependacyStack.keys()
+            if not key in matching:
+                self.log.error("key not found=%s" % (key))  
+                continue
+            testEnv = dict(enviroment)
+            depStack = dependacyStack[key]
+            possibleFirstJob = []
+            for item in depStack:
+                joblist = resolutionStack[item]
+                cleanProvided = []
+                nosolutions = False
+                for job in joblist:
+                    matchesVariablesValue = self.cfgContainer.allcontianed[job].matchesVariablesValue(testEnv)
+                    if matchesVariablesValue == True:
+                        cleanProvided.append(job)
+                if len(cleanProvided) == 0:
+                    self.log.error("No solutions to %s" %(job))
+                    possibleFirstJob.append(None)
+                    continue
+                if len(cleanProvided) > 1:
+                    self.log.error("to many solutions both %s" % (cleanProvided))
+                    continue
+                possibleFirstJob.append(cleanProvided[0])
+                
+            unifiedTree[key] = possibleFirstJob
+        badkeys = []
+        for key in unifiedTree.keys():
+            vesult = unifiedTree[key]
+            if None in vesult:
+                badkeys.append(key)
+        for key in badkeys:
+            self.log.error("Skipping %s : %s" %(key,unifiedTree))
+            del unifiedTree[key]
+        self.log.error("unifiedTree %s" %(    unifiedTree))
+        #self.log.error("dependacyStack=%s" % (dependacyStack))  
+        #self.log.error("resolutionStack=%s" % (resolutionStack))  
+        unifiedTreeKeyLen = len(unifiedTree.keys())
+        if unifiedTreeKeyLen == 0:
+            return []
+        if unifiedTreeKeyLen > 1:
+            self.log.error("to many solutions both %s" % (unifiedTree))
+            return []
+        value = None
+        for key in unifiedTree.keys():
+            value = unifiedTree[key] + [key]
+        return value
+
+
+class runner(object):
+
+    def __init__(self, *args, **kwargs):
+        self.enviroment = kwargs.get('enviroment', None)
+        self.EnvContainer = kwargs.get('env_container', None)
+        self.JobContainer = kwargs.get('job_container', None)
+        self.job_plan = kwargs.get('job_plan', None)
+        self.log = logging.getLogger("runner")
+    def runstage(self,item):
+        if not "script" in self.JobContainer.allcontianed[item].dictionary.keys():
+            return 0
+        rs = chroot_script_runner.runnershell2(command="/bin/sh")
+        rs.initialise()
+        rs.setEnv(self.runenviroment)
+        initialEnv = rs.getEnv()
+        
+        script = self.JobContainer.allcontianed[item].dictionary["script"]
+        self.log.info("Running Command '%s'" % (item))
+        self.log.info("Running is script '%s'" % (script))
+        output = rs.runscript(script)
+        if output != 0:
+            return output
+        
+        finalEnv = rs.getEnv()
+        initialKeys = set(initialEnv.keys())
+        finalKeys = set(finalEnv.keys())
+        newkeys = finalKeys.difference(initialKeys)
+        for key in newkeys:
+            
+            self.runenviroment[key] = finalEnv[key]
+        return 0
+        
+    def run(self):
+        self.runenviroment = dict(self.enviroment)
+        
+        Totalrc = 0
+        for item in self.job_plan:
+            rc = self.runstage(item)
+            if rc != 0:
+                Totalrc = rc
+                break
+        
+        return Totalrc
+        
 
 class matrixRunner(object):
 
@@ -233,6 +457,8 @@ class matrixRunner(object):
         self.jobs = loaderJobs(cfgDir=dirJobs)
         self.enviroment = loaderEnviroment(cfgDir=dirEnviroments)
         self.log = logging.getLogger("matrixRunner")
+        self.log = logging.getLogger("matrixRunner")
+        
         
     def loadconfig(self):
         successLoadingJobs = self.jobs.load()
@@ -245,3 +471,12 @@ class matrixRunner(object):
             return False
     
         return True
+    def Run(self,enviroment):
+        
+        jobplan = self.jobs.getJobsPlan(enviroment)
+        runTool = runner(job_plan=jobplan,
+            job_container = self.jobs.cfgContainer,
+            env_container = self.enviroment.cfgContainer,
+            enviroment = {}
+            )
+        return runTool.run()

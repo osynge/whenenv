@@ -32,7 +32,6 @@ def main():
         logging.basicConfig(level=logging.INFO)
     outputDict = None
     logFile = None
-    
     if 'VMCHNDL_ON_LOG_CONF' in os.environ:
         logFile = os.environ['VMCHNDL_ON_LOG_CONF']
     if 'CHROOT' in os.environ:
@@ -120,7 +119,7 @@ def main():
     if rc != True:
         log.error("Loading config failed")
         sys.exit(2)
-
+    rc = runnerObj.Run(os.environ)
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     main()

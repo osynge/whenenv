@@ -1,0 +1,10 @@
+{
+    "name" : "build_python_branch_scientific",
+    "provides" : ["build_package"],
+    "script" : "transfer/vmcatcher_build.sh",
+    "inherits" : ["branch_testing"],
+    "variables" : {
+        "require_values" : { "RELEASE" : "development" },
+        "require_keys" : []
+    }
+}

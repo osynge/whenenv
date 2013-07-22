@@ -1,0 +1,9 @@
+{
+    "name" : "git_checkout_source",
+    "provides" : ["checkout_source"],
+    "script" : "transfer/git_checkout_source.sh",
+    "enviroment" : "chroot",
+    "variables" : { "provides_keys" : ["BUILD_SRC"],
+        "require_values" : { "RELEASE" : "production" }
+    }
+}

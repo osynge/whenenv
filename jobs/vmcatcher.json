@@ -1,0 +1,9 @@
+{
+    "name" : "vmcatcher",
+    "variables" : {
+        "require_values" : { "PRODUCT" : "vmcatcher"},
+        "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
+    },
+    "provides" : ["execution"],
+    "depends" : ["vmcatcher_source","checkout_source","build_package"]
+}

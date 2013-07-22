@@ -1,0 +1,7 @@
+{
+    "name" : "branch_testing",
+    "variables" : {
+        "require_values" : { "RELEASE" : "testing" },
+        "require_keys" : ["BUILD_SRC"]
+    }
+}

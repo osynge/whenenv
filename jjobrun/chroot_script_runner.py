@@ -151,7 +151,7 @@ class runnershell2(object):
         fp = open(script)
         for line in fp:
             cleanline = line.strip()
-            self.log.info("run+%s" %(cleanline))
+            self.log.debug("run+%s" %(cleanline))
             self.running.Write(line)
         self.running.Write("echo %s\n" % (endPrompt))
         counter = 0
