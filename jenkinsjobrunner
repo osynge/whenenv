@@ -503,6 +503,22 @@ def runJob (jobname):
                 },
 
                 {"script" : "transfer/chroot-scientific-6-teardown.sh"}],
+            
+        "vmcatcher_eventHndlExpl_ON-scientific-6-prod" : [{"script" : "transfer/chroot-scientific-6-buildup-prod.sh"},
+                {"script" : "transfer/vmcatcher_eventHndlExpl_ON-6-prod.sh",
+                    "shell" : { "type" : "chroot",
+                    "command" : { "template" : "chroot %CHROOT%",
+                        "envimeroment" : ["CHROOT"]
+                        },
+                    "dependancies" :{ "Scientific" : ["python","rpm-build","make","git",
+                    "python-setuptools","m2crypto", "org-desy-grid-virt-sort-release" ] },
+                    },
+                "artifacts" : ["artifacts.tgz"],
+                "flags" : ["chroot"],
+                },
+
+                {"script" : "transfer/chroot-scientific-6-teardown.sh"}],    
+        
         "dirvacua-debian-wheezy-prod" : [{"script" : "transfer/chroot-debian-wheezy-buildup.sh"},
                 {   "script" : "transfer/dirvacua-debian-wheezy-prod-chrooted.sh",
                     "shell" : { "type" : "chroot",
