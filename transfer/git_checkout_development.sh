@@ -1,16 +1,14 @@
 echo "GIT_SRC=${GIT_SRC}"
 echo "GIT_DEST=${GIT_DEST}"
 
-if [  "X${GIT_SRC}" == "X" ] ; then
+if [  "X${GIT_SRC}" = "XX" ] ; then
     echo "GIT_SRC not defined"
     exit 1
 fi
-
-if [ "X${GIT_DEST}" == "X" ] ; then
+if [ "X${GIT_DEST}" = "X" ] ; then
     echo "GIT_DEST not defined"
     exit 1
 fi
-
 ORIGINALDIR=`pwd`
 
 # Now we remove old checkout

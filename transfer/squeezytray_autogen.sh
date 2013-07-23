@@ -1,4 +1,4 @@
-if [ "X${BUILD_SRC}" == "X" ] ; then
+if [ "X${BUILD_SRC}" = "X" ] ; then
     echo "BUILD_SRC not defined"
     exit 1
 fi

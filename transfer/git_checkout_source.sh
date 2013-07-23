@@ -1,13 +1,13 @@
-if [ "X${GIT_SRC}" == "X" ] ; then
+if [ "X${GIT_SRC}" = "X" ] ; then
     echo "GITLOCATION not defined"
     exit 1
 fi
 
-if [ "X${GIT_DEST}" == "X" ] ; then
+if [ "X${GIT_DEST}" = "X" ] ; then
     echo "GITLOCATION not defined"
     exit 1
 fi
-if [ "X${GIT_TAG_FILTER}" == "X" ] ; then
+if [ "X${GIT_TAG_FILTER}" = "X" ] ; then
     echo "GIT_TAG_FILTER not defined"
     exit 1
 fi
