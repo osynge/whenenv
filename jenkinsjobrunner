@@ -244,7 +244,7 @@ class jobPartRun:
         
         
     def packages(self,jobpart,env):
-        self.log.error("packages")
+        #self.log.error("packages")
         release =  lsb_release()
         self.log.error("Distributor=%s" % (release["Distributor ID"]))
         done = False
@@ -258,7 +258,7 @@ class jobPartRun:
         
         
     def executabingo(self,jobpart,env = {}):
-        self.log.error("executabingo")
+        #self.log.error("executabingo")
         inputenv = os.environ
         inputenv.update(env)
         output = {"rc" :  255 , "env" : {}}
