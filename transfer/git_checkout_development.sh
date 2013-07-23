@@ -8,6 +8,7 @@ if [ "X${GIT_DEST}" == "X" ] ; then
     exit 1
 fi
 
+ORIGINALDIR=`pwd`
 
 # Now we remove old checkout
 
@@ -18,5 +19,5 @@ cd ${GIT_DEST}
 BUILD_SRC=${GIT_DEST}
 export BUILD_SRC
 
-
+cd ORIGINALDIR
 
