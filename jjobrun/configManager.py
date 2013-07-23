@@ -79,8 +79,8 @@ class holderBase(object):
             self.log.error("no variables set for %s" % (self.getName()))
             return False
         if 'require_keys' in self.dictionary[u'variables'].keys():
-            print VariablesProvided,self.dictionary[u'variables']['require_keys']
-            print VariablesProvided.issuperset(self.dictionary[u'variables']['require_keys'])
+            #print VariablesProvided,self.dictionary[u'variables']['require_keys']
+            #print VariablesProvided.issuperset(self.dictionary[u'variables']['require_keys'])
             return set(VariablesProvided).issuperset(self.dictionary[u'variables']['require_keys'])
         return True
 
@@ -419,8 +419,6 @@ class runner(object):
         self.basedir = kwargs.get('basedir', None)
         
     def runstage(self,item):
-        if not "script" in self.JobContainer.allcontianed[item].dictionary.keys():
-            return 0
         self.log.info("Running Command '%s'" % (item))
         rs = chroot_script_runner.runnershell2(command="/bin/sh")
         rs.initialise()
