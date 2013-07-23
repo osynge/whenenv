@@ -1,4 +1,6 @@
-export http_proxy=http://squid:3128
+
+ORIGINALDIR=`pwd`
+
 
 id
 hostname -f
@@ -30,5 +32,6 @@ do
 newname=$( echo \${src} | sed -e "s/tar\.gz/bin\.tar\.gz/")
 mv $src $newname
 done
+cd $ORIGINALDIR
 rm -f artifacts.tgz
 tar -zcvf artifacts.tgz build/dist
