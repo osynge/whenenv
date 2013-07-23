@@ -421,7 +421,7 @@ class runner(object):
 
     def runstage(self,item):
         self.log.info("Running Command '%s'" % (item))
-        if not "script" in self.JobContainer.allcontianed[item].dictionary["script"]:
+        if not "script" in self.JobContainer.allcontianed[item].dictionary.keys():
             self.log.info("No script for Command '%s'" % (item))
             return 0
             
