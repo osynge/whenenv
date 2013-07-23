@@ -417,9 +417,15 @@ class runner(object):
         self.job_plan = kwargs.get('job_plan', None)
         self.log = logging.getLogger("runner")
         self.basedir = kwargs.get('basedir', None)
-        
+    
+
     def runstage(self,item):
         self.log.info("Running Command '%s'" % (item))
+        if not "script" in self.JobContainer.allcontianed[item].dictionary["script"]:
+            self.log.info("No script for Command '%s'" % (item))
+            return 0
+            
+        self.JobContainer.allcontianed
         rs = chroot_script_runner.runnershell2(command="/bin/sh")
         rs.initialise()
         self.log.info("Initisaalised Command '%s'" % (item))
@@ -434,8 +440,9 @@ class runner(object):
         self.log.info("Running is script '%s'" % (fullpath))
         
         output = rs.runscript(fullpath)
+        self.log.error("rs.runscript returned error %s '%s'" % (output,script))
         if output != 0:
-            self.log.info("rs.runscript'%s'" % (script))
+            self.log.error("rs.runscript returned error %s '%s'" % (output,script))
             return output
         
         finalEnv = rs.getEnv()
