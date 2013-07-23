@@ -1,5 +1,5 @@
 set -x
-if [ "X${CHROOT}" == "X" ] ; then
+if [ "X${CHROOT}" = "X" ] ; then
 echo "no CHROOT set"
 exit 1
 fi
