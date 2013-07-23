@@ -149,18 +149,15 @@ class ChrootPackageInstallerDebian2(object):
         endPrompt = prompts.GeneratePrompt()
         self.promptPkgInstallStart = re.compile(startPrompt)
         self.promptPkgInstallEnd = re.compile(endPrompt)
-        self.log.info("promptPkgInstallStart %s" %(startPrompt))
-        self.log.info("promptPkgInstallEnd %s" %(endPrompt))
+        self.log.debug("promptPkgInstallStart %s" %(startPrompt))
+        self.log.debug("promptPkgInstallEnd %s" %(endPrompt))
         
         self.waitingOnPromptPkgInstallStart = True
         self.waitingOnPromptPkgInstallEnd = False
         self.running.Write("echo %s\n" % (startPrompt))
         counter = 0
-        
-
 
         cmd = 'apt-get install -y %s\n' % (package)
-        self.log.info("PkgInstall %s" %(cmd.strip()))
         self.running.Write(cmd)
         self.log.info("PkgInstall %s" %(cmd.strip()))
         self.running.Comunicate(timeout = 1)
