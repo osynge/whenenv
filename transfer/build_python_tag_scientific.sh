@@ -10,3 +10,4 @@ python setup.py bdist_rpm \
 cd $ORIGINALDIR
 rm -f artifacts.tgz
 tar -zcvf artifacts.tgz build/dist
+rm -rf $BUILD_SRC
