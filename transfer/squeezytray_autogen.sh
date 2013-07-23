@@ -4,9 +4,9 @@ if [ "X${BUILD_SRC}" == "X" ] ; then
 fi
 ORIGINALDIR=`pwd`
 cd $BUILD_SRC
-
 sizes="16 22 24 32 48 72 128"
 basedirect="icons"
+set +x
 for item in `ls icons/*.svg`
 do
    for size in $sizes
@@ -16,5 +16,5 @@ do
        $cmd
    done
 done
-
+set -x
 cd $ORIGINALDIR
