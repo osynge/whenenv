@@ -17,7 +17,7 @@ fi
 rm -rf ${GIT_DEST}
 git clone ${GIT_SRC} ${GIT_DEST}
 cd ${GIT_DEST}
-GIT_TAG_LAST=$(git tag | grep "${GIT_TAG_FILTER}" |  tail -n 1)
+GIT_TAG_LAST=$(git tag | grep "${GIT_TAG_FILTER}" |  org_desy_grid_virt_sort_release.py)
 
 if [ "X${GIT_TAG_LAST}" = "X" ] ; then
     echo "GIT_TAG_LAST could not be not defined"
