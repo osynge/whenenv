@@ -15,7 +15,7 @@ done
 
 python setup.py bdist_rpm \
     --requires  "python-sqlalchemy m2crypto python-magic smimeX509validation "
-
+python setup.py bdist
 architecture=$(arch)
 for src in $(ls dist/*.tar.gz | grep $architecture )
 do
