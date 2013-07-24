@@ -1,0 +1,9 @@
+{
+    "name" : "hepixvmitrust",
+    "variables" : {
+        "require_values" : { "PRODUCT" : "hepixvmitrust"},
+        "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
+    },
+    "provides" : ["execution"],
+    "depends" : ["hepixvmitrust_source","checkout_source","build_package","export_package"]
+}

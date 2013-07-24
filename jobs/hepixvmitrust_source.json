@@ -1,0 +1,6 @@
+{
+    "name" : "hepixvmitrust_source",
+    "provides" : ["hepixvmitrust_source"],
+    "script" : "transfer/hepixvmitrust_source.sh",
+    "variables" : { "provides_keys" : ["GIT_SRC","GIT_DEST","GIT_TAG_FILTER"] }
+}
