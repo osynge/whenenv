@@ -5,5 +5,5 @@
         "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
     },
     "provides" : ["execution"],
-    "depends" : ["squeezetray_source","checkout_source","squeezytray_autogen","build_package"]
+    "depends" : ["squeezetray_source","checkout_source","squeezytray_autogen","build_package","export_package"]
 }

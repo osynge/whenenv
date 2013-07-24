@@ -5,5 +5,5 @@
         "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
     },
     "provides" : ["execution"],
-    "depends" : ["mutart_source","checkout_source","build_package"]
+    "depends" : ["mutart_source","checkout_source","build_package","export_package"]
 }
