@@ -547,7 +547,7 @@ class matrixRequiresStackPointer(object):
                 self.info = logging.getLogger("rc")
                 return rc
             self.JobsDone.append(firstJob)
-            self.RequiresStack.pop()
+            del self.RequiresStack[0]
         
     def isFinished(self):
         # returns if the iterator will fail with None
