@@ -281,6 +281,7 @@ class containerJobs(containerBase):
             
         if lenMatchesKey > 1:
             self.log.error("Too many matches for jobs for '%s' with %s %s" % (requirement,requirement,cleanMatches))
+            self.log.error("matches %s" % (cleanMatches))
             return []   
         self.log.error("Programming error with matches for jobs for '%s' with %s" % (requirement,requirement))
         return []
