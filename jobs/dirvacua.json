@@ -1,0 +1,9 @@
+{
+    "name" : "dirvacua",
+    "variables" : {
+        "require_values" : { "PRODUCT" : "dirvacua"},
+        "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
+    },
+    "provides" : ["execution"],
+    "depends" : ["dirvacua_source","checkout_source","build_package","export_package"]
+}
