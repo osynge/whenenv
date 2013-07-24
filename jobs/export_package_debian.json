@@ -1,0 +1,8 @@
+{
+    "name" : "export_debian",
+    "provides" : ["export_package"],
+    "variables" : {
+        "require_values" : { "RELEASE" : "development", "OPERATING_SYSTEM" : "debian"},
+        "require_keys" : []
+    }
+}
