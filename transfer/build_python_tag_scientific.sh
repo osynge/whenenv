@@ -13,15 +13,16 @@ newname=$( echo ${src} | sed -e "s/tar\.gz/rc${BUILD_NUMBER}\.src\.tar\.gz/")
 mv $src $newname
 done
 
-python setup.py bdist_rpm \
-    --requires  "python-sqlalchemy m2crypto python-magic smimeX509validation "
 python setup.py bdist
 architecture=$(arch)
 for src in $(ls dist/*.tar.gz | grep $architecture )
 do
-newname=$( echo ${src} | sed -e "s/tar\.gz/rc${BUILD_NUMBER}\.bin\.tar\.gz/")
+newname=$( echo ${src} | sed -e "s/tar\.gz/\.bin\.tar\.gz/")
 mv $src $newname
 done
+
+python setup.py bdist_rpm \
+    --requires  "python-sqlalchemy m2crypto python-magic smimeX509validation "
 
 cd $ORIGINALDIR
 rm -f artifacts.tgz

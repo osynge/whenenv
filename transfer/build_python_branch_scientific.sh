@@ -12,9 +12,7 @@ do
 newname=$( echo ${src} | sed -e "s/tar\.gz/rc${BUILD_NUMBER}\.src\.tar\.gz/")
 mv $src $newname
 done
-python setup.py bdist_rpm \
-    --release rc${BUILD_NUMBER} \
-    --requires  "smimeX509validation hepixvmitrust python-sqlalchemy fetch-crl"
+
 python setup.py bdist
 architecture=$(arch)
 for src in $(ls dist/*.tar.gz | grep $architecture )
@@ -22,6 +20,10 @@ do
 newname=$( echo ${src} | sed -e "s/tar\.gz/rc${BUILD_NUMBER}\.bin\.tar\.gz/")
 mv $src $newname
 done
+
+python setup.py bdist_rpm \
+    --release rc${BUILD_NUMBER} \
+    --requires  "smimeX509validation hepixvmitrust python-sqlalchemy fetch-crl"
 
 cd $ORIGINALDIR
 rm -f artifacts.tgz
