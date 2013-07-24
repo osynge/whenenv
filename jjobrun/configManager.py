@@ -83,6 +83,25 @@ class holderBase(object):
             #print VariablesProvided.issuperset(self.dictionary[u'variables']['require_keys'])
             return set(VariablesProvided).issuperset(self.dictionary[u'variables']['require_keys'])
         return True
+    
+    def matchIsStricterOrEqual(self,Aholder):
+        SelfLenRequiredValues = len(self.dictionary[u'variables']['require_values'].keys())
+        OtherLenRequiredValues = len(Aholder.dictionary[u'variables']['require_values'].keys())
+        if OtherLenRequiredValues > SelfLenRequiredValues:
+            return 1
+        if OtherLenRequiredValues < SelfLenRequiredValues:
+            return -1
+        
+        SelfLenHasValues = len(self.dictionary[u'variables']['require_keys'])
+        OtherLenHasValues = len(Aholder.dictionary[u'variables']['require_keys'])
+        if OtherLenHasValues > SelfLenHasValues:
+            return 1
+        if OtherLenHasValues < SelfLenHasValues:
+            return -1
+        return 0
+        
+        
+        
 
 class holderJob(holderBase):
     def __init__(self, dictionary, *args, **kwargs):
@@ -242,9 +261,27 @@ class containerJobs(containerBase):
             return []
         if lenMatchesKey == 1:
             return matches
+        
+        refMatch = matches[0]
+        cleanMatches = []
+        for job in matches:
+            rc = self.allcontianed[plan][job].matchIsStricterOrEqual(self.allcontianed[refMatch][firstMatch])
+            if rc == 0:
+                cleanMatches.append(job)
+            if rc > 0:
+                cleanMatches = [job]
+                refMatch = job
+        lenMatchesKey = len(cleanMatches) 
+        
+        if lenMatchesKey == 0:
+            self.log.error("Programing error")
+            return []     
+        if lenMatchesKey == 1:
+            return cleanMatches
+            
         if lenMatchesKey > 1:
-            self.log.error("Too many matches for jobs for '%s' with %s %s" % (requirement,requirement,matches))
-            return []
+            self.log.error("Too many matches for jobs for '%s' with %s %s" % (requirement,requirement,cleanMatches))
+            return []   
         self.log.error("Programming error with matches for jobs for '%s' with %s" % (requirement,requirement))
         return []
     def getRequire(self,name):
