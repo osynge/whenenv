@@ -13,7 +13,7 @@ ORIGINALDIR=`pwd`
 
 SVN_TRUNK="${SVN_SRC}/trunk"
 
-svn co ${SVN_TRUNK}
+svn co ${SVN_TRUNK} ${SVN_DEST}
 
 BUILD_SRC=${SVN_DEST}
 export BUILD_SRC
