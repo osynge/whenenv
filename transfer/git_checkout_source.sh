@@ -21,6 +21,7 @@ GIT_TAG_LAST=$(git tag | grep "${GIT_TAG_FILTER}" | org_desy_grid_virt_sort_rele
 
 if [ "X${GIT_TAG_LAST}" = "X" ] ; then
     echo "GIT_TAG_LAST could not be not defined"
+    git tag
     exit 1
 fi
 
