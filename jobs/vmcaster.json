@@ -5,5 +5,5 @@
         "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
     },
     "provides" : ["execution"],
-    "depends" : ["vmcaster_source","checkout_source","build_package"]
+    "depends" : ["vmcaster_source","checkout_source","build_package","export_package"]
 }
