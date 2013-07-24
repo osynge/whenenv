@@ -112,11 +112,13 @@ class containerBase(object):
         holderName = holder.getName()
         if holderName == None:
             return False
+        result = True
         allHolderNames = self.allcontianed.keys()
         if holderName in allHolderNames:
-            self.log = logging.getLogger("over writing %s" % (holderName))
+            self.log.error("Clashing %s versions." % (holderName))
+            result = False
         self.allcontianed[holderName] = holder
-        return True
+        return result
         
     def addFromDictionary(self,JobAsDictionary):
         print 'shoudl not be here'
@@ -155,7 +157,6 @@ class containerBase(object):
             lenInherits = len(inherits)
             if InheritsPass > lenInherits:
                 # Inherits tree max deapth found
-                self.log.error("max repeat")
                 break
             if lenInheritsLastPass == lenInherits:
                 # We are not resolving the inherits tree further.
@@ -201,7 +202,7 @@ class containerBase(object):
             #    self.log.info("availableitem=%s:%s" % (item,self.allcontianed[item].dictionary))
         
         self.provides = provides
-        self.log.info("provided=%s" % (self.provides.keys()))
+        self.log.debug("provideds=%s" % (self.provides.keys()))
             
     def listJobsProvide(self,filer):
         #self.log.error("getJobsPlan")
@@ -271,6 +272,7 @@ class loaderBase(object):
             for fileName in files:
                 filepath = "%s%s" % (root , fileName)
                 knownFiles.append(filepath)
+        result = True
         for CfgFile in knownFiles:
             if not os.path.isfile(CfgFile):
                 continue
@@ -280,9 +282,12 @@ class loaderBase(object):
             except ValueError,E:
                 self.log.error("InvalidJson:%s:%s" % (E,CfgFile))
                 continue
-            self.cfgContainer.addFromDictionary(parsedJson)
+            rc = self.cfgContainer.addFromDictionary(parsedJson)
+            if rc != True:
+                self.log.error("Failed to load job '%s'" % (CfgFile))
+                result = False
         self.cfgContainer.Index()
-        return True  
+        return result
 
 class loaderEnviroment(loaderBase):
     def __init__(self, *args, **kwargs):

@@ -1,5 +1,5 @@
 {
-    "name" : "git_checkout_trunk",
+    "name" : "svn_checkout_trunk",
     "provides" : ["checkout_source"],
     "script" : "transfer/svn_checkout_trunk.sh",
     "enviroment" : "chroot",
