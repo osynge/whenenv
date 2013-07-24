@@ -1,0 +1,6 @@
+{
+    "name" : "vmcatcher_eventHndlExpl_ON_source",
+    "provides" : ["vmcatcher_eventHndlExpl_ON_source"],
+    "script" : "transfer/vmcatcher_eventHndlExpl_ON_source.sh",
+    "variables" : { "provides_keys" : ["GIT_SRC","GIT_DEST","GIT_TAG_FILTER"] }
+}
