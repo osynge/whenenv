@@ -4,7 +4,7 @@
     "script" : "transfer/git_checkout_tag_override.sh",
     "enviroment" : "chroot",
     "variables" : { "provides_keys" : ["BUILD_SRC"], 
-        "require_values" : { "PRODUCT" : "mutart",
+        "require_values" : { "PRODUCT" : "vmcatcher_eventHndlExpl_ON",
             "RELEASE" : "production" },
         "require_keys" : [ "GIT_SRC" ]
     }
