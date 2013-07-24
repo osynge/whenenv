@@ -9,7 +9,7 @@ cd $BUILD_SRC
 python setup.py sdist
 for src in $(ls dist/*.tar\.gz | grep -v \.src\.tar\.gz )
 do
-newname=$( echo \${src} | sed -e "s/tar\.gz/rc${BUILD_NUMBER}\.src\.tar\.gz/")
+newname=$( echo ${src} | sed -e "s/tar\.gz/rc${BUILD_NUMBER}\.src\.tar\.gz/")
 mv $src $newname
 done
 python setup.py bdist_rpm \
