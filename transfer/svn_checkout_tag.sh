@@ -16,7 +16,7 @@ SVN_TAGS="${SVN_SRC}/tags"
 
 TAG_LAST=$(svn ls ${SVN_TAGS} | org_desy_grid_virt_sort_release.py  | tail -n 1)
 
-svn co ${SVN_TRUNK}/tags/${TAG_LAST} ${SVN_DEST}
+svn co ${SVN_SRC}/tags/${TAG_LAST} ${SVN_DEST}
 
 BUILD_SRC=${SVN_DEST}
 export BUILD_SRC
