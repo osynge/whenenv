@@ -4,7 +4,7 @@
     "script" : "transfer/vmcatcher_build_debian.sh",
     "inherits" : ["branch_testing"],
     "variables" : {
-        "require_values" : { "RELEASE" : "production", "OPERATING_SYSTEM" : "debian"},
+        "require_values" : { "RELEASE" : "production", "OPERATING_SYSTEM" : "Debian"},
         "require_keys" : []
     }
 }

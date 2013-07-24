@@ -2,7 +2,7 @@
     "name" : "export_debian",
     "provides" : ["export_package"],
     "variables" : {
-        "require_values" : { "OPERATING_SYSTEM" : "debian"},
+        "require_values" : { "OPERATING_SYSTEM" : "Debian"},
         "require_keys" : []
     }
 }
