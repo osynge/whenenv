@@ -458,64 +458,6 @@ class loaderJobs(loaderBase):
         return value
 
 
-class runner(object):
-
-    def __init__(self, *args, **kwargs):
-        self.enviroment = kwargs.get('enviroment', None)
-        self.EnvContainer = kwargs.get('env_container', None)
-        self.JobContainer = kwargs.get('job_container', None)
-        self.job_plan = kwargs.get('job_plan', None)
-        self.log = logging.getLogger("runner")
-        self.basedir = kwargs.get('basedir', None)
-    
-
-    def runstage(self,item):
-        self.log.info("Running Command '%s'" % (item))
-        if not "script" in self.JobContainer.allcontianed[item].dictionary.keys():
-            self.log.info("No script for Command '%s'" % (item))
-            return 0
-            
-        self.JobContainer.allcontianed
-        rs = chroot_script_runner.runnershell2(command="/bin/sh")
-        rs.initialise()
-        #self.log.info("Initisaalised Command '%s'" % (item))
-        rs.setEnv(self.runenviroment)
-        #self.log.info("setEnv Command '%s'" % (self.runenviroment))
-        initialEnv = rs.getEnv()
-        #self.log.info("getEnv Command '%s'" % (item))
-        script = self.JobContainer.allcontianed[item].dictionary["script"]
-        fullpath = "%s/%s" % (self.basedir , script)
-        #self.log.info("Running Command '%s'" % (item))
-        self.log.info("Running is script '%s'" % (script))
-        self.log.info("Running is script '%s'" % (fullpath))
-        
-        output = rs.runscript(fullpath)
-        
-        if output != 0:
-            self.log.error("rs.runscript returned error %s '%s'" % (output,script))
-            return output
-        
-        finalEnv = rs.getEnv()
-        initialKeys = set(initialEnv.keys())
-        finalKeys = set(finalEnv.keys())
-        newkeys = finalKeys.difference(initialKeys)
-        for key in newkeys:
-            
-            self.runenviroment[key] = finalEnv[key]
-        return 0
-        
-    def run(self):
-        self.runenviroment = dict(self.enviroment)
-        
-        Totalrc = 0
-        for item in self.job_plan:
-            rc = self.runstage(item)
-            if rc != 0:
-                Totalrc = rc
-                break
-        
-        return Totalrc
-        
 
 
 matrixRequiresStateIdle = 0
@@ -646,17 +588,4 @@ class matrixRunner(object):
         self.log.info("Starting planless")
         ranOk = RequiresStack.getNextJob()
         return ranOk
-    def Run222(self,enviroment):
-        
-        jobplan = self.jobs.getJobsPlan(enviroment)
-        self.log.info("job plan developed %s" % (jobplan))
-        if len(jobplan) == 0:
-            self.log.error("no job plan developed")
-            return 1
-        runTool = runner(job_plan=jobplan,
-            job_container = self.jobs.cfgContainer,
-            env_container = self.enviroment.cfgContainer,
-            enviroment = {},
-            basedir = self.basedir
-            )
-        return runTool.run()
+    
