@@ -3,6 +3,7 @@ if [ "X${BUILD_SRC}" = "X" ] ; then
     echo "BUILD_SRC not defined"
     exit 1
 fi
+ORIGINALDIR=`pwd`
 cd $BUILD_SRC
 python setup.py bdist_rpm \
     --release rc${BUILD_NUMBER} \
@@ -14,3 +15,7 @@ do
   newname=$( echo ${src} | sed -e "s/tar\.gz/rc${BUILD_NUMBER}\.bin\.tar\.gz/")
   mv $src $newname
 done
+cd $ORIGINALDIR
+rm -f artifacts.tgz
+tar -zcvf artifacts.tgz build/dist
+rm -rf $BUILD_SRC
