@@ -1,5 +1,5 @@
 {
-    "name" : "build_python_nranch_debian_devlopement",
+    "name" : "build_python_branch_debian_devlopement",
     "provides" : ["build_package"],
     "script" : "transfer/vmcatcher_build_debian.sh",
     "inherits" : ["branch_testing"],
