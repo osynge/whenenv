@@ -84,20 +84,20 @@ class holderBase(object):
             return set(VariablesProvided).issuperset(self.dictionary[u'variables']['require_keys'])
         return True
     
-    def matchIsStricterOrEqual(self,Aholder):
+    def matchCompare(self,Aholder):
         SelfLenRequiredValues = len(self.dictionary[u'variables']['require_values'].keys())
         OtherLenRequiredValues = len(Aholder.dictionary[u'variables']['require_values'].keys())
         if OtherLenRequiredValues > SelfLenRequiredValues:
-            return 1
-        if OtherLenRequiredValues < SelfLenRequiredValues:
             return -1
+        if OtherLenRequiredValues < SelfLenRequiredValues:
+            return 1
         
         SelfLenHasValues = len(self.dictionary[u'variables']['require_keys'])
         OtherLenHasValues = len(Aholder.dictionary[u'variables']['require_keys'])
         if OtherLenHasValues > SelfLenHasValues:
-            return 1
-        if OtherLenHasValues < SelfLenHasValues:
             return -1
+        if OtherLenHasValues < SelfLenHasValues:
+            return 1
         return 0
         
         
@@ -261,11 +261,10 @@ class containerJobs(containerBase):
             return []
         if lenMatchesKey == 1:
             return matches
-        
         refMatch = matches[0]
         cleanMatches = []
         for job in matches:
-            rc = self.allcontianed[plan][job].matchIsStricterOrEqual(self.allcontianed[refMatch][firstMatch])
+            rc = self.allcontianed[job].matchCompare(self.allcontianed[refMatch])
             if rc == 0:
                 cleanMatches.append(job)
             if rc > 0:
