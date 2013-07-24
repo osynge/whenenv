@@ -4,6 +4,7 @@
     "script" : "transfer/git_checkout_development.sh",
     "enviroment" : "chroot",
     "variables" : { "provides_keys" : ["BUILD_SRC"],
-        "require_values" : { "RELEASE" : "development" }
+        "require_values" : { "RELEASE" : "development" },
+        "require_keys" : [ "GIT_SRC" ]
     }
 }
