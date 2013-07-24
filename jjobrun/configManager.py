@@ -544,12 +544,12 @@ class matrixRequiresStackPointer(object):
         needToExpandDeps = True
         firstJob = None
         while True:
-            self.log.debug("Enviroment %s" % (self.enviroment))
-            self.log.info("Stack %s '%s'" % (self.RequiresStack,self.JobsDone))
-            
             if len(self.RequiresStack) == 0:
                 self.info = logging.getLogger("No Requirestack")
                 return 0
+            self.log.debug("Enviroment %s" % (self.enviroment))
+            self.log.info("Stack %s '%s'" % (self.RequiresStack,self.JobsDone))
+            
             matches = self.JobContainer.getJobs( self.enviroment ,self.RequiresStack[0])
             if len(matches) == 0:
                 self.log = logging.getLogger("No matcvhes")
