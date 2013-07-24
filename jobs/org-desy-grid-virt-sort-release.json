@@ -1,0 +1,9 @@
+{
+    "name" : "org-desy-grid-virt-sort-release",
+    "variables" : {
+        "require_values" : { "PRODUCT" : "org-desy-grid-virt-sort-release"},
+        "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
+    },
+    "provides" : ["execution"],
+    "depends" : ["org-desy-grid-virt-sort-release_source","checkout_source","build_package","export_package"]
+}

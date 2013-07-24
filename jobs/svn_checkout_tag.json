@@ -1,0 +1,10 @@
+{
+    "name" : "git_checkout_trunk",
+    "provides" : ["checkout_source"],
+    "script" : "transfer/svn_checkout_trunk.sh",
+    "enviroment" : "chroot",
+    "variables" : { "provides_keys" : ["BUILD_SRC"],
+        "require_values" : { "RELEASE" : "development" },
+        "require_keys" : [ "SVN_SRC" ]
+    }
+}
