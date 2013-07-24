@@ -5,7 +5,7 @@
     "inherits" : ["branch_testing"],
     "variables" : {
         "require_values" : { "RELEASE" : "development" , 
-            "OPERATING_SYSTEM" : "el" },
+            "OPERATING_SYSTEM" : "Scientific" },
         "require_keys" : []
     }
 }
