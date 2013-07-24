@@ -1,14 +1,11 @@
-
 pwd
 if [ "X${ROOTDIR}" = "X" ] ; then
     echo "ROOTDIR not defined"
     ROOTDIR="/tmp/repo"
     #exit 1
 fi
-
 tar -zxvf artifacts.tgz
 rm -f artifacts.tgz
-mkdir -p ${ROOTDIR}
 RELEASE_TYPE="development"
 PLATFORM="x86_64"
 FLAVOR="scientific"
