@@ -1,5 +1,5 @@
 {
-    "name" : "export_python_tag_srpm_scientific_6",
+    "name" : "export_python_branch_srpm_scientific_6",
     "provides" : ["export_package"],
     "script" : "transfer/export_python_branch_srpm_scientific.sh",
     "variables" : {
