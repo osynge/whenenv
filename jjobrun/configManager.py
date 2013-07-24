@@ -474,12 +474,14 @@ class matrixRequiresStackPointer(object):
         self.ExecutionStatus = observable.Observable(matrixRequiresStateIdle)
         self.RequiresStack = []
         self.JobsDone = []
+        self.RequiresDone = []
         self.log = logging.getLogger("matrixRequiresStackPointer")
         self.basedir = kwargs.get('basedir', None)
         
     def PushStack(self,requires):
         self.RequiresStack = [requires] + self.RequiresStack
-
+        
+        
     
     def runstage(self,item):
         self.log.info("Running Command '%s'" % (item))
@@ -533,11 +535,13 @@ class matrixRequiresStackPointer(object):
                 self.log = logging.getLogger("No matcvhes")
                 return 1
             firstJob = matches[0]
-            requires = self.JobContainer.getRequire(firstJob)
-            if len(requires) > 0:
-                requires.extend(self.RequiresStack)
-                self.RequiresStack = requires
-                continue
+            if not firstJob in self.RequiresDone:
+                requires = self.JobContainer.getRequire(firstJob)
+                if len(requires) > 0:
+                    requires.extend(self.RequiresStack)
+                    self.RequiresStack = requires
+                    self.RequiresDone.append(firstJob)
+                    continue
             # No dependacies
             if firstJob in self.JobsDone:
                 del self.RequiresStack[0]
