@@ -19,7 +19,7 @@ def main():
     p.add_option('--log-config', action ='store',help='Logfile configuration file, (overrides command line).', metavar='LOGFILE')
     p.add_option('--envvar', action ='append',help='Which enfiroment variables to whitelist.', metavar='ENVIROMENT VAR')
     options, arguments = p.parse_args()
-    if options.logcfg:
+    if options.log_config:
         if os.path.isfile(str(options.logfile)):
             logging.config.fileConfig(options.logfile)
         else:
@@ -31,6 +31,10 @@ def main():
         logging.basicConfig(level=logging.INFO)
     outputDict = None
     logFile = None
+    envvardict = {}
+    
+    
+    
     if 'VMCHNDL_ON_LOG_CONF' in os.environ:
         logFile = os.environ['VMCHNDL_ON_LOG_CONF']
     if 'CHROOT' in os.environ:
@@ -77,46 +81,29 @@ def main():
 
 
     if options.envvar:
-        print options.envvar
-        sys.exit(0)
-    
-    
-    baseDir = os.path.dirname(os.path.realpath(__file__))
-    
-    release = None
-    product = None
-    operatingSystem = None
-    if 'PRODUCT' in os.environ:
-        product = os.environ['PRODUCT']
-    if 'RELEASE' in os.environ:
-        release = os.environ['RELEASE']
-    if 'OPERATING_SYSTEM' in os.environ:
-        operatingSystem = os.environ['OPERATING_SYSTEM']
-    
-    if product == None:
-        log.error("No PRODUCT Enviroment variable set")
-        sys.exit(2)
-    
+        for item in options.envvar:
+            value = ""
+            if  item in os.environ.keys():
+                value = os.environ[item]
+            finalvalue = value.strip()
+            envvardict[item] = finalvalue
 
-    if release == None:
-        log.error("No RELEASE Enviroment variable set")
-        sys.exit(2)
+    baseDir = os.path.dirname(os.path.realpath(__file__))
+
     
-    if operatingSystem == None:
-        log.error("No OPERATING_SYSTEM Enviroment variable set")
-        sys.exit(2)
+    for item in envvardict.keys():
+        if len(envvardict[item]) < 3 :
+            log.warning("Enviroment variable '%s' is unset." % item)
+        log.info("Matrix Enviroment values :%s=%s" % (item,envvardict[item]))
+    if len(envvardict.keys()) == 0:
+        log.error("No Enviroment variables set on the command line")
+        sys.exit(4)
         
     currentDir = os.path.dirname(os.path.realpath(__file__))
     envDir = "%s/enviroments/" % (currentDir)
     jobsDir = "%s/jobs/" % (currentDir)
-
-    log.info("PRODUCT=%s" % product )
-    log.info("RELEASE=%s" % release )
-    log.info("OPERATING_SYSTEM=%s" %  operatingSystem)
     
-    runnerObj = jjobrun.configManager.matrixRunner(product=product,
-        release=release,
-        operatingSystem=operatingSystem,
+    runnerObj = jjobrun.configManager.matrixRunner(matrixEnv=envvardict,
         dirEnviroments=envDir,
         dirJobs=jobsDir,
         basedir=baseDir
@@ -125,9 +112,7 @@ def main():
     if rc != True:
         log.error("Loading config failed")
         sys.exit(2)
-    rc = runnerObj.Run({'PRODUCT' : product,
-        "RELEASE" : release,
-        "OPERATING_SYSTEM" : operatingSystem})
+    rc = runnerObj.Run(envvardict)
     if rc != 0:
         log.error("Running failed")
         sys.exit(rc)

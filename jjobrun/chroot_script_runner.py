@@ -230,7 +230,7 @@ class runnershell2(object):
             self.running.Comunicate()
         self.running.CbDelOnFdRead(self.logOutputGetEnv)
         self.running.CbDelOnExit(self.ScriptOnExit)
-        self.log.error("getEnv end")
+        self.log.debug("getEnv end")
         return self.FoundEnv
     def finalise(self):
         if self.running.returncode == None:

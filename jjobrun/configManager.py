@@ -2,7 +2,7 @@ import json
 import os
 import logging
 import chroot_script_runner
-
+import observable
 class holderBase(object):
     def __init__(self, dictionary,*args, **kwargs):
         self.log = logging.getLogger("holderBase")
@@ -222,7 +222,32 @@ class containerJobs(containerBase):
         super(containerJobs, self).Index()
 
     
-        
+    def getJobs(self,enviroment,requirement):
+        possiblePlans = self.listJobsProvide(requirement)
+        matches = []
+        for plan in possiblePlans:
+            testEnv = dict(enviroment)
+            testKeys = set(testEnv.keys())
+            if True != self.allcontianed[plan].matchesVariablesProvided(testKeys):
+                #self.log.error("matchesVariablesProvided=%s" % (testKeys))
+                continue
+            if True != self.allcontianed[plan].matchesVariablesValue(testEnv):
+                #self.log.error("matchesVariablesValue=%s" % (testKeys))
+                continue
+            matches.append(plan)
+        lenMatchesKey = len(matches) 
+        if lenMatchesKey == 0:
+            self.log.error("No matching jobs for '%s' with %s" % (requirement,enviroment))
+            return []
+        if lenMatchesKey == 1:
+            return matches
+        if lenMatchesKey > 1:
+            self.log.error("Too many matches for jobs for '%s' with %s" % (requirement,requirement))
+            return []
+        self.log.error("Programming error with matches for jobs for '%s' with %s" % (requirement,requirement))
+        return []
+    def getRequire(self,name):
+        return self.allcontianed[name].getDepends()
         
 class containerEnviroment(containerBase):
     def __init__(self, *args, **kwargs):
@@ -272,8 +297,33 @@ class loaderJobs(loaderBase):
         super(loaderJobs, self).__init__(*args, **kwargs)
         self.log = logging.getLogger("loaderJobs")
         self.cfgContainer = containerJobs(dirJobs=self.cfgDir)
-        
+    
+    
+    def getJobs(self,enviroment,requirement):
+        possiblePlans = self.cfgContainer.listJobsProvide("execution")
+        matches = []
+        for plan in possiblePlans:
+            testEnv = dict(enviroment)
+            testKeys = set(testEnv.keys())
+            if True != self.cfgContainer.allcontianed[plan].matchesVariablesProvided(testKeys):
+                continue
+            if True != self.cfgContainer.allcontianed[plan].matchesVariablesValue(testEnv):
+                continue
+        lenMatchesKey = len(matches.keys())
+        if lenMatchesKey == 0:
+            self.log.error("No matching jobs for '%s' with %s" % (requirement,requirement))
+            return []
+        if lenMatchesKey == 1:
+            return matches
+        if lenMatchesKey > 1:
+            self.log.error("Too many matches for jobs for '%s' with %s" % (requirement,requirement))
+            return []
+        self.log.error("Programming error with matches for jobs for '%s' with %s" % (requirement,requirement))
+        return []
     def getJobsPlan(self,enviroment):
+        # replace thsi code with soem thign better later
+        # using a dependacy stack processor and comparing 
+        # variabels on the go.
         self.log.error("getJobsPlan=%s" % (enviroment))
         # Now we test the plans
         tree = {}
@@ -428,19 +478,19 @@ class runner(object):
         self.JobContainer.allcontianed
         rs = chroot_script_runner.runnershell2(command="/bin/sh")
         rs.initialise()
-        self.log.info("Initisaalised Command '%s'" % (item))
+        #self.log.info("Initisaalised Command '%s'" % (item))
         rs.setEnv(self.runenviroment)
-        self.log.info("setEnv Command '%s'" % (self.runenviroment))
+        #self.log.info("setEnv Command '%s'" % (self.runenviroment))
         initialEnv = rs.getEnv()
-        self.log.info("getEnv Command '%s'" % (item))
+        #self.log.info("getEnv Command '%s'" % (item))
         script = self.JobContainer.allcontianed[item].dictionary["script"]
         fullpath = "%s/%s" % (self.basedir , script)
-        self.log.info("Running Command '%s'" % (item))
+        #self.log.info("Running Command '%s'" % (item))
         self.log.info("Running is script '%s'" % (script))
         self.log.info("Running is script '%s'" % (fullpath))
         
         output = rs.runscript(fullpath)
-        self.log.error("rs.runscript returned error %s '%s'" % (output,script))
+        
         if output != 0:
             self.log.error("rs.runscript returned error %s '%s'" % (output,script))
             return output
@@ -467,6 +517,103 @@ class runner(object):
         return Totalrc
         
 
+
+matrixRequiresStateIdle = 0
+matrixRequiresStateRunning = 1
+matrixRequiresStateFinished = 2
+
+
+class matrixRequiresStackPointer(object):
+    def __init__(self, *args, **kwargs):
+        self.enviroment = kwargs.get('enviroment', None)
+        self.EnvContainer = kwargs.get('env_container', None)
+        self.JobContainer = kwargs.get('job_container', None)
+        self.ExecutionPonter = observable.Observable(None)
+        self.ExecutionStatus = observable.Observable(matrixRequiresStateIdle)
+        self.RequiresStack = []
+        self.JobsDone = []
+        self.log = logging.getLogger("matrixRequiresStackPointer")
+        self.basedir = kwargs.get('basedir', None)
+        
+    def PushStack(self,requires):
+        self.RequiresStack = [requires] + self.RequiresStack
+
+    
+    def runstage(self,item):
+        self.log.info("Running Command '%s'" % (item))
+        if not "script" in self.JobContainer.allcontianed[item].dictionary.keys():
+            self.log.info("No script for Command '%s'" % (item))
+            return 0
+            
+        self.JobContainer.allcontianed
+        rs = chroot_script_runner.runnershell2(command="/bin/sh")
+        rs.initialise()
+        #self.log.info("Initisaalised Command '%s'" % (item))
+        rs.setEnv(self.enviroment)
+        #self.log.info("setEnv Command '%s'" % (self.enviroment))
+        initialEnv = rs.getEnv()
+        #self.log.info("getEnv Command '%s'" % (item))
+        script = self.JobContainer.allcontianed[item].dictionary["script"]
+        fullpath = "%s/%s" % (self.basedir , script)
+        self.log.info("Running is script '%s'" % (script))
+        self.log.info("Running is script '%s'" % (fullpath))
+        
+        output = rs.runscript(fullpath)
+        if output != 0:
+            self.log.error("Job Part '%s' failed with '%s'" % (script,output))
+            return output
+        
+        finalEnv = rs.getEnv()
+        initialKeys = set(initialEnv.keys())
+        finalKeys = set(finalEnv.keys())
+        newkeys = finalKeys.difference(initialKeys)
+        for key in newkeys:
+            
+            self.enviroment[key] = finalEnv[key]
+        return 0
+            
+    def getNextJob(self):
+        if len(self.RequiresStack) == 0:
+            self.info = logging.getLogger("No Requirestack")
+            return 0
+
+        needToExpandDeps = True
+        firstJob = None
+        while True:
+            self.log.debug("Enviroment %s" % (self.enviroment))
+            self.log.debug("Stack %s '%s'" % (self.RequiresStack,self.JobsDone))
+            
+            if len(self.RequiresStack) == 0:
+                self.info = logging.getLogger("No Requirestack")
+                return 0
+            matches = self.JobContainer.getJobs( self.enviroment ,self.RequiresStack[0])
+            if len(matches) == 0:
+                self.log = logging.getLogger("No matcvhes")
+                return 1
+            firstJob = matches[0]
+            requires = self.JobContainer.getRequire(firstJob)
+            if len(requires) > 0:
+                requires.extend(self.RequiresStack)
+                self.RequiresStack = requires
+                continue
+            # No dependacies
+            if firstJob in self.JobsDone:
+                del self.RequiresStack[0]
+                continue
+            rc = self.runstage(firstJob)
+            if rc != 0:
+                self.info = logging.getLogger("rc")
+                return rc
+            self.JobsDone.append(firstJob)
+            self.RequiresStack.pop()
+        
+    def isFinished(self):
+        # returns if the iterator will fail with None
+        pass   
+    def isDone(self):
+        
+        return True
+
 class matrixRunner(object):
 
     def __init__(self, *args, **kwargs):
@@ -487,9 +634,19 @@ class matrixRunner(object):
         if successLoadingEnviroment != True:
             self.log.error("Failed to load enviroment")
             return False
-    
+        
         return True
+    
     def Run(self,enviroment):
+        RequiresStack = matrixRequiresStackPointer(job_container = self.jobs.cfgContainer,
+            env_container = self.enviroment.cfgContainer,
+            enviroment = enviroment,
+            basedir = self.basedir)
+        RequiresStack.PushStack("execution")
+        self.log.info("Starting planless")
+        ranOk = RequiresStack.getNextJob()
+        return ranOk
+    def Run222(self,enviroment):
         
         jobplan = self.jobs.getJobsPlan(enviroment)
         self.log.info("job plan developed %s" % (jobplan))
