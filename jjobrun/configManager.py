@@ -298,28 +298,6 @@ class loaderJobs(loaderBase):
         self.log = logging.getLogger("loaderJobs")
         self.cfgContainer = containerJobs(dirJobs=self.cfgDir)
     
-    
-    def getJobs(self,enviroment,requirement):
-        possiblePlans = self.cfgContainer.listJobsProvide("execution")
-        matches = []
-        for plan in possiblePlans:
-            testEnv = dict(enviroment)
-            testKeys = set(testEnv.keys())
-            if True != self.cfgContainer.allcontianed[plan].matchesVariablesProvided(testKeys):
-                continue
-            if True != self.cfgContainer.allcontianed[plan].matchesVariablesValue(testEnv):
-                continue
-        lenMatchesKey = len(matches.keys())
-        if lenMatchesKey == 0:
-            self.log.error("No matching jobs for '%s' with %s" % (requirement,requirement))
-            return []
-        if lenMatchesKey == 1:
-            return matches
-        if lenMatchesKey > 1:
-            self.log.error("Too many matches for jobs for '%s' with %s" % (requirement,requirement))
-            return []
-        self.log.error("Programming error with matches for jobs for '%s' with %s" % (requirement,requirement))
-        return []
     def getJobsPlan(self,enviroment):
         # replace thsi code with soem thign better later
         # using a dependacy stack processor and comparing 
