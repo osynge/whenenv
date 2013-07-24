@@ -523,7 +523,7 @@ class matrixRequiresStackPointer(object):
         firstJob = None
         while True:
             self.log.debug("Enviroment %s" % (self.enviroment))
-            self.log.debug("Stack %s '%s'" % (self.RequiresStack,self.JobsDone))
+            self.log.info("Stack %s '%s'" % (self.RequiresStack,self.JobsDone))
             
             if len(self.RequiresStack) == 0:
                 self.info = logging.getLogger("No Requirestack")
