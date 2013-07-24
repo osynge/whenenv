@@ -1,7 +1,7 @@
 {
     "name" : "export_python_tag_srpm_scientific_6",
     "provides" : ["export_package"],
-    "script" : "transfer/export_python_tag_srpm_scientific_6.sh",
+    "script" : "transfer/export_python_branch_srpm_scientific.sh",
     "inherits" : ["branch_testing"],
     "variables" : {
         "require_values" : { "RELEASE" : "development", "OPERATING_SYSTEM" : "el"},
