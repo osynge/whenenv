@@ -3,6 +3,11 @@ if [ "X${BUILD_SRC}" = "X" ] ; then
     echo "BUILD_SRC not defined"
     exit 1
 fi
+if [ "X${RPM_DEPENDS}" = "X" ] ; then
+    echo "RPM_DEPENDS not defined"
+    exit 1
+fi
+
 ORIGINALDIR=`pwd`
 cd $BUILD_SRC
 
@@ -23,7 +28,7 @@ done
 
 python setup.py bdist_rpm \
     --release rc${BUILD_NUMBER} \
-    --requires  "smimeX509validation hepixvmitrust python-sqlalchemy fetch-crl"
+    --requires  "${RPM_DEPENDS}"
 
 cd $ORIGINALDIR
 rm -f artifacts.tgz
