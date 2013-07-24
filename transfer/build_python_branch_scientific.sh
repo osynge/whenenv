@@ -7,7 +7,7 @@ ORIGINALDIR=`pwd`
 cd $BUILD_SRC
 
 python setup.py sdist
-for src in $(ls dist/*.tar\.gz | grep -v \.src\.tar\.gz )
+for src in $(ls dist/*.tar.gz | grep -v .src.tar.gz )
 do
 newname=$( echo ${src} | sed -e "s/tar\.gz/rc${BUILD_NUMBER}\.src\.tar\.gz/")
 mv $src $newname
@@ -17,7 +17,7 @@ python setup.py bdist_rpm \
     --requires  "smimeX509validation hepixvmitrust python-sqlalchemy fetch-crl"
 python setup.py bdist
 architecture=$(arch)
-for src in $(ls dist/*.tar.gz | grep \$architecture )
+for src in $(ls dist/*.tar.gz | grep $architecture )
 do
 newname=$( echo ${src} | sed -e "s/tar\.gz/rc${BUILD_NUMBER}\.bin\.tar\.gz/")
 mv $src $newname
