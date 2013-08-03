@@ -9,12 +9,14 @@ fi
 
 echo CHROOT=$CHROOT
 
-SVNLOCATION="https://svnsrv.desy.de/public/grid-virt/org.hepix.virtulization.docs/trunk"
+#SVNLOCATION="https://svnsrv.desy.de/public/grid-virt/org.hepix.virtulization.docs/trunk"
+GIT_SRC="git://github.com/hepix-virtualisation/hepix-virtualisation-book.git"
 #TAG=`svn ls ${SVNLOCATION} | org_desy_grid_virt_sort_release.py | tail -n 1`
 rm -rf build
 #svn co ${SVNLOCATION}/${TAG} build
 pwd
-ycheckrc svn co ${SVNLOCATION} build
+#ycheckrc svn co ${SVNLOCATION} build
+git clone ${GIT_SRC} build
 #exit 1
 cd build
 ycheckrc make html
