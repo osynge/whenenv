@@ -127,8 +127,12 @@ class ChrootPackageInstallerDebian2(object):
         self.promptPkgCatUpdateEnd = re.compile(endPrompt)
         
         self.running.Write("echo %s\n" % (startPrompt))
+        counter = 0
         while self.promptPkgCatUpdateStart == True:
             self.running.Comunicate(timeout = 1)
+            counter += 1
+            if counter > 100:
+                self.running.Write("echo %s\n" % (endPrompt))
         self.running.Write("%s\n" % (cmd))
         self.waitingOnPromptPkgCatUpdateEnd = True
         counter = 0
@@ -136,7 +140,7 @@ class ChrootPackageInstallerDebian2(object):
         while self.waitingOnPromptPkgCatUpdateEnd == True:
             self.running.Comunicate(timeout = 1)
             counter += 1
-            if counter > 10:
+            if counter > 100:
                 self.running.Write("echo %s\n" % (endPrompt))
         self.running.CbDelOnFdRead(self.logOutputPkgCatUpdate)
         return self.PkgCatInstalled
@@ -162,9 +166,12 @@ class ChrootPackageInstallerDebian2(object):
         self.log.info("PkgInstall %s" %(cmd.strip()))
         self.running.Comunicate(timeout = 1)
         self.running.Write("echo %s\n" % (endPrompt))
-        
+        counter = 0
         while self.waitingOnPromptPkgInstallEnd == True:
             self.running.Comunicate(timeout = 1)
+            counter += 1
+            if counter > 100:
+                self.running.Write("echo %s\n" % (endPrompt))
         self.running.CbDelOnFdRead(self.logOutputPkg)
         
         return True
@@ -204,7 +211,7 @@ class ChrootPackageInstallerRedhat(object):
 
     def __init__(self, *args, **kwargs):
         # we still need these things chrootCmd, env):
-        self.log = logging.getLogger("ChrootPackageInstallerDebian2")
+        self.log = logging.getLogger("ChrootPackageInstallerRedhat")
         self.chrootCmd = kwargs.get('command', None)
         self.logOut = logging.getLogger("pkg.out")
         self.logErr = logging.getLogger("pkg.err")
