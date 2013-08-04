@@ -1,5 +1,6 @@
 CHROOT_SCRIPT=${CHROOT}/script
 cat > ${CHROOT_SCRIPT} <<-EOF
+export http_proxy=http://squid:3128
 yum update -y
 yum upgrade -y
 yum install epel-release -y

@@ -1,7 +1,6 @@
 CHROOT_SCRIPT=${CHROOT}/script
 cat > ${CHROOT_SCRIPT} <<-EOF
-cd build
-ls
+export http_proxy=http://squid:3128
 apt-get update -y
 apt-get upgrade -y
 apt-get install git \
