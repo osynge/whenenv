@@ -7,7 +7,6 @@ apt-get upgrade -y
 apt-get install git \
     python \
     make \
-    pkgconfig \
     swig \
     gcc \
     lcg-CA \
