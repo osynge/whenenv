@@ -56,7 +56,9 @@ class runnershell2(object):
         
         
     def logOutputSetEnv(self,fd,data,args,keys):
-        #self.logOutput(fd,data,args,keys)
+        #self.logOutput(fd,data,args,keys
+        Now = datetime.datetime.now()
+        self.bunpSyncTime(Now)
         lines = data.split('\n')
         for line in lines:
             if len(line) == 0:
@@ -169,7 +171,7 @@ class runnershell2(object):
             if Now > self.SyncTime:
                 self.log.error("echo sync")
                 self.running.Write("echo %s\n" % (startPrompt))
-                self.SyncTime = syncDelay + Now
+                self.bunpSyncTime(Now)
             if Now > TimeOutTime:
                 self.log.error("runscript time out 1")
                 break
@@ -182,10 +184,13 @@ class runnershell2(object):
         counter = 0
         while self.waitingOnPromptRunScriptEnd == True:
             self.running.Comunicate(timeout=1)
-            counter += 1
-            if counter > 100:
-                counter = 0
+            Now = datetime.datetime.now()
+            if Now > self.SyncTime:
+                self.bunpSyncTime(Now)
                 self.running.Write("echo %s\n" % (endPrompt))
+            if Now > TimeOutTime:
+                self.log.error("runscript time out 2")
+                break
         self.running.CbDelOnFdRead(self.logOutputRunScript)
         self.running.CbDelOnExit(self.ScriptOnExit)
         rc = 0
