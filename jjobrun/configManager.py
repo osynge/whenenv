@@ -309,6 +309,7 @@ class loaderBase(object):
             for fileName in files:
                 filepath = "%s%s" % (root , fileName)
                 knownFiles.append(filepath)
+        self.log.error("knownFiles=%s" % (knownFiles))
         result = True
         for CfgFile in knownFiles:
             if not os.path.isfile(CfgFile):
