@@ -1,12 +1,24 @@
 pwd
 id
 hostname -f
-
-SVNLOCATION="https://svnsrv.desy.de/public/grid-virt/org.desy.grid-virt.sort.release/tags"
-TAG=`svn ls ${SVNLOCATION} | tail -n 1`
+GIT_DEST=build
+#SVNLOCATION="https://svnsrv.desy.de/public/grid-virt/org.desy.grid-virt.sort.release/tags"
+GIT_SRC="git://github.com/osynge/grid_version_sort.git"
+#TAG=`svn ls ${SVNLOCATION} | tail -n 1`
 rm -rf build
-svn co ${SVNLOCATION}/${TAG} build
-cd build
+#svn co ${SVNLOCATION}/${TAG} build
+git clone ${GIT_SRC} ${GIT_DEST}
+cd ${GIT_DEST}
+GIT_TAG_LAST=$(git tag | grep "${GIT_TAG_FILTER}" | tail -n 1)
+
+if [ "X${GIT_TAG_LAST}" = "X" ] ; then
+    echo "GIT_TAG_LAST could not be not defined"
+    git tag
+    exit 1
+fi
+export GIT_TAG_LAST
+git checkout ${GIT_TAG_LAST}
+
 python setup.py sdist
 for src in $(ls dist/*.tar\.gz | grep -v .src.tar.gz )
 do
