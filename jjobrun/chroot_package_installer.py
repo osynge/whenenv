@@ -110,7 +110,7 @@ class ChrootPackageInstallerDebian2(object):
         
         return True
     def logOutputPkginstall(self,fd,data,args,keys):    
-        pass
+        self.logOutput(fd,data,args,keys)
     def initialise(self):
         if self.chrootCmd == None:
             self.log.error("No chroot command set")
@@ -122,7 +122,7 @@ class ChrootPackageInstallerDebian2(object):
         
     def updatePackages(self):
         Now = datetime.datetime.now()
-        SyncTime = syncDelay + Now
+        self.SyncTime = syncDelay + Now
         TimeOutTime = timeoutDelay + Now
         self.waitingOnPromptPkgCatUpdateEnd = False
         
@@ -142,14 +142,14 @@ class ChrootPackageInstallerDebian2(object):
         while self.promptPkgCatUpdateStart == True:
             self.running.Comunicate(timeout = 1)
             Now = datetime.datetime.now()
-            if Now > SyncTime:
+            if Now > self.SyncTime:
                 self.log.error("echo sync")
                 self.running.Write("echo %s\n" % (endPrompt))
-                SyncTime = syncDelay + Now
+                self.SyncTime = syncDelay + Now
             if Now > TimeOutTime:
                 self.log.error("updatePackages time out 1")
                 break
-        SyncTime = syncDelay + Now
+        self.SyncTime = syncDelay + Now
         TimeOutTime = timeoutDelay + Now
         self.running.Write("%s\n" % (cmd))
         self.waitingOnPromptPkgCatUpdateEnd = True
@@ -158,10 +158,10 @@ class ChrootPackageInstallerDebian2(object):
         while self.waitingOnPromptPkgCatUpdateEnd == True:
             self.running.Comunicate(timeout = 1)
             Now = datetime.datetime.now()
-            if Now > SyncTime:
+            if Now > self.SyncTime:
                 self.log.error("echo sync")
                 self.running.Write("echo %s\n" % (endPrompt))
-                SyncTime = syncDelay + Now
+                self.SyncTime = syncDelay + Now
                 
             if Now > TimeOutTime:
                 self.log.error("updatePackages time out 2")
@@ -189,14 +189,14 @@ class ChrootPackageInstallerDebian2(object):
         self.running.Comunicate(timeout = 1)
         self.running.Write("echo %s\n" % (endPrompt))
         Now = datetime.datetime.now()
-        SyncTime = syncDelay + Now
+        self.SyncTime = syncDelay + Now
         TimeOutTime = timeoutDelay + Now
         while self.waitingOnPromptPkgInstallEnd == True:
             self.running.Comunicate(timeout = 1)
-            if Now > SyncTime:
+            if Now > self.SyncTime:
                 self.log.error("echo sync")
                 self.running.Write("echo %s\n" % (endPrompt))
-                SyncTime = syncDelay + Now
+                self.SyncTime = syncDelay + Now
             if Now > TimeOutTime:
                 self.log.error("updatePackages time out 2")
                 break
