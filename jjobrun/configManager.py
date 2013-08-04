@@ -499,7 +499,7 @@ class matrixRequiresStackPointer(object):
         self.JobsDone = []
         self.RequiresDone = []
         self.log = logging.getLogger("matrixRequiresStackPointer")
-        self.basedir = kwargs.get('basedir', None)
+        
         
     def PushStack(self,requires):
         self.RequiresStack = [requires] + self.RequiresStack
@@ -588,7 +588,7 @@ class matrixRunner(object):
     def __init__(self, *args, **kwargs):
         self.log = logging.getLogger("matrixRunner")
         dirEnviroments = kwargs.get('dirEnviroments', None)
-        dirJobs = kwargs.get('dirJobs', None)
+        self.dirJobs = kwargs.get('dirJobs', None)
         self.log.info("dirJobs=%s" % (dirJobs))
         self.jobs = loaderJobs(cfgDir=dirJobs)
         self.enviroment = loaderEnviroment(cfgDir=dirEnviroments)
@@ -612,7 +612,7 @@ class matrixRunner(object):
         RequiresStack = matrixRequiresStackPointer(job_container = self.jobs.cfgContainer,
             env_container = self.enviroment.cfgContainer,
             enviroment = enviroment,
-            basedir = self.basedir)
+            dirJobs = self.dirJobs)
         RequiresStack.PushStack("execution")
         #self.log.info("Starting planless")
         ranOk = RequiresStack.getNextJob()
