@@ -417,7 +417,7 @@ def runJob (jobname):
             {   "script" : "transfer/chroot-debian-wheezy-teardown.sh"},
             ],
         "grid-virt-sort-debian-wheezy-prod-deb": [{  "script" : "transfer/chroot-debian-wheezy-buildup.sh"},
-            {   "script" : "transfer/smimeX509validation-debian-wheezy-prod-part-04.sh",
+            {   "script" : "transfer/grid-virt-sort-debian-wheezy-prod-deb-build.sh",
                 "shell" : { "type" : "chroot",
                     "command" : { "template" : "chroot %CHROOT%",
                         "envimeroment" : ["CHROOT"]

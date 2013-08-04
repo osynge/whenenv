@@ -1,6 +1,6 @@
 set -x	
 
-chroot chroot
+chroot $CHROOT
 id
 hostname -f
 dirStart=`pwd`
