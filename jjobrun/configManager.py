@@ -519,7 +519,7 @@ class matrixRequiresStackPointer(object):
         rs.setEnv(self.enviroment)
         #self.log.info("setEnv Command '%s'" % (self.enviroment))
         initialEnv = rs.getEnv()
-        #self.log.info("getEnv Command '%s'" % (item))
+        self.log.info("self.scriptDir='%s'" % (self.scriptDir))
         script = self.JobContainer.allcontianed[item].dictionary["script"]
         fullpath = "%s/%s" % (self.scriptDir , script)
         self.log.info("Running is script '%s'" % (script))
