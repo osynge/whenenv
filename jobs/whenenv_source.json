@@ -1,6 +1,6 @@
 {
-    "name" : "whenend_source",
-    "provides" : ["whenend_source"],
-    "script" : "transfer/whenend_source.sh",
+    "name" : "whenenv_source",
+    "provides" : ["whenenv_source"],
+    "script" : "transfer/whenenv_source.sh",
     "variables" : { "provides_keys" : ["GIT_SRC","GIT_DEST","GIT_TAG_FILTER"] }
 }
