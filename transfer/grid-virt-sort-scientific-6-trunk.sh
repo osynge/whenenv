@@ -8,7 +8,7 @@ cat > ${CHROOT_SCRIPT} <<-EOF
 #!/bin/bash
 id
 hostname -f
-yum install subversion \
+yum install git \
     org-desy-grid-virt-sort-release  \
     rpmbuild \
     python-setuptools \
