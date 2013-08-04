@@ -14,7 +14,7 @@ git checkout pristine-tar
 git pull
 git checkout master
 git pull
-echo `git-buildpackage`
+git-buildpackage
 cd ${dirStart}
 rm -f artifacts.tgz
 rm -fr   build/gitclone/ build/*.build
