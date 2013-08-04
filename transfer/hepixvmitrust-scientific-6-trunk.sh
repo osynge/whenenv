@@ -1,6 +1,7 @@
 set -x
 #chroot ${CHROOT}
 CHROOT_SCRIPT=${CHROOT}/script
+GITLOCATION="git://github.com/hepix-virtualisation/hepixvmitrust.git"
 cat > ${CHROOT_SCRIPT} <<-EOF
 #!/bin/bash
 yum install git \
@@ -10,9 +11,8 @@ yum install git \
   rpm-build \
   m2crypto \
   -y
-GITLOCATION="git://github.com/hepix-virtualisation/hepixvmitrust.git"
 rm -rf build
-git clone \${GITLOCATION} build
+git clone ${GITLOCATION} build
 cd build
 python setup.py sdist
 for src in \$(ls dist/*.tar\.gz | grep -v \.src\.tar\.gz )
