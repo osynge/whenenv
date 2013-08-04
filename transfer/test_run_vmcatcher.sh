@@ -3,6 +3,8 @@ cat > ${CHROOT_SCRIPT} <<-EOF
 set -e
 set -x
 cd build
+env
+export PATH=\$PATH:/usr/bin/
 echo \`fetch-crl\`
 cp /etc/yokel/hepix_tests_keydetails.py keydetails.py
 cat keydetails.py
