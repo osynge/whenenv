@@ -1,0 +1,9 @@
+{
+    "name" : "test_run_vmcatcher",
+    "provides" : ["run_tests"],
+    "script" : "transfer/test_run_vmcatcher.sh",
+    "variables" : {
+        "require_values" : { "TESTED" : "vmcatcher"},
+        "require_keys" : []
+    }
+}

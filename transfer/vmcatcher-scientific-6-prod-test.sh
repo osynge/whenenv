@@ -1,6 +1,7 @@
 CHROOT="/tmp/chroot/executor_${EXECUTOR_NUMBER}"
 #chroot ${CHROOT}
 CHROOT_SCRIPT=${CHROOT}/script
+SVNLOCATION="https://svnsrv.desy.de/public/grid-virt/org.hepix.testing.hepixvmitrust/trunk"
 cat > ${CHROOT_SCRIPT} <<-EOF
 #!/bin/bash
 export HOME=/root
@@ -30,9 +31,8 @@ hostname -f
 rpm -qa | grep hepix
 rpm -qa | grep smime
 
-SVNLOCATION="https://svnsrv.desy.de/public/grid-virt/org.hepix.testing.hepixvmitrust/trunk"
 rm -rf build
-svn co \${SVNLOCATION}/ build
+svn co ${SVNLOCATION}/ build
 cd build
 echo \`fetch-crl\`
 cp /etc/yokel/hepix_tests_keydetails.py keydetails.py
