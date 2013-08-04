@@ -1,7 +1,7 @@
 {
     "name" : "build_python_branch_scientific",
     "provides" : ["build_package"],
-    "script" : "transfer/build_python_branch_scientific.sh",
+    "script" : "build_python_branch_scientific.sh",
     "inherits" : ["branch_testing"],
     "variables" : {
         "require_values" : { "RELEASE" : "development" , 

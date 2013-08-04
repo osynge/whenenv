@@ -1,6 +1,6 @@
 {
     "name" : "vmcaster_source",
     "provides" : ["vmcaster_source"],
-    "script" : "transfer/vmcaster_source.sh",
+    "script" : "vmcaster_source.sh",
     "variables" : { "provides_keys" : ["GIT_SRC","GIT_DEST","GIT_TAG_FILTER"] }
 }

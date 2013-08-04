@@ -1,7 +1,7 @@
 {
     "name" : "export_python_branch_srpm_scientific_6",
     "provides" : ["export_package"],
-    "script" : "transfer/export_python_branch_srpm_scientific.sh",
+    "script" : "export_python_branch_srpm_scientific.sh",
     "variables" : {
         "require_values" : { "RELEASE" : "development", "OPERATING_SYSTEM" : "Scientific"},
         "require_keys" : []

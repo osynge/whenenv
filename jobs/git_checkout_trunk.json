@@ -1,7 +1,7 @@
 {
     "name" : "git_checkout_trunk",
     "provides" : ["checkout_source"],
-    "script" : "transfer/git_checkout_development.sh",
+    "script" : "git_checkout_development.sh",
     "enviroment" : "chroot",
     "variables" : { "provides_keys" : ["BUILD_SRC"],
         "require_values" : { "RELEASE" : "development" },

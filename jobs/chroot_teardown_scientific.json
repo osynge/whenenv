@@ -1,7 +1,7 @@
 {
     "name" : "chroot_teardown_scientific",
     "provides" : ["chroot_teardown"],
-    "script" : "transfer/chroot-scientific-6-teardown.sh",
+    "script" : "chroot-scientific-6-teardown.sh",
     "variables" : {
         "require_values" : { "OPERATING_SYSTEM" : "Scientific"},
         "require_keys" : []

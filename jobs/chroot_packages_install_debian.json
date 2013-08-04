@@ -1,7 +1,7 @@
 {
     "name" : "chroot_packages_install_debian",
     "provides" : ["chroot_packages_install"],
-    "script" : "transfer/chroot_packages_install_debian.sh",
+    "script" : "chroot_packages_install_debian.sh",
     "variables" : {
         "require_values" : {  "OPERATING_SYSTEM" : "Debian"},
         "require_keys" : []
