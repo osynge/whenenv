@@ -18,6 +18,10 @@ def main():
     p.add_option('--quiet', action ='count',help='Change global log level, decreasing log output.', metavar='LOGFILE')
     p.add_option('--log-config', action ='store',help='Logfile configuration file, (overrides command line).', metavar='LOGFILE')
     p.add_option('--envvar', action ='append',help='Which enfiroment variables to whitelist.', metavar='ENVIROMENT VAR')
+    p.add_option('--dir-jobs', action ='store',help='directory storing json jobs.', metavar='ENVIROMENT VAR')
+    p.add_option('--dir-scripts', action ='store',help='directory storing jobs scripts.', metavar='ENVIROMENT VAR')
+    
+    
     options, arguments = p.parse_args()
     if options.log_config:
         if os.path.isfile(str(options.logfile)):
@@ -33,6 +37,9 @@ def main():
     logFile = None
     envvardict = {}
     
+    currentDir = os.path.dirname(os.path.realpath(__file__))
+    envDir = "%s/enviroments/" % (currentDir)
+    jobsDir = "%s/jobs/" % (currentDir)
     
     
     if 'VMCHNDL_ON_LOG_CONF' in os.environ:
@@ -88,7 +95,11 @@ def main():
             finalvalue = value.strip()
             envvardict[item] = finalvalue
 
-    baseDir = os.path.dirname(os.path.realpath(__file__))
+    if options.dir_jobs:
+        jobsDir = options.dir_jobs
+
+    if options.dir_scripts:
+        scriptsDir = options.dir_scripts
 
     
     for item in envvardict.keys():
@@ -99,14 +110,11 @@ def main():
         log.error("No Enviroment variables set on the command line")
         sys.exit(4)
         
-    currentDir = os.path.dirname(os.path.realpath(__file__))
-    envDir = "%s/enviroments/" % (currentDir)
-    jobsDir = "%s/jobs/" % (currentDir)
     
     runnerObj = jjobrun.configManager.matrixRunner(matrixEnv=envvardict,
         dirEnviroments=envDir,
         dirJobs=jobsDir,
-        basedir=baseDir
+        dirScripts=scriptsDir,
         )
     rc = runnerObj.loadconfig()
     if rc != True:
