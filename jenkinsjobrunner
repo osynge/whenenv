@@ -503,7 +503,7 @@ def runJob (jobname):
                     "command" : { "template" : "chroot %CHROOT%",
                         "envimeroment" : ["CHROOT"]
                         },
-                    "dependancies" :{ "Debian" : ["subversion", "python","rpm","make","git", "python-setuptools","python-m2crypto" ] },
+                    "dependancies" :{ "Debian" : ["python","rpm","make","git", "python-setuptools","python-m2crypto" ] },
                     },
                 "artifacts" : ["artifacts.tgz"],
                 "flags" : ["chroot"],
@@ -515,7 +515,7 @@ def runJob (jobname):
                     "command" : { "template" : "chroot %CHROOT%",
                         "envimeroment" : ["CHROOT"]
                         },
-                    "dependancies" :{ "Debian" : ["subversion", "python","rpm","make","git", "python-setuptools","python-m2crypto" ] },
+                    "dependancies" :{ "Debian" : ["python","rpm","make","git", "python-setuptools","python-m2crypto" ] },
                     },
                 "artifacts" : ["artifacts.tgz"],
                 "flags" : ["chroot"],
