@@ -1,4 +1,5 @@
-CHROOT="/tmp/chroot/executor_${EXECUTOR_NUMBER}"
+
+#CHROOT="/tmp/chroot/executor_${EXECUTOR_NUMBER}"
 #chroot ${CHROOT}
 CHROOT_SCRIPT=${CHROOT}/script
 #SVNLOCATION="https://svnsrv.desy.de/public/grid-virt/org.hepix.testing.hepixvmitrust/trunk"
