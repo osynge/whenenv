@@ -17,7 +17,7 @@ transtbl = string.maketrans(
 
 
 syncDelay = datetime.timedelta(seconds=100)
-timeoutDelay = datetime.timedelta(seconds=500)
+timeoutDelay = datetime.timedelta(seconds=1500)
 
 
 
