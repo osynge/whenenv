@@ -2,7 +2,7 @@ set -x
 hostname -f
 dirStart=`pwd`
 rm -f artifacts.tgz *.dsc *.deb 
-GITLOCATION="git://github.com/osynge/deb-grid-virt-sort.git"
+GITLOCATION="https://github.com/osynge/deb-grid-virt-sort.git"
 rm -rf build
 cmd="git clone ${GITLOCATION} build/gitclone"
 echo $cmd
