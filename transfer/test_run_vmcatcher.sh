@@ -1,7 +1,7 @@
 CHROOT_SCRIPT=${CHROOT}/script
 cat > ${CHROOT_SCRIPT} <<-EOF
 cd build
-
+ls
 yum update -y
 yum upgrade -y
 yum install epel-release -y
