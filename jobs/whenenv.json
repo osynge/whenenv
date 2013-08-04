@@ -1,0 +1,9 @@
+{
+    "name" : "whenend",
+    "variables" : {
+        "require_values" : { "PRODUCT" : "whenend"},
+        "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
+    },
+    "provides" : ["execution"],
+    "depends" : ["whenend_source","checkout_source","build_package","export_package"]
+}
