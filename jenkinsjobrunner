@@ -422,7 +422,7 @@ def runJob (jobname):
                     "command" : { "template" : "chroot %CHROOT%",
                         "envimeroment" : ["CHROOT"]
                         },
-                    "dependancies" :{ "Debian" : ["git", "python","git-buildpackage","devscripts", "python-all",  "python-setuptools","python-m2crypto",] },
+                    "dependancies" :{ "Debian" : ["debhelper", "git", "python","git-buildpackage","devscripts", "python-all",  "python-setuptools","python-m2crypto",] },
                     },
                 "artifacts" : ["artifacts.tgz"],
                 "flags" : ["chroot"],

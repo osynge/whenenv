@@ -193,6 +193,7 @@ class ChrootPackageInstallerDebian2(object):
         self.running.CbDelOnFdRead(self.logOutputPkgCatUpdate)
         return self.PkgCatInstalled
     def installPackage(self,package):  
+        Now = datetime.datetime.now()
         self.SyncTime = syncDelay + Now
         TimeOutTime = timeoutDelay + Now
         self.waitingOnPromptPkgInstallStart = True
@@ -212,7 +213,7 @@ class ChrootPackageInstallerDebian2(object):
             Now = datetime.datetime.now()
             if Now > self.SyncTime:
                 self.log.error("echo sync")
-                self.running.Write("echo %s\n" % (endPrompt))
+                self.running.Write("echo %s\n" % (startPrompt))
                 self.SyncTime = syncDelay + Now
             if Now > TimeOutTime:
                 self.log.error("installPackage time out 1")
