@@ -1,7 +1,7 @@
 {
     "name" : "chroot_initialise_tag_scientific",
     "provides" : ["chroot_buildup_image"],
-    "script" : "transfer/chroot-scientific-6-buildup-prod.sh",
+    "script" : "chroot-scientific-6-buildup-prod.sh",
     "variables" : {
         "require_values" : { "RELEASE" : "production", "OPERATING_SYSTEM" : "Scientific"},
         "require_keys" : []

@@ -1,6 +1,6 @@
 {
     "name" : "squeezetray_source",
     "provides" : ["squeezetray_source"],
-    "script" : "transfer/squeezetray_source.sh",
+    "script" : "squeezetray_source.sh",
     "variables" : { "provides_keys" : ["GIT_SRC","GIT_DEST","GIT_TAG_FILTER"] }
 }

@@ -1,7 +1,7 @@
 {
     "name" : "chroot_initialise_branch_debian",
     "provides" : ["chroot_buildup_image"],
-    "script" : "transfer/chroot-debian-wheezy-buildup.sh",
+    "script" : "chroot-debian-wheezy-buildup.sh",
     "variables" : {
         "require_values" : { "RELEASE" : "development", "OPERATING_SYSTEM" : "Debian"},
         "require_keys" : []
