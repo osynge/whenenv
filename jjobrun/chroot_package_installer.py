@@ -191,6 +191,8 @@ class ChrootPackageInstallerDebian2(object):
         Now = datetime.datetime.now()
         self.SyncTime = syncDelay + Now
         TimeOutTime = timeoutDelay + Now
+        
+        self.running.CbAddOnFdRead(self.)
         while self.waitingOnPromptPkgInstallEnd == True:
             self.running.Comunicate(timeout = 1)
             if Now > self.SyncTime:
@@ -300,7 +302,7 @@ class ChrootPackageInstallerRedhat(object):
         
         return True
     def logOutputPkginstall(self,fd,data,args,keys):    
-        pass
+        self.logOutputPkg(fd,data,args,keys)
     def initialise(self):
         if self.chrootCmd == None:
             self.log.error("No chroot command set")
@@ -358,7 +360,7 @@ class ChrootPackageInstallerRedhat(object):
         self.log.info("PkgInstall %s" %(cmd.strip()))
         self.running.Comunicate(timeout = 1)
         self.running.Write("echo %s\n" % (endPrompt))
-        
+        self.running.CbAddOnFdRead(self.logOutputPkg)
         while self.waitingOnPromptPkgInstallEnd == True:
             self.running.Comunicate(timeout = 1)
         self.running.CbDelOnFdRead(self.logOutputPkg)
