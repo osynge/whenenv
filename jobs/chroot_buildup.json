@@ -1,0 +1,9 @@
+{
+    "name" : "chroot_initialise_tag_scientific",
+    "provides" : ["chroot_buildup"],
+    "variables" : {
+        "require_values" : { },
+        "require_keys" : []
+    },
+    "depends" : ["chroot_buildup_image","chroot_packages_install"]
+}
