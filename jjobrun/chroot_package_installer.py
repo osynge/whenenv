@@ -168,7 +168,7 @@ class ChrootPackageInstallerDebian2(object):
             Now = datetime.datetime.now()
             if Now > self.SyncTime:
                 self.log.error("echo sync")
-                self.running.Write("echo %s\n" % (endPrompt))
+                self.running.Write("echo %s\n" % (startPrompt))
                 self.SyncTime = syncDelay + Now
             if Now > TimeOutTime:
                 self.log.error("updatePackages time out 1")

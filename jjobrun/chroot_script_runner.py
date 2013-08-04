@@ -8,11 +8,20 @@ import prompts
 import re
 import observable
 import time
+import datetime
 
 transtbl = string.maketrans(
           'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
           'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
         )
+
+
+syncDelay = datetime.timedelta(seconds=100)
+timeoutDelay = datetime.timedelta(seconds=500)
+
+
+
+
 class runnershell2(object):
     def __init__(self, *args, **kwargs):
         self.log = logging.getLogger("runshell")
@@ -23,6 +32,12 @@ class runnershell2(object):
         self.logOut = logging.getLogger("sr2.out")
         self.logErr = logging.getLogger("sr2.err")
         self.state = observable.Observable(None)
+    
+    
+    def bunpSyncTime(self,Now)
+        self.SyncTime = Now + syncDelay
+    
+    
     def logOutput(self,fd,data,args,keys):
         log = self.log
         if fd == 1:
@@ -69,7 +84,8 @@ class runnershell2(object):
         
     def logOutputRunScript(self,fd,data,args,keys):
         #self.logOutput(fd,data,args,keys)
-        
+        Now = datetime.datetime.now()
+        self.bunpSyncTime(Now)
         lines = data.split('\n')
         for line in lines:
             cleanline = line.strip()
@@ -142,11 +158,21 @@ class runnershell2(object):
         self.promptRunScriptEnd = re.compile(endPrompt)
         self.waitingOnPromptRunScriptStart = True
         self.waitingOnPromptRunScriptEnd = False
+        Now = datetime.datetime.now()
+        self.bunpSyncTime(Now)
+        TimeOutTime = timeoutDelay + Now
         self.running.CbAddOnFdRead(self.logOutputRunScript)
         self.running.Write("echo %s\n" % (startPrompt))
         while self.waitingOnPromptRunScriptStart == True:
             self.running.Comunicate(timeout = 1)
-        
+            Now = datetime.datetime.now()
+            if Now > self.SyncTime:
+                self.log.error("echo sync")
+                self.running.Write("echo %s\n" % (startPrompt))
+                self.SyncTime = syncDelay + Now
+            if Now > TimeOutTime:
+                self.log.error("runscript time out 1")
+                break
         fp = open(script)
         for line in fp:
             cleanline = line.strip()
@@ -239,5 +265,10 @@ class runnershell2(object):
         if self.running.returncode == None:
             self.running.Write("exit 0\n")
         self.running.Comunicate(timeout=1)
-        
+        if self.running.returncode == None:
+            self.running.Write("exit 0\n")
+        self.running.Comunicate(timeout=1)
+        if self.running.returncode == None:
+            self.running.Write("exit 0\n")
+        self.running.Comunicate(timeout=1)
         
