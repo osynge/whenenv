@@ -1,7 +1,7 @@
 CHROOT_SCRIPT=${CHROOT}/script
 cat > ${CHROOT_SCRIPT} <<-EOF
 cd build
-echo `fetch-crl`
+echo \$(fetch-crl)
 cp /etc/yokel/hepix_tests_keydetails.py keydetails.py
 python test_vmilisttool.py
 python test_smimeX509validation.py
