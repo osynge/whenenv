@@ -7,7 +7,7 @@ yum update -y
 yum upgrade -y
 yum install epel-release -y
 yum install -y ${BUILD_DEPS_RPM}
-rpm -qa | grep vmcatcher
+#rpm -qa | grep vmcatcher
 EOF
 echo xx
 cat ${CHROOT_SCRIPT}
