@@ -34,7 +34,7 @@ class runnershell2(object):
         self.state = observable.Observable(None)
     
     
-    def bunpSyncTime(self,Now)
+    def bunpSyncTime(self,Now):
         self.SyncTime = Now + syncDelay
     
     
