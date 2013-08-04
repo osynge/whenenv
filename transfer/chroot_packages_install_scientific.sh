@@ -6,11 +6,11 @@ export http_proxy
 yum update -y
 yum upgrade -y
 yum install epel-release -y
-yum install ${BUILD_DEPS_RPM}
-    -y
+yum install -y ${BUILD_DEPS_RPM}
 rpm -qa | grep vmcatcher
 EOF
 echo xx
 cat ${CHROOT_SCRIPT}
-echo xx
+echo xxls
+
 chroot ${CHROOT} /bin/bash /script
