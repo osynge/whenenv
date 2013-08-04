@@ -5,6 +5,9 @@ set -x
 cd build
 env
 export PATH=\$PATH:/usr/bin/
+HOME=/root
+export HOME
+
 echo \`fetch-crl\`
 cp /etc/yokel/hepix_tests_keydetails.py keydetails.py
 cat keydetails.py
