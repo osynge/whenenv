@@ -1,5 +1,6 @@
 #chroot ${CHROOT}
 CHROOT_SCRIPT=${CHROOT}/script
+GITLOCATION="git://github.com/hepix-virtualisation/smimeX509validation.git"
 cat > ${CHROOT_SCRIPT} <<-EOF
 #!/bin/bash
 id
@@ -12,9 +13,8 @@ yum install git \
   rpm-build \
   m2crypto \
   -y
-GITLOCATION="git://github.com/hepix-virtualisation/smimeX509validation.git"
 rm -rf build
-git clone \${GITLOCATION} build
+git clone ${GITLOCATION} build
 cd build
 latest_tag=\$(git tag | org_desy_grid_virt_sort_release.py | tail -n 1)
 #latest_tag=`git tag | tail -n 1`
