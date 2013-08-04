@@ -1,0 +1,9 @@
+{
+    "name" : "vmrecaster",
+    "variables" : {
+        "require_values" : { "PRODUCT" : "vmrecaster"},
+        "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
+    },
+    "provides" : ["execution"],
+    "depends" : ["vmrecaster_source","checkout_source","build_package","export_package"]
+}
