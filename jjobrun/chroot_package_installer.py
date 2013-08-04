@@ -20,8 +20,8 @@ import datetime
 
 
 
-syncDelay = datetime.timedelta(seconds=10)
-timeoutDelay = datetime.timedelta(seconds=360)
+syncDelay = datetime.timedelta(seconds=100)
+timeoutDelay = datetime.timedelta(seconds=500)
 
 
 
@@ -183,7 +183,6 @@ class ChrootPackageInstallerDebian2(object):
         self.waitingOnPromptPkgInstallStart = True
         self.waitingOnPromptPkgInstallEnd = False
         self.running.Write("echo %s\n" % (startPrompt))
-        counter = 0
         cmd = 'apt-get install -y %s\n' % (package)
         self.running.Write(cmd)
         self.log.info("PkgInstall %s" %(cmd.strip()))
@@ -194,7 +193,6 @@ class ChrootPackageInstallerDebian2(object):
         TimeOutTime = timeoutDelay + Now
         while self.waitingOnPromptPkgInstallEnd == True:
             self.running.Comunicate(timeout = 1)
-            counter += 1
             if Now > SyncTime:
                 self.log.error("echo sync")
                 self.running.Write("echo %s\n" % (endPrompt))

@@ -1,7 +1,4 @@
 set -x	
-
-chroot $CHROOT
-id
 hostname -f
 dirStart=`pwd`
 rm -f artifacts.tgz *.dsc *.deb 
