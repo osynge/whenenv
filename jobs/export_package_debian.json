@@ -1,6 +1,7 @@
 {
-    "name" : "export_debian",
+    "name" : "export_package_debian",
     "provides" : ["export_package"],
+    "script" : "export_package_debian.sh",
     "variables" : {
         "require_values" : { "OPERATING_SYSTEM" : "Debian"},
         "require_keys" : []
