@@ -40,7 +40,7 @@ def main():
     currentDir = os.path.dirname(os.path.realpath(__file__))
     envDir = "%s/enviroments/" % (currentDir)
     jobsDir = "%s/jobs/" % (currentDir)
-    
+    scriptsDir  = "%s/transfer/" % (currentDir)
     
     if 'VMCHNDL_ON_LOG_CONF' in os.environ:
         logFile = os.environ['VMCHNDL_ON_LOG_CONF']
