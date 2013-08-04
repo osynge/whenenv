@@ -10,10 +10,10 @@ yum install subversion \
     python-setuptools \
     rpm-build \
     -y
-SVNLOCATION="https://svnsrv.desy.de/public/grid-virt/org.desy.grid-virt.sort.release/tags"
-TAG=\$(svn ls \${SVNLOCATION} | org_desy_grid_virt_sort_release.py | tail -n 1)
+#SVNLOCATION="https://svnsrv.desy.de/public/grid-virt/org.desy.grid-virt.sort.release/tags"
+GITLOCATION="git@github.com:osynge/grid_version_sort.git"
 rm -rf build
-svn co \${SVNLOCATION}/\${TAG} build
+git clone \${GITLOCATION} build
 cd build
 python setup.py sdist
 for src in \$(ls dist/*.tar\.gz | grep -v \.src\.tar\.gz )
