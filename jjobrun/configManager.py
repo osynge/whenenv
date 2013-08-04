@@ -309,7 +309,8 @@ class loaderBase(object):
             for fileName in files:
                 filepath = "%s/%s" % (root , fileName)
                 knownFiles.append(filepath)
-        self.log.error("knownFiles=%s" % (knownFiles))
+        if len(knownFiles) == 0:
+            self.log.warning("could not fine any files in :%s" % (self.cfgDir))
         result = True
         for CfgFile in knownFiles:
             if not os.path.isfile(CfgFile):
