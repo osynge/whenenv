@@ -435,7 +435,7 @@ def runJob (jobname):
                     "command" : { "template" : "chroot %CHROOT%",
                         "envimeroment" : ["CHROOT"]
                         },
-                    "dependancies" :{ "Debian" : ["subversion", "python","rpm","make" ] },
+                    "dependancies" :{ "Debian" : ["git", "python","rpm","make" ] },
                     },
                 "artifacts" : ["artifacts.tgz"],
                 "flags" : ["chroot"],
