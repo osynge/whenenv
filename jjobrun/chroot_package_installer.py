@@ -170,8 +170,6 @@ class ChrootPackageInstallerDebian2(object):
         return self.PkgCatInstalled
     def installPackage(self,package):  
         
-        
-        self.running.CbAddOnFdRead(self.logOutputPkg)
         passenv_ignored = set(["PATH","SHLVL","OLDPWD","PS1"])
         startPrompt = prompts.GeneratePrompt()
         endPrompt = prompts.GeneratePrompt()
@@ -192,7 +190,7 @@ class ChrootPackageInstallerDebian2(object):
         self.SyncTime = syncDelay + Now
         TimeOutTime = timeoutDelay + Now
         
-        self.running.CbAddOnFdRead(self.)
+        self.running.CbAddOnFdRead(self.logOutputPkg)
         while self.waitingOnPromptPkgInstallEnd == True:
             self.running.Comunicate(timeout = 1)
             if Now > self.SyncTime:
