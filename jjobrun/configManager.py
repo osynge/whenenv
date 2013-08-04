@@ -307,7 +307,7 @@ class loaderBase(object):
             return False
         for root, dirs, files in os.walk(self.cfgDir):
             for fileName in files:
-                filepath = "%s%s" % (root , fileName)
+                filepath = "%s/%s" % (root , fileName)
                 knownFiles.append(filepath)
         self.log.error("knownFiles=%s" % (knownFiles))
         result = True
