@@ -190,7 +190,7 @@ class ChrootPackageInstallerDebian2(object):
         self.SyncTime = syncDelay + Now
         TimeOutTime = timeoutDelay + Now
         
-        self.running.CbAddOnFdRead(self.logOutputPkg)
+        self.running.CbAddOnFdRead(self.logOutputPkginstall)
         while self.waitingOnPromptPkgInstallEnd == True:
             self.running.Comunicate(timeout = 1)
             if Now > self.SyncTime:
@@ -200,7 +200,7 @@ class ChrootPackageInstallerDebian2(object):
             if Now > TimeOutTime:
                 self.log.error("updatePackages time out 2")
                 break
-        self.running.CbDelOnFdRead(self.logOutputPkg)
+        self.running.CbDelOnFdRead(self.logOutputPkginstall)
         
         return True
     
