@@ -21,8 +21,6 @@ dir_tgz="${ROOTDIR}/${RELEASE_TYPE}/source/${FLAVOR}/7/tgz/"
 dir_btgz="${ROOTDIR}/${RELEASE_TYPE}/${PLATFORM}/${FLAVOR}/7/tgz/"
 mkdir -p ${dir_tgz}
 mkdir -p ${dir_btgz}
-mkdir -p ${dir_srpm}
-mkdir -p ${dir_rpm}
 /usr/bin/rsync -v --ignore-existing build/dist/*.src.tar.gz \
     ${dir_tgz}
 rm -rf build/dist/*src.tar.gz
