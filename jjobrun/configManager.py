@@ -586,8 +586,10 @@ class matrixRequiresStackPointer(object):
 class matrixRunner(object):
 
     def __init__(self, *args, **kwargs):
+        self.log = logging.getLogger("matrixRunner")
         dirEnviroments = kwargs.get('dirEnviroments', None)
         dirJobs = kwargs.get('dirJobs', None)
+        self.log.info("dirJobs=%s" % (dirJobs))
         self.jobs = loaderJobs(cfgDir=dirJobs)
         self.enviroment = loaderEnviroment(cfgDir=dirEnviroments)
         self.log = logging.getLogger("matrixRunner")

@@ -109,7 +109,8 @@ def main():
     if len(envvardict.keys()) == 0:
         log.error("No Enviroment variables set on the command line")
         sys.exit(4)
-        
+    
+    log.info("dirJobs=%s" % (jobsDir))
     
     runnerObj = jjobrun.configManager.matrixRunner(matrixEnv=envvardict,
         dirEnviroments=envDir,
