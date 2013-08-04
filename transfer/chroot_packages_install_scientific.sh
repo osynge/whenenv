@@ -6,22 +6,7 @@ export http_proxy
 yum update -y
 yum upgrade -y
 yum install epel-release -y
-yum install git \
-    python \
-    rpm-build \
-    make \
-    org-desy-grid-virt-sort-release \
-    openssl-devel \
-    python-devel \
-    pkgconfig \
-    swig \
-    gcc \
-    pexpect \
-    lcg-CA \
-    ca_BitFace \
-    fetch-crl \
-    vmcatcher \
-    ntp \
+yum install ${BUILD_DEPS_RPM}
     -y
 EOF
 echo xx

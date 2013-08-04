@@ -2,7 +2,24 @@
 GIT_SRC="git://git.fritz.box/imagelist_functional_tests.git"
 GIT_DEST="build"
 GIT_TAG_FILTER="-"
+BUILD_DEPS_RPM="git \
+    python \
+    rpm-build \
+    make \
+    org-desy-grid-virt-sort-release \
+    openssl-devel \
+    python-devel \
+    pkgconfig \
+    swig \
+    gcc \
+    pexpect \
+    lcg-CA \
+    ca_BitFace \
+    fetch-crl \
+    vmcatcher \
+    ntp\
+"
 export GIT_SRC
 export GIT_DEST
 export GIT_TAG_FILTER
-
+export BUILD_DEPS_RPM

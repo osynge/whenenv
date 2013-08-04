@@ -4,6 +4,6 @@
     "script" : "transfer/chroot_packages_install_scientific.sh",
     "variables" : {
         "require_values" : {  "OPERATING_SYSTEM" : "Scientific"},
-        "require_keys" : []
+        "require_keys" : [ "CHROOT", "BUILD_DEPS_RPM"]
     }
 }
