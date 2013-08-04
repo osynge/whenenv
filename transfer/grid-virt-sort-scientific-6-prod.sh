@@ -11,7 +11,7 @@ yum install git \
     rpm-build \
     -y
 #SVNLOCATION="https://svnsrv.desy.de/public/grid-virt/org.desy.grid-virt.sort.release/tags"
-GITLOCATION="git@github.com:osynge/grid_version_sort.git"
+GITLOCATION="https://github.com/osynge/grid_version_sort.git"
 rm -rf build
 git clone \${GITLOCATION} build
 cd build
