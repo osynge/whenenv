@@ -1,0 +1,6 @@
+{
+    "name" : "test_vmcatcher_source",
+    "provides" : ["test_vmcatcher_source"],
+    "script" : "transfer/test_vmcatcher_source.sh",
+    "variables" : { "provides_keys" : ["GIT_SRC","GIT_DEST","GIT_TAG_FILTER"] }
+}

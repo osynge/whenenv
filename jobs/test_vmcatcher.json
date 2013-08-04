@@ -1,0 +1,9 @@
+{
+    "name" : "test_vmcatcher1",
+    "variables" : {
+        "require_values" : { "TESTED" : "vmcatcher"},
+        "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
+    },
+    "provides" : ["execution"],
+    "depends" : ["test_vmcatcher_source","checkout_source","run_tests","export_tests"]
+}
