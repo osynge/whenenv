@@ -490,6 +490,7 @@ class matrixRequiresStackPointer(object):
         self.enviroment = kwargs.get('enviroment', None)
         self.EnvContainer = kwargs.get('env_container', None)
         self.JobContainer = kwargs.get('job_container', None)
+        self.scriptDir = kwargs.get('scriptsDir', None)
         self.ExecutionPonter = observable.Observable(None)
         self.ExecutionStatus = observable.Observable(matrixRequiresStateIdle)
         self.RequiresStack = []
@@ -518,7 +519,7 @@ class matrixRequiresStackPointer(object):
         initialEnv = rs.getEnv()
         #self.log.info("getEnv Command '%s'" % (item))
         script = self.JobContainer.allcontianed[item].dictionary["script"]
-        fullpath = "%s/%s" % (self.basedir , script)
+        fullpath = "%s/%s" % (self.scriptDir , script)
         self.log.info("Running is script '%s'" % (script))
         self.log.info("Running is script '%s'" % (fullpath))
         
