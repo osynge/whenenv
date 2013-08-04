@@ -16,6 +16,14 @@ import watcher
 
 import time
 import json
+import datetime
+
+
+
+syncDelay = datetime.timedelta(seconds=10)
+timeoutDelay = datetime.timedelta(seconds=360)
+
+
 
 
 class ChrootPackageInstallerDebian2(object):
@@ -113,6 +121,9 @@ class ChrootPackageInstallerDebian2(object):
         self.running.Write("set -e \n")
         
     def updatePackages(self):
+        Now = datetime.datetime.now()
+        SyncTime = syncDelay + Now
+        TimeOutTime = timeoutDelay + Now
         self.waitingOnPromptPkgCatUpdateEnd = False
         
         self.waitingOnPromptPkgCatUpdateStart = True
@@ -127,21 +138,34 @@ class ChrootPackageInstallerDebian2(object):
         self.promptPkgCatUpdateEnd = re.compile(endPrompt)
         
         self.running.Write("echo %s\n" % (startPrompt))
-        counter = 0
+        
         while self.promptPkgCatUpdateStart == True:
             self.running.Comunicate(timeout = 1)
-            counter += 1
-            if counter > 100:
+            Now = datetime.datetime.now()
+            if Now > SyncTime:
+                self.log.error("echo sync")
                 self.running.Write("echo %s\n" % (endPrompt))
+                SyncTime = syncDelay + Now
+            if Now > TimeOutTime:
+                self.log.error("updatePackages time out 1")
+                break
+        SyncTime = syncDelay + Now
+        TimeOutTime = timeoutDelay + Now
         self.running.Write("%s\n" % (cmd))
         self.waitingOnPromptPkgCatUpdateEnd = True
         counter = 0
         self.running.Write("echo %s\n" % (endPrompt))
         while self.waitingOnPromptPkgCatUpdateEnd == True:
             self.running.Comunicate(timeout = 1)
-            counter += 1
-            if counter > 100:
+            Now = datetime.datetime.now()
+            if Now > SyncTime:
+                self.log.error("echo sync")
                 self.running.Write("echo %s\n" % (endPrompt))
+                SyncTime = syncDelay + Now
+                
+            if Now > TimeOutTime:
+                self.log.error("updatePackages time out 2")
+                break
         self.running.CbDelOnFdRead(self.logOutputPkgCatUpdate)
         return self.PkgCatInstalled
     def installPackage(self,package):  
@@ -160,18 +184,24 @@ class ChrootPackageInstallerDebian2(object):
         self.waitingOnPromptPkgInstallEnd = False
         self.running.Write("echo %s\n" % (startPrompt))
         counter = 0
-
         cmd = 'apt-get install -y %s\n' % (package)
         self.running.Write(cmd)
         self.log.info("PkgInstall %s" %(cmd.strip()))
         self.running.Comunicate(timeout = 1)
         self.running.Write("echo %s\n" % (endPrompt))
-        counter = 0
+        Now = datetime.datetime.now()
+        SyncTime = syncDelay + Now
+        TimeOutTime = timeoutDelay + Now
         while self.waitingOnPromptPkgInstallEnd == True:
             self.running.Comunicate(timeout = 1)
             counter += 1
-            if counter > 100:
+            if Now > SyncTime:
+                self.log.error("echo sync")
                 self.running.Write("echo %s\n" % (endPrompt))
+                SyncTime = syncDelay + Now
+            if Now > TimeOutTime:
+                self.log.error("updatePackages time out 2")
+                break
         self.running.CbDelOnFdRead(self.logOutputPkg)
         
         return True
