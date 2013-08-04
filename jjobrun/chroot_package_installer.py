@@ -193,6 +193,8 @@ class ChrootPackageInstallerDebian2(object):
         self.running.CbDelOnFdRead(self.logOutputPkgCatUpdate)
         return self.PkgCatInstalled
     def installPackage(self,package):  
+        self.SyncTime = syncDelay + Now
+        TimeOutTime = timeoutDelay + Now
         self.waitingOnPromptPkgInstallStart = True
         self.waitingOnPromptPkgInstallEnd = False
         passenv_ignored = set(["PATH","SHLVL","OLDPWD","PS1"])
