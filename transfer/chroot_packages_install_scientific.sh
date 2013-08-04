@@ -5,7 +5,7 @@ ls
 yum update -y
 yum upgrade -y
 yum install epel-release -y
-yum install subversion \
+yum install git \
     python \
     rpm-build \
     make \
