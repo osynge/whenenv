@@ -1,3 +1,4 @@
+chroot $CHROOT
 cd build
 echo `fetch-crl`
 cp /etc/yokel/hepix_tests_keydetails.py keydetails.py

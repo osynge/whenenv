@@ -1,7 +1,7 @@
 {
     "name" : "chroot_initialise_tag_debian",
     "provides" : ["chroot_buildup"],
-    "script" : "transfer/chrootbuilder-debian-wheezy-prod.sh",
+    "script" : "transfer/chroot-debian-wheezy-buildup.sh",
     "variables" : {
         "require_values" : { "RELEASE" : "production", "OPERATING_SYSTEM" : "Debian"},
         "require_keys" : []
