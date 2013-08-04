@@ -1,0 +1,10 @@
+{
+    "name" : "git_checkout_test",
+    "provides" : ["checkout_test"],
+    "script" : "transfer/",
+    "enviroment" : "chroot",
+    "variables" : { "provides_keys" : ["BUILD_SRC"],
+        "require_values" : { },
+        "require_keys" : [ "GIT_SRC" ]
+    }
+}
