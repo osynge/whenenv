@@ -111,6 +111,7 @@ class ChrootPackageInstallerDebian2(object):
         return True
     def logOutputPkginstall(self,fd,data,args,keys):
         self.log.info("logOutputPkginstall")
+        Now = datetime.datetime.now()
         self.SyncTime = syncDelay + Now
         self.logOutput(fd,data,args,keys)
     def initialise(self):
