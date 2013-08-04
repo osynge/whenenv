@@ -177,7 +177,7 @@ class ChrootPackageInstallerDebian2(object):
         self.promptPkgInstallEnd = re.compile(endPrompt)
         self.log.debug("promptPkgInstallStart %s" %(startPrompt))
         self.log.debug("promptPkgInstallEnd %s" %(endPrompt))
-        
+        self.running.CbAddOnFdRead(self.logOutputPkginstall)
         self.waitingOnPromptPkgInstallStart = True
         self.waitingOnPromptPkgInstallEnd = False
         self.running.Write("echo %s\n" % (startPrompt))
@@ -189,8 +189,6 @@ class ChrootPackageInstallerDebian2(object):
         Now = datetime.datetime.now()
         self.SyncTime = syncDelay + Now
         TimeOutTime = timeoutDelay + Now
-        
-        self.running.CbAddOnFdRead(self.logOutputPkginstall)
         while self.waitingOnPromptPkgInstallEnd == True:
             self.running.Comunicate(timeout = 1)
             if Now > self.SyncTime:
