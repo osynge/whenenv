@@ -1,0 +1,9 @@
+{
+    "name" : "build_python_tag_scientific",
+    "provides" : ["chroot_buildup"],
+    "script" : "transfer/chroot-scientific-6-buildup-prod.sh",
+    "variables" : {
+        "require_values" : { "RELEASE" : "production", "OPERATING_SYSTEM" : "Scientific"},
+        "require_keys" : []
+    }
+}

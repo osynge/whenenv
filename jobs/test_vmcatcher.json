@@ -5,5 +5,5 @@
         "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
     },
     "provides" : ["execution"],
-    "depends" : ["test_vmcatcher_source","checkout_source","run_tests","export_tests"]
+    "depends" : ["test_vmcatcher_source","chroot_buildup","checkout_source","run_tests","chroot_teardown","export_tests"]
 }
