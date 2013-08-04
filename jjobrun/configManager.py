@@ -490,7 +490,9 @@ class matrixRequiresStackPointer(object):
         self.enviroment = kwargs.get('enviroment', None)
         self.EnvContainer = kwargs.get('env_container', None)
         self.JobContainer = kwargs.get('job_container', None)
-        self.scriptDir = kwargs.get('scriptsDir', None)
+        self.scriptDir = kwargs.get('dirScripts', None)
+        self.dirJobs = kwargs.get('dirJobs', None)
+        
         self.ExecutionPonter = observable.Observable(None)
         self.ExecutionStatus = observable.Observable(matrixRequiresStateIdle)
         self.RequiresStack = []
