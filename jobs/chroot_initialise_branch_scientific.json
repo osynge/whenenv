@@ -1,6 +1,6 @@
 {
     "name" : "chroot_initialise_branch_scientific",
-    "provides" : ["chroot_buildup"],
+    "provides" : ["chroot_buildup_image"],
     "script" : "transfer/chroot-scientific-6-buildup-trunk.sh",
     "variables" : {
         "require_values" : { "RELEASE" : "development", "OPERATING_SYSTEM" : "Scientific"},

@@ -5,5 +5,7 @@
     "variables" : {
         "require_values" : { "TESTED" : "vmcatcher"},
         "require_keys" : []
-    }
+    },
+    "depends" : ["chroot_deps"]
+    
 }
