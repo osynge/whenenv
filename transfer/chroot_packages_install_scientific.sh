@@ -1,6 +1,8 @@
 CHROOT_SCRIPT=${CHROOT}/script
 cat > ${CHROOT_SCRIPT} <<-EOF
-export http_proxy=http://squid:3128
+set -x
+http_proxy=http://squid:3128
+export http_proxy
 yum update -y
 yum upgrade -y
 yum install epel-release -y
@@ -25,4 +27,5 @@ EOF
 echo xx
 cat ${CHROOT_SCRIPT}
 echo xx
+rpm -qa | grep vmcatcher
 chroot ${CHROOT} /bin/bash /script
