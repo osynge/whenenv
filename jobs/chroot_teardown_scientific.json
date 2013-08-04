@@ -1,9 +1,9 @@
 {
-    "name" : "build_python_tag_scientific",
+    "name" : "chroot_teardown_scientific",
     "provides" : ["chroot_teardown"],
     "script" : "transfer/chroot-scientific-6-teardown.sh",
     "variables" : {
-        "require_values" : { "RELEASE" : "production", "OPERATING_SYSTEM" : "Scientific"},
+        "require_values" : { "OPERATING_SYSTEM" : "Scientific"},
         "require_keys" : []
     }
 }

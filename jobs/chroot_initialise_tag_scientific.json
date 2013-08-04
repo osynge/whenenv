@@ -1,5 +1,5 @@
 {
-    "name" : "build_python_tag_scientific",
+    "name" : "chroot_initialise_tag_scientific",
     "provides" : ["chroot_buildup"],
     "script" : "transfer/chroot-scientific-6-buildup-prod.sh",
     "variables" : {
