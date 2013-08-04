@@ -609,7 +609,7 @@ class matrixRunner(object):
             enviroment = enviroment,
             basedir = self.basedir)
         RequiresStack.PushStack("execution")
-        self.log.info("Starting planless")
+        #self.log.info("Starting planless")
         ranOk = RequiresStack.getNextJob()
         return ranOk
     
