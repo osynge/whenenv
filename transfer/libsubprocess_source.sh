@@ -1,6 +1,6 @@
 GIT_SRC="git://git.fritz.box/libsubprocess.git"
 GIT_DEST="build"
-GIT_TAG_FILTER="libsubprocess-"
+GIT_TAG_FILTER="libsubprocess_"
 RPM_DEPENDS="rpm"
 REPOSITORY_TYPE="public"
 BUILD_TYPE="autotools"
