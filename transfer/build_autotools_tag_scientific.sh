@@ -25,7 +25,7 @@ rm -f artifacts.tgz
 
 
 mkdir -p build/dist
-tar -C bdist -zcvf build/dist/${PRODUCT}_0.0.1.bin.tar.gz .
+tar -C bdist -zcvf build/dist/${GIT_TAG_LAST}.bin.tar.gz .
 
 BASEFILE=`ls build/*tar.gz`
 NEWFILE=`echo ${BASEFILE} | sed -e 's/\.tar\.gz/\.src\.tar\.gz/g' | sed -e 's/build/build\/dist/' `
