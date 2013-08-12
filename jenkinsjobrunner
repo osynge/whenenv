@@ -474,7 +474,7 @@ def runJob (jobname):
                         "envimeroment" : ["CHROOT"]
                         },
                     "dependancies" :{ "Scientific" : ["python","rpm-build","make","git",
-                    "python-setuptools","m2crypto", "org-desy-grid-virt-sort-release" ] },
+                    "python-setuptools","m2crypto" ] },
                     },
                 "artifacts" : ["artifacts.tgz"],
                 "flags" : ["chroot"],
