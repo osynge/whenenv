@@ -22,6 +22,11 @@ cd $ORIGINALDIR
 rm -f artifacts.tgz
 
 mkdir -p build/dist
+
+BASEFILE=`ls build/*tar.gz`
+NEWFILE=`echo ${BASEFILE} | sed -e 's/\.tar\.gz/\.src\.tar\.gz/g' | sed -e 's/build/build\/dist/g' `
+mv ${BASEFILE} ${NEWFILE}
+
 cp build/RPMS/x86_64/* build/dist
 cp build/SOURCES/* build/dist
 cp build/SRPMS/* build/dist
