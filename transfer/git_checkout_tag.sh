@@ -29,7 +29,9 @@ fi
 
 export GIT_TAG_LAST
 git checkout ${GIT_TAG_LAST}
-
+export GIT_TAG_FILTER
+SRC_VERSION=$(echo $GIT_TAG_LAST | sed -e "s/${GIT_TAG_FILTER}//")
+export SRC_VERSION
 
 BUILD_SRC=${GIT_DEST}
 export BUILD_SRC

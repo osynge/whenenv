@@ -4,8 +4,7 @@
     "script" : "build_autotools_tag_scientific.sh",
     "inherits" : ["branch_testing"],
     "variables" : {
-        "require_values" : { "RELEASE" : "production", 
-            "OPERATING_SYSTEM" : "Scientific", 
+        "require_values" : { "OPERATING_SYSTEM" : "Scientific", 
             "BUILD_TYPE" : "autotools"},
         "require_keys" : []
     }
