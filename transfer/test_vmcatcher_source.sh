@@ -20,8 +20,10 @@ BUILD_DEPS_RPM="git \
     ntp\
 "
 REPOSITORY_TYPE="public"
+BUILD_TYPE="disttools"
 export GIT_SRC
 export GIT_DEST
 export GIT_TAG_FILTER
 export BUILD_DEPS_RPM
 export REPOSITORY_TYPE
+export BUILD_TYPE
