@@ -9,20 +9,16 @@ if [ "X${RPM_DEPENDS}" = "X" ] ; then
 fi
 
 ORIGINALDIR=`pwd`
+rm -rf bdist
 cd $BUILD_SRC
 ./autogen.sh 
 ./configure
 make dist
-make install DESTDIR=`pwd`/bdist
+make install DESTDIR=${ORIGINALDIR}/bdist
 # make apidoc
 make rpm
 
 # Now we make the artifacts
-
-mkdir dist
-mkdir 
-tar -zcvf ../
-
 
 cd $ORIGINALDIR
 rm -f artifacts.tgz
