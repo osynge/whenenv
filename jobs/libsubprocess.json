@@ -1,0 +1,9 @@
+{
+    "name" : "libsubprocess",
+    "variables" : {
+        "require_values" : { "PRODUCT" : "libsubprocess"},
+        "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
+    },
+    "provides" : ["execution"],
+    "depends" : ["libsubprocess_source","checkout_source","build_package","export_package"]
+}
