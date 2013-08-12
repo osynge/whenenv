@@ -3,6 +3,12 @@ if [ "X${ROOTDIR}" = "X" ] ; then
     echo "ROOTDIR not defined"
     ROOTDIR="/tmp/repo"
     #exit 1
+    if [ "X${REPOSITORY_TYPE}" = "Xpublic" ] ; then
+        ROOTDIR="/tmp/public_repo"
+    fi
+    if [ "X${REPOSITORY_TYPE}" = "Xprivate" ] ; then
+        ROOTDIR="/tmp/private_repo"
+    fi
 fi
 tar -zxvf artifacts.tgz
 rm -f artifacts.tgz
