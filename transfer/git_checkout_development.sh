@@ -22,6 +22,6 @@ export BUILD_SRC
 
 cd ${ORIGINALDIR}
 
-SRC_VERSION=`date '+20%y%m%d%H'`
+SRC_VERSION=rc`date '+20%y%m%d%H'`
 export SRC_VERSION
 
