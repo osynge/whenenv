@@ -6,6 +6,6 @@
     "variables" : {
         "require_values" : { "OPERATING_SYSTEM" : "Scientific", 
             "BUILD_TYPE" : "autotools"},
-        "require_keys" : []
+        "require_keys" : ["SRC_VERSION","PRODUCT","BUILD_SRC"]
     }
 }
