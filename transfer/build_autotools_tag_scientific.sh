@@ -1,5 +1,5 @@
 ORIGINALDIR=`pwd`
-
+export SRC_VERSION
 cd $BUILD_SRC
 ./autogen.sh 
 ./configure
