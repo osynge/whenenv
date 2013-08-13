@@ -1,0 +1,10 @@
+{
+    "name" : "build_autotools_default",
+    "provides" : ["build_package"],
+    "script" : "build_autotools_default.sh",
+    "inherits" : ["branch_testing"],
+    "variables" : {
+        "require_values" : { "BUILD_TYPE" : "autotools"},
+        "require_keys" : ["SRC_VERSION","PRODUCT","BUILD_SRC"]
+    }
+}
