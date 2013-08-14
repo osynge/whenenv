@@ -1,8 +1,8 @@
 ORIGINALDIR=`pwd`
 export SRC_VERSION
 cd $BUILD_SRC
-./autogen.sh 
-./configure
+sh bootstrap.sh
+./configure --prefix=/usr
 make dist
 mkdir dist
 mv *.tar.gz dist

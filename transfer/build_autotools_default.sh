@@ -1,8 +1,8 @@
 ORIGINALDIR=`pwd`
 
 cd $BUILD_SRC
-./autogen.sh 
-./configure
+sh bootstrap.sh
+./configure --prefix=/usr
 make dist
 mkdir dist
 FILENAME=`ls -t *tar.gz | head -n 1`
