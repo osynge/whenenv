@@ -16,10 +16,10 @@ RELEASE_TYPE="development"
 PLATFORM="x86_64"
 FLAVOR="scientific"
 mkdir -p ${ROOTDIR}
-dir_tgz="${ROOTDIR}/${RELEASE_TYPE}/src/${FLAVOR}/6/tgz"
-dir_btgz="${ROOTDIR}/${RELEASE_TYPE}/${PLATFORM}/${FLAVOR}/6/tgz"
-dir_srpm="${ROOTDIR}/${RELEASE_TYPE}/${PLATFORM}/${FLAVOR}/6/srpm"
-dir_rpm="${ROOTDIR}/${RELEASE_TYPE}/${PLATFORM}/${FLAVOR}/6/rpm"
+dir_tgz="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/source/6/tgz"
+dir_btgz="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/6/tgz"
+dir_srpm="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/source/6/srpm"
+dir_rpm="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/6/rpm"
 mkdir -p ${dir_tgz}
 mkdir -p ${dir_btgz}
 mkdir -p ${dir_srpm}
