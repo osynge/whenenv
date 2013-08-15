@@ -1,6 +1,7 @@
 ORIGINALDIR=`pwd`
 
 cd $BUILD_SRC
+export SRC_VERSION
 sh bootstrap.sh
 ./configure --prefix=/usr
 make dist
