@@ -20,7 +20,7 @@ rm -f artifacts.tgz
 
 
 mkdir -p build/dist
-tar -C ${BUILD_SRC}/bdist -zcvf build/dist/${PRODUCT}_${SRC_VERSION}.bin.$(arch).tar.gz .
+tar -C ${BUILD_SRC}/bdist -zcvf build/dist/${PRODUCT}_${SRC_VERSION}.$(arch).bin.tar.gz .
 
 
 
