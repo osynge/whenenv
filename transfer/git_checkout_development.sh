@@ -16,12 +16,11 @@ ORIGINALDIR=`pwd`
 rm -rf ${GIT_DEST}
 git clone ${GIT_SRC} ${GIT_DEST}
 cd ${GIT_DEST}
-
+GIT_TAG_LAST=$(git tag | grep "${GIT_TAG_FILTER}" | org_desy_grid_virt_sort_release.py  | tail -n 1)
 BUILD_SRC=${GIT_DEST}
 export BUILD_SRC
 
 cd ${ORIGINALDIR}
-GIT_TAG_LAST=$(git tag | grep "${GIT_TAG_FILTER}" | org_desy_grid_virt_sort_release.py  | tail -n 1)
 
 SRC_VERSION=${GIT_TAG_LAST}rc`date '+20%y%m%d%H'`
 export SRC_VERSION
