@@ -18,7 +18,7 @@ rm -f artifacts.tgz
 
 
 mkdir -p build/dist
-tar -C ${BUILD_SRC}/bdist -zcvf build/dist/${PRODUCT}_${SRC_VERSION}.bin.tar.gz .
+tar -C ${BUILD_SRC}/bdist -zcvf build/dist/${PRODUCT}_${SRC_VERSION}.bin.$(arch).tar.gz .
 
 BASEFILE=`ls build/*tar.gz`
 NEWFILE=`echo ${BASEFILE} | sed -e 's/\.tar\.gz/\.src\.tar\.gz/g' | sed -e 's/build/build\/dist/' `
