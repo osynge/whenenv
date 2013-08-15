@@ -21,7 +21,8 @@ BUILD_SRC=${GIT_DEST}
 export BUILD_SRC
 
 cd ${ORIGINALDIR}
+GIT_TAG_LAST=$(git tag | grep "${GIT_TAG_FILTER}" | org_desy_grid_virt_sort_release.py  | tail -n 1)
 
-SRC_VERSION=rc`date '+20%y%m%d%H'`
+SRC_VERSION=${GIT_TAG_LAST}rc`date '+20%y%m%d%H'`
 export SRC_VERSION
 
