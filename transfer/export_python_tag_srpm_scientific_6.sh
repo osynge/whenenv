@@ -18,7 +18,7 @@ FLAVOR="scientific"
 mkdir -p ${ROOTDIR}
 dir_tgz="${ROOTDIR}/${RELEASE_TYPE}/source/${FLAVOR}/6x/tgz"
 dir_btgz="${ROOTDIR}/${RELEASE_TYPE}/${PLATFORM}/${FLAVOR}/6x/tgz"
-dir_srpm="${ROOTDIR}/${RELEASE_TYPE}/${PLATFORM}/${FLAVOR}/6x/srpm"
+dir_srpm="${ROOTDIR}/${RELEASE_TYPE}/source/${FLAVOR}/6x/srpm"
 dir_rpm="${ROOTDIR}/${RELEASE_TYPE}/${PLATFORM}/${FLAVOR}/6x/rpm"
 mkdir -p ${dir_tgz}
 mkdir -p ${dir_btgz}
