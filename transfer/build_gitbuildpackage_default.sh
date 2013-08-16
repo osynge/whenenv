@@ -1,13 +1,12 @@
 rm -f *.orig.tar.gz
 rm -f *.changes
-rm -f *.build
 rm -f *.debian.tar.gz
 rm -f *.dsc
 rm -f *.deb
 rm -f *.upload
 rm -rf build
 ls
-git clone https://github.com/osynge/deb-grid-virt-sort.git build
+#git clone https://github.com/osynge/deb-grid-virt-sort.git build
 
 cd build
 
