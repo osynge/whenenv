@@ -19,7 +19,7 @@ mkdir -p ${ROOTDIR}
 dir_tgz="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/src/tgz"
 dir_btgz="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/tgz"
 dir_srpm="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/src/srpm"
-dir_rpm="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/6/rpm"
+dir_rpm="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/rpm"
 mkdir -p ${dir_tgz}
 mkdir -p ${dir_btgz}
 mkdir -p ${dir_srpm}
