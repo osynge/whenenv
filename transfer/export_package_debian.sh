@@ -1,24 +1,26 @@
 pwd
-if [ "X${ROOTDIR}" = "X" ] ; then
-    echo "ROOTDIR not defined"
-    ROOTDIR="/tmp/repo"
-    #exit 1
-fi
-if [ "X${REPOSITORY_TYPE}" = "Xpublic" ] ; then
-ROOTDIR="/tmp/public_repo"
-fi
 if [ "X${REPOSITORY_TYPE}" = "Xprivate" ] ; then
 ROOTDIR="/tmp/private_repo"
 fi
-
+if [ "X${ROOTDIR}" = "X" ] ; then
+    echo "ROOTDIR not defined"
+    ROOTDIR="/export/jenkins_matrix_build/repo"
+    #exit 1
+    if [ "X${REPOSITORY_TYPE}" = "Xpublic" ] ; then
+        ROOTDIR="/export/jenkins_matrix_build/public_repo"
+    fi
+    if [ "X${REPOSITORY_TYPE}" = "Xprivate" ] ; then
+        ROOTDIR="/export/jenkins_matrix_build/private_repo"
+    fi
+fi
 tar -zxvf artifacts.tgz
 rm -f artifacts.tgz
 RELEASE_TYPE="release"
 PLATFORM="x86_64"
-FLAVOR="debian"
+FLAVOR="debian/wheezy"
 mkdir -p ${ROOTDIR}
-dir_tgz="${ROOTDIR}/${RELEASE_TYPE}/source/${FLAVOR}/7/tgz/"
-dir_btgz="${ROOTDIR}/${RELEASE_TYPE}/${PLATFORM}/${FLAVOR}/7/tgz/"
+dir_tgz="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/src/tgz"
+dir_btgz="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/tgz"
 mkdir -p ${dir_tgz}
 mkdir -p ${dir_btgz}
 /usr/bin/rsync -v --ignore-existing build/dist/*.src.tar.gz \

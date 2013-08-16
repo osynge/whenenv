@@ -14,11 +14,11 @@ tar -zxvf artifacts.tgz
 rm -f artifacts.tgz
 RELEASE_TYPE="development"
 PLATFORM="x86_64"
-FLAVOR="scientific"
+FLAVOR="scientific/6"
 mkdir -p ${ROOTDIR}
-dir_tgz="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/source/6/tgz"
-dir_btgz="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/6/tgz"
-dir_srpm="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/source/6/srpm"
+dir_tgz="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/src/tgz"
+dir_btgz="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/tgz"
+dir_srpm="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/src/srpm"
 dir_rpm="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/6/rpm"
 mkdir -p ${dir_tgz}
 mkdir -p ${dir_btgz}
