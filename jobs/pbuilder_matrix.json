@@ -1,0 +1,10 @@
+{
+    "name" : "pbuilder_matrix",
+    "variables" : {
+        "require_values" : { "PRODUCT" : "pbuilder_matrix"},
+        "require_keys" : ["NODE","ARCH","DIST","RELEASE"]
+    },
+    "script" : "pbuilder_matrix.sh",
+    "provides" : ["execution"],
+    "depends" : []
+}
