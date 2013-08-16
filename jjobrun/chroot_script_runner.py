@@ -1,7 +1,6 @@
 import logging
 import uuid
 import base64
-import pexpect
 import string
 import watcher
 import prompts
