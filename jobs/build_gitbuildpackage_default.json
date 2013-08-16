@@ -1,5 +1,5 @@
 {
-    "name" : "build_autotools_default",
+    "name" : "build_gitbuildpackage_default",
     "provides" : ["build_package"],
     "script" : "build_gitbuildpackage_default.sh",
     "inherits" : ["branch_testing"],
