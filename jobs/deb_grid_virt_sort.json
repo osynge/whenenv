@@ -6,5 +6,5 @@
     },
     "script" : "pbuilder_matrix.sh",
     "provides" : ["execution"],
-    "depends" : []
+    "depends" : ["deb_grid_virt_sort_source","checkout_source","build_package"]
 }
