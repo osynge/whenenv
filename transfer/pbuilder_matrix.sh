@@ -34,7 +34,7 @@ cd build
 
 version=`awk '{gsub("[()]", ""); print $2; exit}' debian/changelog`
 
-dch -b -v "${version}+${DIST}${BUILD_NUMBER}${ARCH}" "Yokel ${DIST} build #${BUILD_NUMBER}" --distribution $DIST
+echo `dch -b -v "${version}+${DIST}${BUILD_NUMBER}${ARCH}" "Yokel ${DIST} build #${BUILD_NUMBER}" --distribution $DIST`
 #dch --distribution ${DIST}
 
 git commit -m"changing dist" debian/changelog
