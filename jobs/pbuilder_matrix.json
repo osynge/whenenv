@@ -1,7 +1,7 @@
 {
     "name" : "pbuilder_matrix",
     "variables" : {
-        "require_values" : { "PRODUCT" : "deb-grid-virt-sort'"},
+        "require_values" : { "PRODUCT" : "deb-grid-virt-sort"},
         "require_keys" : ["NODE","ARCH","DIST","RELEASE"]
     },
     "script" : "pbuilder_matrix.sh",
