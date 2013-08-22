@@ -1,4 +1,5 @@
 GIT_SRC="git://git.fritz.box/libsubprocess.git"
+GIT_SRC="https://github.com/osynge/libsubprocess.git"
 GIT_DEST="build"
 GIT_TAG_FILTER="libsubprocess_"
 RPM_DEPENDS="rpm"
