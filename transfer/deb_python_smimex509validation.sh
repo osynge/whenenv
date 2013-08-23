@@ -1,6 +1,6 @@
 GIT_SRC="https://github.com/osynge/deb-python-smimex509validation.git "
 GIT_DEST="build"
-GIT_TAG_FILTER=""
+GIT_TAG_FILTER="deb-python-smimex509validation"
 RPM_DEPENDS="bash"
 BUILD_TYPE="gitbuildpackage"
 export GIT_SRC
