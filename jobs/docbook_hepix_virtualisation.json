@@ -2,7 +2,7 @@
     "name" : "docbook_hepix_virtualisation",
     "variables" : {
         "require_values" : { "PRODUCT" : "hepix-virtualisation-book" },
-        "require_keys" : [ "NODE", "ARCH", "DIST", "RELEASE" ]
+        "require_keys" : [ "ARCH", "DIST", "RELEASE" ]
     },
     "provides" : ["execution"],
     "depends" : ["docbook_hepix_virtualisation_source","checkout_source","build_docbook"]
