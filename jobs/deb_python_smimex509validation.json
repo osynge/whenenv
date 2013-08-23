@@ -1,0 +1,9 @@
+{
+    "name" : "deb_python_smimex509validation",
+    "variables" : {
+        "require_values" : { "PRODUCT" : "deb_python_smimex509validation" },
+        "require_keys" : [ "NODE", "ARCH", "DIST", "RELEASE" ]
+    },
+    "provides" : ["execution"],
+    "depends" : ["deb_grid_virt_sort_source","checkout_source","build_package"]
+}
