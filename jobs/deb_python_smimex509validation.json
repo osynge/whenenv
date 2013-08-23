@@ -5,5 +5,5 @@
         "require_keys" : [ "NODE", "ARCH", "DIST", "RELEASE" ]
     },
     "provides" : ["execution"],
-    "depends" : ["deb_grid_virt_sort_source","checkout_source","build_package"]
+    "depends" : ["deb_python_smimex509validation_source","checkout_source","build_package"]
 }
