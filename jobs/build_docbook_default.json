@@ -1,0 +1,9 @@
+{
+    "name" : "build_docbook_default",
+    "provides" : ["build_docbook"],
+    "script" : "build_docbook_default.sh",
+    "variables" : {
+        "require_values" : { },
+        "require_keys" : ["SRC_VERSION","PRODUCT","BUILD_SRC"]
+    }
+}

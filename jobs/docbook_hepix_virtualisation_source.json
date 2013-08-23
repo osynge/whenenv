@@ -1,0 +1,8 @@
+{
+    "name" : "docbook_hepix_virtualisation_source",
+    "provides" : ["docbook_hepix_virtualisation_source"],
+    "script" : "docbook_hepix_virtualisation_source.sh",
+    "variables" : { "provides_keys" : ["GIT_SRC","GIT_DEST","GIT_TAG_FILTER"] ,
+        "require_values" : { "PRODUCT" : "deb-grid-virt-sort" }
+    }
+}
