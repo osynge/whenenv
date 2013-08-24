@@ -1,0 +1,9 @@
+{
+    "name" : "docbook_yokel_welcome",
+    "variables" : {
+        "require_values" : { "PRODUCT" : "hepix-virtualisation-book" },
+        "require_keys" : [ "RELEASE" ]
+    },
+    "provides" : ["execution"],
+    "depends" : ["docbook_yokel_welcome_source","checkout_source","build_docbook"]
+}
