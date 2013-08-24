@@ -355,8 +355,6 @@ class ChrootPackageInstallerRedhat(object):
         
         self.waitingOnPromptPkgCatUpdateStart = True
         self.PkgCatInstalled = set([])
-        cmd = "yum clean all"
-        self.running.Write("%s\n" % (cmd))
         #self.shell.Write("apt-get update -y\n")
         cmd = "rpm -qa --qf '%{NAME}\n'\n"
         self.running.CbAddOnFdRead(self.logOutputPkgCatUpdate)
@@ -387,7 +385,8 @@ class ChrootPackageInstallerRedhat(object):
         self.promptPkgInstallEnd = re.compile(endPrompt)
         self.log.info("promptPkgInstallStart %s" %(startPrompt))
         self.log.info("promptPkgInstallEnd %s" %(endPrompt))
-        
+        cmd = "yum clean all"
+        self.running.Write("%s\n" % (cmd))
         self.waitingOnPromptPkgInstallStart = True
         self.waitingOnPromptPkgInstallEnd = False
         self.running.Write("echo %s\n" % (startPrompt))
