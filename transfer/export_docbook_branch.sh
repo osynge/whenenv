@@ -29,3 +29,11 @@ mkdir -p ${dir_html_multi}
 mkdir -p ${dir_epub}
 /usr/bin/rsync -v --ignore-existing build/Book-a4.pdf \
     ${dir_pdf_a4}/${PRODUCT}-a4-${SRC_VERSION}.pdf
+/usr/bin/rsync -v --ignore-existing build/Book-letter.pdf \
+    ${dir_pdf_letter}/${PRODUCT}-letter-${SRC_VERSION}.pdf
+/usr/bin/rsync -v --ignore-existing build/Book.epub \
+    ${dir_epub}/${PRODUCT}-${SRC_VERSION}.epub
+/usr/bin/rsync -v --ignore-existing build/Book.html \
+    ${dir_html_single}/${PRODUCT}-${SRC_VERSION}.html
+rm -f ${dir_html_single}/${PRODUCT}.html
+ln -s ${dir_html_single}/${PRODUCT}-${SRC_VERSION}.html ${PRODUCT}.html 
