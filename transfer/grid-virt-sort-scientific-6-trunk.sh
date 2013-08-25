@@ -8,6 +8,7 @@ cat > ${CHROOT_SCRIPT} <<-EOF
 #!/bin/bash
 id
 hostname -f
+yum update
 yum install git \
     org-desy-grid-virt-sort-release  \
     rpmbuild \
