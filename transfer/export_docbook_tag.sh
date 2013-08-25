@@ -27,13 +27,18 @@ mkdir -p ${dir_pdf_letter}
 mkdir -p ${dir_html_single}
 mkdir -p ${dir_html_multi}
 mkdir -p ${dir_epub}
-/usr/bin/rsync -v --ignore-existing build/Book-a4.pdf \
+/usr/bin/rsync -va --ignore-existing build/Book-a4.pdf \
     ${dir_pdf_a4}/${PRODUCT}-a4-${SRC_VERSION}.pdf
-/usr/bin/rsync -v --ignore-existing build/Book-letter.pdf \
+/usr/bin/rsync -va --ignore-existing build/Book-letter.pdf \
     ${dir_pdf_letter}/${PRODUCT}-letter-${SRC_VERSION}.pdf
-/usr/bin/rsync -v --ignore-existing build/Book.epub \
+/usr/bin/rsync -va --ignore-existing build/Book.epub \
     ${dir_epub}/${PRODUCT}-${SRC_VERSION}.epub
-/usr/bin/rsync -v --ignore-existing build/Book.html \
+/usr/bin/rsync -va --ignore-existing build/Book.html \
     ${dir_html_single}/${PRODUCT}-${SRC_VERSION}.html
-rm -f ${dir_html_single}/${PRODUCT}.html
-ln -s ${PRODUCT}-${SRC_VERSION}.html ${dir_html_single}/${PRODUCT}.html
+rm -f ${dir_html_single}/${PRODUCT}-current.html
+ln -s ${PRODUCT}-${SRC_VERSION}.html ${dir_html_single}/${PRODUCT}-current.html
+
+/usr/bin/rsync -va --ignore-existing build/Book \
+    ${dir_html_multi}/${PRODUCT}-${SRC_VERSION}
+rm -f ${dir_html_single}/${PRODUCT}-current
+ln -s ${PRODUCT}-${SRC_VERSION}.html ${dir_html_single}/${PRODUCT}-current
