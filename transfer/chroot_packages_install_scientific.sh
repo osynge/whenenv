@@ -4,6 +4,7 @@ set -x
 http_proxy=http://squid:3128
 export http_proxy
 yum clean all
+yum clean metadata
 yum update -y
 yum upgrade -y
 yum install epel-release -y
