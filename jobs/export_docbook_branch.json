@@ -1,0 +1,9 @@
+{
+    "name" : "export_docbook_branch",
+    "provides" : ["export_docbook"],
+    "script" : "export_docbook_branch.sh",
+    "variables" : {
+        "require_values" : { "RELEASE" : "development"},
+        "require_keys" : ["PRODUCT"]
+    }
+}
