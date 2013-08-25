@@ -40,5 +40,5 @@ ln -s ${PRODUCT}-${SRC_VERSION}.html ${dir_html_single}/${PRODUCT}-current.html
 
 /usr/bin/rsync -va --ignore-existing build/Book \
     ${dir_html_multi}/${PRODUCT}-${SRC_VERSION}
-rm -f ${dir_html_single}/${PRODUCT}-current
-ln -s ${PRODUCT}-${SRC_VERSION}.html ${dir_html_single}/${PRODUCT}-current
+rm -f ${dir_html_multi}/${PRODUCT}-current
+ln -s ${PRODUCT}-${SRC_VERSION} ${dir_html_multi}/${PRODUCT}-current
