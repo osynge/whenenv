@@ -36,4 +36,4 @@ mkdir -p ${dir_epub}
 /usr/bin/rsync -v --ignore-existing build/Book.html \
     ${dir_html_single}/${PRODUCT}-${SRC_VERSION}.html
 rm -f ${dir_html_single}/${PRODUCT}.html
-ln -s ${dir_html_single}/${PRODUCT}-${SRC_VERSION}.html ${PRODUCT}.html 
+ln -s ${PRODUCT}-${SRC_VERSION}.html ${dir_html_single}/${PRODUCT}.html
