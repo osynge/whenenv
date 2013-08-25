@@ -5,5 +5,5 @@
         "require_keys" : [ "RELEASE" ]
     },
     "provides" : ["execution"],
-    "depends" : ["docbook_hepix_virtualisation_source","checkout_source","build_docbook"]
+    "depends" : ["docbook_hepix_virtualisation_source","checkout_source","build_docbook","export_docbook"]
 }

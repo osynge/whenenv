@@ -1,0 +1,9 @@
+{
+    "name" : "export_docbook_tag",
+    "provides" : ["export_docbook"],
+    "script" : "export_docbook_tag.sh",
+    "variables" : {
+        "require_values" : { "RELEASE" : "production"},
+        "require_keys" : ["PRODUCT"]
+    }
+}
