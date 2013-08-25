@@ -28,4 +28,4 @@ mkdir -p ${dir_html_single}
 mkdir -p ${dir_html_multi}
 mkdir -p ${dir_epub}
 /usr/bin/rsync -v --ignore-existing build/Book-a4.pdf \
-    ${dir_pdf_a4}/${PRODUCT}-a4.pdf
+    ${dir_pdf_a4}/${PRODUCT}-a4-${SRC_VERSION}.pdf
