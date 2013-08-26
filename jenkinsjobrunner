@@ -182,7 +182,7 @@ class jobPartRun:
             if "dependancies" in jobpart["shell"].keys():
                 
                 if "Debian" in jobpart["shell"]["dependancies"].keys():
-                    self.log.info("foundthe answer")
+                    self.log.info("found the answer")
                     depnedacylist = list(jobpart["shell"]["dependancies"]["Debian"])
         if len(depnedacylist) == 0:
             self.log.info("no packages to install")
@@ -215,7 +215,7 @@ class jobPartRun:
             if "dependancies" in jobpart["shell"].keys():
                 
                 if "Scientific" in jobpart["shell"]["dependancies"].keys():
-                    self.log.info("foundthe answer")
+                    self.log.info("found the answer")
                     depnedacylist = list(jobpart["shell"]["dependancies"]["Scientific"])
         if len(depnedacylist) == 0:
             self.log.info("no packages to install")
@@ -275,7 +275,7 @@ class jobPartRun:
         self.packages(jobpart,env)
         command = "/bin/bash"
         allfliages =  jobpart["flags"]
-        #self.log.error("flags=%s" % (allfliages))
+        self.log.error("flags=%s" % (allfliages))
         if "chroot" in allfliages:
             if not "CHROOT" in inputenv.keys():
                 self.log.error("no CHROOT enviroment_valiable set")
