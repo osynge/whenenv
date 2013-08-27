@@ -200,9 +200,11 @@ class jobPartRun:
         if  initok == False:
             self.log.info("INITIALISATION FAILED")
             return False
+        self.log.info("bbb")
         initok = pi.updatePackages()
         if  initok == False:
             return False
+        self.log.info("aaa")
         initok = pi.installPackages(depnedacylist)
         if  initok == False:
             return False
