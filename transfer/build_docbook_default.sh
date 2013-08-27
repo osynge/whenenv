@@ -9,4 +9,4 @@ make man
 cd $ORIGINALDIR
 
 rm -f artifacts.tgz
-tar -zcvf artifacts.tgz build/*.pdf build/Book
+tar -zcvf artifacts.tgz build/*.pdf build/Book build/Book.epub 
