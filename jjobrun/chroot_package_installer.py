@@ -366,7 +366,7 @@ class ChrootPackageInstallerRedhat(object):
         
         self.promptPkgCatUpdateStart = re.compile(startPrompt)
         self.promptPkgCatUpdateEnd = re.compile(endPrompt)
-        
+        self.log.error("starting lookp one")
         self.running.Write("echo %s\n" % (startPrompt))
         while self.promptPkgCatUpdateStart == True:
             self.running.Comunicate(timeout = 1)
@@ -383,6 +383,7 @@ class ChrootPackageInstallerRedhat(object):
         self.running.Write("%s\n" % (cmd))
         self.running.Write("echo %s\n" % (endPrompt))
         self.waitingOnPromptPkgCatUpdateEnd = True
+        self.log.error("starting lookp two")
         while self.waitingOnPromptPkgCatUpdateEnd == True:
             self.running.Comunicate(timeout = 1)
             Now = datetime.datetime.now()
