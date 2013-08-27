@@ -322,7 +322,7 @@ class ChrootPackageInstallerRedhat(object):
         foundpackages = set([])
         deinstalledPackages = set([])
         for line in lines:
-            cleanline = line.strip()
+            cleanline = line.split(',')
             if len(cleanline) == 0:
                 continue
             if self.waitingOnPromptPkgCatUpdateEnd == True:
@@ -363,7 +363,7 @@ class ChrootPackageInstallerRedhat(object):
         self.waitingOnPromptPkgCatUpdateStart = True
         self.PkgCatInstalled = set([])
         #self.shell.Write("apt-get update -y\n")
-        cmd = "rpm -qa --qf '%{NAME}\n'\n"
+        cmd = "rpm -qa --qf ',%{NAME}'\n"
         self.running.CbAddOnFdRead(self.logOutputPkgCatUpdate)
         startPrompt = prompts.GeneratePrompt()
         endPrompt = prompts.GeneratePrompt()
