@@ -364,7 +364,7 @@ class ChrootPackageInstallerRedhat(object):
         self.running.CbAddOnFdRead(self.logOutputPkgCatUpdate)
         startPrompt = prompts.GeneratePrompt()
         endPrompt = prompts.GeneratePrompt()
-        
+        self.running.CbAddOnFdRead(self.logOutput)
         self.promptPkgCatUpdateStart = re.compile(startPrompt)
         self.promptPkgCatUpdateEnd = re.compile(endPrompt)
         self.log.error("starting lookp one")
@@ -389,6 +389,7 @@ class ChrootPackageInstallerRedhat(object):
             self.running.Comunicate(timeout = 1)
             Now = datetime.datetime.now()
             if Now > self.SyncTime:
+                self.running.Write("%s\n" % (cmd))
                 self.log.error("echo sync")
                 self.running.Write("echo %s\n" % (endPrompt))
                 self.SyncTime = syncDelay + Now
@@ -397,6 +398,7 @@ class ChrootPackageInstallerRedhat(object):
                 self.log.error("updatePackages time out 2")
                 break
         self.running.CbDelOnFdRead(self.logOutputPkgCatUpdate)
+        self.running.CbDelOnFdRead(self.logOutput)
         return self.PkgCatInstalled
     def installPackage(self,package):  
         self.log.info("installPackage")
