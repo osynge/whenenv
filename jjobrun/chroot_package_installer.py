@@ -22,7 +22,8 @@ import datetime
 
 syncDelay = datetime.timedelta(seconds=100)
 timeoutDelay = datetime.timedelta(seconds=500)
-
+syncDelayShort = datetime.timedelta(seconds=1)
+timeoutDelayShort = datetime.timedelta(seconds=5)
 
 
 
@@ -371,6 +372,7 @@ class ChrootPackageInstallerRedhat(object):
         self.promptPkgCatUpdateEnd = re.compile(endPrompt)
         self.log.error("starting lookp one")
         self.running.Write("echo %s\n" % (startPrompt))
+        
         while self.promptPkgCatUpdateStart == True:
             self.running.Comunicate(timeout = 1)
             Now = datetime.datetime.now()
@@ -387,6 +389,8 @@ class ChrootPackageInstallerRedhat(object):
         self.running.Write("echo %s\n" % (endPrompt))
         self.waitingOnPromptPkgCatUpdateEnd = True
         self.log.error("starting lookp two")
+        self.SyncTime = syncDelayShort + Now
+        TimeOutTime = timeoutDelayShort + Now
         while self.waitingOnPromptPkgCatUpdateEnd == True:
             self.running.Comunicate(timeout = 1)
             Now = datetime.datetime.now()
@@ -394,7 +398,7 @@ class ChrootPackageInstallerRedhat(object):
                 
                 self.log.error("echo sync")
                 self.running.Write("echo %s\n" % (endPrompt))
-                self.SyncTime = syncDelay + Now
+                self.SyncTime = syncDelayShort + Now
                 
             if Now > TimeOutTime:
                 self.log.error("updatePackages time out 2")
