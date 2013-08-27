@@ -1,0 +1,9 @@
+{
+    "name" : "build_docbook_vmim",
+    "provides" : ["build_docbook_vmim"],
+    "script" : "build_docbook_vmim.sh",
+    "variables" : {
+        "require_values" : { },
+        "require_keys" : ["SRC_VERSION","PRODUCT","BUILD_SRC"]
+    }
+}
