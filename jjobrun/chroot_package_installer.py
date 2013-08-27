@@ -363,7 +363,7 @@ class ChrootPackageInstallerRedhat(object):
         self.waitingOnPromptPkgCatUpdateStart = True
         self.PkgCatInstalled = set([])
         #self.shell.Write("apt-get update -y\n")
-        cmd = "rpm -qa --qf ',%{NAME}'\n"
+        cmd = 'rpm -qa --qf ",%{NAME}"\n'
         self.running.CbAddOnFdRead(self.logOutputPkgCatUpdate)
         startPrompt = prompts.GeneratePrompt()
         endPrompt = prompts.GeneratePrompt()
