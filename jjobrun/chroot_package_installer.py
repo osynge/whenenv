@@ -400,7 +400,7 @@ class ChrootPackageInstallerRedhat(object):
         return self.PkgCatInstalled
     def installPackage(self,package):  
         self.log.info("installPackage")
-        
+        self.running.CbAddOnFdRead(self.logOutput)
         self.running.CbAddOnFdRead(self.logOutputPkg)
         passenv_ignored = set(["PATH","SHLVL","OLDPWD","PS1"])
         startPrompt = prompts.GeneratePrompt()
@@ -425,6 +425,7 @@ class ChrootPackageInstallerRedhat(object):
         while self.waitingOnPromptPkgInstallEnd == True:
             self.running.Comunicate(timeout = 1)
         self.running.CbDelOnFdRead(self.logOutputPkg)
+        self.running.CbDelOnFdRead(self.logOutput)
         
         return True
     
