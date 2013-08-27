@@ -351,6 +351,9 @@ class ChrootPackageInstallerRedhat(object):
         self.running.Write("set -e \n")
         
     def updatePackages(self):
+        Now = datetime.datetime.now()
+        self.SyncTime = syncDelay + Now
+        TimeOutTime = timeoutDelay + Now
         self.waitingOnPromptPkgCatUpdateEnd = False
         
         self.waitingOnPromptPkgCatUpdateStart = True
@@ -367,11 +370,30 @@ class ChrootPackageInstallerRedhat(object):
         self.running.Write("echo %s\n" % (startPrompt))
         while self.promptPkgCatUpdateStart == True:
             self.running.Comunicate(timeout = 1)
+            Now = datetime.datetime.now()
+            if Now > self.SyncTime:
+                self.log.error("echo sync")
+                self.running.Write("echo %s\n" % (startPrompt))
+                self.SyncTime = syncDelay + Now
+            if Now > TimeOutTime:
+                self.log.error("updatePackages time out 1")
+                break
+        self.SyncTime = syncDelay + Now
+        TimeOutTime = timeoutDelay + Now
         self.running.Write("%s\n" % (cmd))
         self.running.Write("echo %s\n" % (endPrompt))
         self.waitingOnPromptPkgCatUpdateEnd = True
         while self.waitingOnPromptPkgCatUpdateEnd == True:
             self.running.Comunicate(timeout = 1)
+            Now = datetime.datetime.now()
+            if Now > self.SyncTime:
+                self.log.error("echo sync")
+                self.running.Write("echo %s\n" % (endPrompt))
+                self.SyncTime = syncDelay + Now
+                
+            if Now > TimeOutTime:
+                self.log.error("updatePackages time out 2")
+                break
         self.running.CbDelOnFdRead(self.logOutputPkgCatUpdate)
         return self.PkgCatInstalled
     def installPackage(self,package):  
