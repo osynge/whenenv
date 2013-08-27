@@ -316,6 +316,7 @@ class ChrootPackageInstallerRedhat(object):
             self.logOutput(fd,data,args,keys)
             
     def logOutputPkgCatUpdate(self,fd,data,args,keys):
+        self.log.error("logOutputPkgCatUpdate start")
         lines = data.split('\n')
         foundpackages = set([])
         deinstalledPackages = set([])
@@ -337,7 +338,7 @@ class ChrootPackageInstallerRedhat(object):
             foundpackages.add(cleanline)
             #print fred
             #self.logOutput(fd,data,args,keys)
-        
+        self.log.error("logOutputPkgCatUpdate end %s" % (len(foundpackages)))
         return True
     def logOutputPkginstall(self,fd,data,args,keys):    
         self.logOutputPkg(fd,data,args,keys)
