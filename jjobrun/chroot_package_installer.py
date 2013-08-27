@@ -391,7 +391,7 @@ class ChrootPackageInstallerRedhat(object):
             self.running.Comunicate(timeout = 1)
             Now = datetime.datetime.now()
             if Now > self.SyncTime:
-                self.running.Write("%s\n" % (cmd))
+                
                 self.log.error("echo sync")
                 self.running.Write("echo %s\n" % (endPrompt))
                 self.SyncTime = syncDelay + Now
