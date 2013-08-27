@@ -352,6 +352,8 @@ class ChrootPackageInstallerRedhat(object):
         self.running.Write("set -e \n")
         
     def updatePackages(self):
+        rc = self.running.returncode()
+        self.log.error("rc=%s" % (rc))
         Now = datetime.datetime.now()
         self.SyncTime = syncDelay + Now
         TimeOutTime = timeoutDelay + Now
