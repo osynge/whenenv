@@ -385,8 +385,6 @@ class ChrootPackageInstallerRedhat(object):
         self.promptPkgInstallEnd = re.compile(endPrompt)
         self.log.info("promptPkgInstallStart %s" %(startPrompt))
         self.log.info("promptPkgInstallEnd %s" %(endPrompt))
-        cmd = "yum clean all"
-        self.running.Write("%s\n" % (cmd))
         self.waitingOnPromptPkgInstallStart = True
         self.waitingOnPromptPkgInstallEnd = False
         self.running.Write("echo %s\n" % (startPrompt))
