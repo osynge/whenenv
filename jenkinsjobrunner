@@ -232,17 +232,21 @@ class jobPartRun:
         chrootdir = env['CHROOT']
         cmd = "/usr/sbin/chroot %s" % (chrootdir)
         pi = ChrootPackageInstallerRedhat(command = cmd,enviroment = env)
+        self.log.info("11111111")
         initok = pi.initialise()
         if  initok == False:
             self.log.info("INITIALISATION FAILED")
             return False
+        self.log.info("222222222222")
         initok = pi.updatePackages()
         if  initok == False:
             self.log.info("updatePackages failed")
             return False
+        self.log.info("333333333333")
         initok = pi.installPackages(depnedacylist)
         if  initok == False:
             return False
+        self.log.info("44444444")
         return True
         
         
