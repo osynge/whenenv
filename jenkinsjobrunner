@@ -187,7 +187,7 @@ class jobPartRun:
         if len(depnedacylist) == 0:
             self.log.info("no packages to install")
             return True
-        
+        self.log.info("1111")
         match_prompt = uuid.uuid1()
         prompt = str(match_prompt)
         packagesmissing = []
@@ -196,6 +196,7 @@ class jobPartRun:
         cmd = "/usr/sbin/chroot %s" % (chrootdir)
         pi = ChrootPackageInstallerDebian2(command = cmd,enviroment = env)
         initok = pi.initialise()
+        self.log.info("2222")
         if  initok == False:
             self.log.info("INITIALISATION FAILED")
             return False
@@ -205,6 +206,7 @@ class jobPartRun:
         initok = pi.installPackages(depnedacylist)
         if  initok == False:
             return False
+        self.log.info("333")
         return True
         
     def packagesScientific(self,jobpart,env):
