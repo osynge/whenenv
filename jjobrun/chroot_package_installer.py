@@ -378,6 +378,9 @@ class ChrootPackageInstallerRedhat(object):
         
         while self.promptPkgCatUpdateStart == True:
             self.running.Comunicate(timeout = 1)
+            rc = self.running.returncode()
+            if rc != None:
+                self.log.error("rc=%s" % (rc))
             Now = datetime.datetime.now()
             if Now > self.SyncTime:
                 self.log.error("echo sync")
