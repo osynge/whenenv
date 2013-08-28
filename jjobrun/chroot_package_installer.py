@@ -437,7 +437,7 @@ class ChrootPackageInstallerRedhat(object):
         self.running.Write("echo %s\n" % (startPrompt))
         counter = 0
         
-        cmd = "yum install -y  %s\n" % (package)
+        cmd = "yum install -y -q %s\n" % (package)
         self.log.info(cmd.strip())
         self.log.info("PkgInstall %s" %(cmd.strip()))
         self.running.Write(cmd)
