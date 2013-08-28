@@ -480,4 +480,10 @@ class ChrootPackageInstallerRedhat(object):
         if self.running.returncode == None:
             self.running.Write("exit 0\n")
 
+def tester_owen():
+    pass
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
+    main()
 
