@@ -335,10 +335,12 @@ class ChrootPackageInstallerRedhat(object):
                 if matches != None:
                     self.waitingOnPromptPkgCatUpdateStart = False
                     self.waitingOnPromptPkgCatUpdateEnd = True
+                    print "hereh"
                     continue
             foundpackages.add(cleanline)
             #print fred
             #self.logOutput(fd,data,args,keys)
+        self.foundpackages = foundpackages
         self.log.error("logOutputPkgCatUpdate end %s" % (len(foundpackages)))
         return True
     def logOutputPkginstall(self,fd,data,args,keys):    
@@ -423,7 +425,7 @@ class ChrootPackageInstallerRedhat(object):
         self.running.Write("echo %s\n" % (startPrompt))
         counter = 0
         
-        cmd = "yum install -y -q %s\n" % (package)
+        cmd = "yum install -y  %s\n" % (package)
         self.log.info(cmd.strip())
         self.log.info("PkgInstall %s" %(cmd.strip()))
         self.running.Write(cmd)
