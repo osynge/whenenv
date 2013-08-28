@@ -330,7 +330,7 @@ class ChrootPackageInstallerRedhat(object):
                 if matches != None:
                     self.waitingOnPromptPkgCatUpdateEnd = False
                     continue
-                for item in line.split(',')
+                for item in line.split(','):
                     if len(item) == 0:
                         continue
                     foundpackages.add(item)
