@@ -345,7 +345,7 @@ class ChrootPackageInstallerRedhat(object):
             
             #print fred
             #self.logOutput(fd,data,args,keys)
-        self.foundpackages = foundpackages
+        self.PkgCatInstalled = foundpackages
         self.log.error("logOutputPkgCatUpdate end %s" % (len(foundpackages)))
         return True
     def logOutputPkginstall(self,fd,data,args,keys):    
