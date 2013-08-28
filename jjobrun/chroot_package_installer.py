@@ -322,7 +322,7 @@ class ChrootPackageInstallerRedhat(object):
         foundpackages = set([])
         deinstalledPackages = set([])
         for line in lines:
-            cleanline = line.split(',')
+            cleanline = line.strip()
             if len(cleanline) == 0:
                 continue
             if self.waitingOnPromptPkgCatUpdateEnd == True:
@@ -330,6 +330,10 @@ class ChrootPackageInstallerRedhat(object):
                 if matches != None:
                     self.waitingOnPromptPkgCatUpdateEnd = False
                     continue
+                for item in line.split(',')
+                    if len(item) == 0:
+                        continue
+                    foundpackages.add(item)
             if self.waitingOnPromptPkgCatUpdateStart == True:
                 matches = self.promptPkgCatUpdateStart.match(line)
                 if matches != None:
@@ -337,7 +341,8 @@ class ChrootPackageInstallerRedhat(object):
                     self.waitingOnPromptPkgCatUpdateEnd = True
                     print "hereh"
                     continue
-            foundpackages.add(cleanline)
+            
+            
             #print fred
             #self.logOutput(fd,data,args,keys)
         self.foundpackages = foundpackages
