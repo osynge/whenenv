@@ -230,7 +230,7 @@ class jobPartRun:
         packagesmissing = []
         alreadyinstalled = []
         chrootdir = env['CHROOT']
-        cmd = "/usr/sbin/chroot %s" % (chrootdir)
+        cmd = "/usr/sbin/chroot %s /bin/sh" % (chrootdir)
         pi = ChrootPackageInstallerRedhat(command = cmd,enviroment = env)
         self.log.info("11111111")
         initok = pi.initialise()
