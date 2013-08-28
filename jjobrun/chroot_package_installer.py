@@ -372,7 +372,7 @@ class ChrootPackageInstallerRedhat(object):
         self.PkgCatInstalled = set([])
         #self.shell.Write("apt-get update -y\n")
         cmd = '\nrpm -qa --qf ",%{NAME}"\n'
-        cmd = "\necho\n"
+        #cmd = "\necho\n"
         self.running.CbAddOnFdRead(self.logOutputPkgCatUpdate)
         startPrompt = prompts.GeneratePrompt()
         endPrompt = prompts.GeneratePrompt()
@@ -481,9 +481,10 @@ class ChrootPackageInstallerRedhat(object):
             self.running.Write("exit 0\n")
 
 def tester_owen():
-    pass
+    obj2test = ChrootPackageInstallerRedhat()
+    print updatePackages
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
-    main()
+    tester_owen()
 
