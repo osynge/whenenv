@@ -2,6 +2,7 @@ set -x
 CHROOT_SCRIPT=${CHROOT}/script
 cat > ${CHROOT_SCRIPT} <<-EOF
 #!/bin/bash
+export http_proxy=http://squid:3128
 yum install git  org_desy_grid_virt_sort_release \
   rpmbuild \
   python-setuptools \

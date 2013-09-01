@@ -4,7 +4,7 @@ cat > ${CHROOT_SCRIPT} <<-EOF
 #!/bin/bash
 id
 hostname -f
-
+export http_proxy=http://squid:3128
 hostname -f
 yum clean all
 yum install git  org_desy_grid_virt_sort_release \

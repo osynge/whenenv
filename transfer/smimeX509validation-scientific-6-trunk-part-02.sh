@@ -4,6 +4,7 @@ cat > ${CHROOT_SCRIPT} <<-EOF
 #!/bin/bash
 id
 hostname -f
+export http_proxy=http://squid:3128
 yum install git \
   org-desy-grid-virt-sort-release \
   rpmbuild \

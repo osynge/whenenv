@@ -1,7 +1,7 @@
 
 ORIGINALDIR=`pwd`
 
-
+export http_proxy=http://squid:3128
 id
 hostname -f
 yum install git \

@@ -4,6 +4,7 @@ CHROOT_SCRIPT=${CHROOT}/script
 GITLOCATION="git://github.com/hepix-virtualisation/hepixvmitrust.git"
 cat > ${CHROOT_SCRIPT} <<-EOF
 #!/bin/bash
+export http_proxy=http://squid:3128
 yum install git \
   org-desy-grid-virt-sort-release \
   rpmbuild \
