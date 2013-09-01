@@ -16,7 +16,7 @@ transtbl = string.maketrans(
 
 
 syncDelay = datetime.timedelta(seconds=100)
-timeoutDelay = datetime.timedelta(seconds=1500)
+timeoutDelay = datetime.timedelta(seconds=2000)
 
 
 
@@ -181,6 +181,8 @@ class runnershell2(object):
             self.running.Write(line)
         self.running.Write("echo %s\n" % (endPrompt))
         counter = 0
+        Now = datetime.datetime.now()
+        TimeOutTime = timeoutDelay + Now
         while self.waitingOnPromptRunScriptEnd == True:
             self.running.Comunicate(timeout=1)
             Now = datetime.datetime.now()
