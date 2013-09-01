@@ -5,6 +5,7 @@ cat > ${CHROOT_SCRIPT} <<-EOF
 set -x
 env
 export HOME=/root
+export http_proxy=http://squid:3128
 yum clean all
 yum update -y
 yum clean all

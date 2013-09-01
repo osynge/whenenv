@@ -8,6 +8,7 @@ cat > ${CHROOT_SCRIPT} <<-EOF
 #!/bin/bash
 export HOME=/root
 set -x
+export http_proxy=http://squid:3128
 yum update -y
 yum upgrade -y
 yum install epel-release -y
