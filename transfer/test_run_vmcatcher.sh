@@ -2,12 +2,14 @@ CHROOT_SCRIPT=${CHROOT}/script
 cat > ${CHROOT_SCRIPT} <<-EOF
 set -e
 set -x
+rpm -qa | grep vmcatcher
+rpm -qa | grep smime
+rpm -qa | grep hepix
 cd build
 env
 export PATH=\$PATH:/usr/bin/
 HOME=/root
 export HOME
-
 echo \`fetch-crl\`
 cp /etc/yokel/hepix_tests_keydetails.py keydetails.py
 cat keydetails.py
