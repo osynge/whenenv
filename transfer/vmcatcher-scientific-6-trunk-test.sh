@@ -11,7 +11,7 @@ yum clean all
 yum update -y
 yum upgrade -y
 yum install epel-release -y
-yum install subversion \
+yum install git \
     python \
     rpm-build \
     make \
@@ -36,9 +36,9 @@ ntpdate pool.ntp.org
 rpm -qa | grep hepix
 rpm -qa | grep smime
 rpm -qa | grep vmcatcher
-SVNLOCATION="https://svnsrv.desy.de/public/grid-virt/org.hepix.testing.hepixvmitrust/trunk"
+GITLOCATION="git://git.fritz.box/imagelist_functional_tests.git"
 rm -rf build
-svn co \${SVNLOCATION}/ build
+git clone \${GITLOCATION}/ build
 cd build
 echo \`fetch-crl\`
 cp /etc/yokel/hepix_tests_keydetails.py keydetails.py
