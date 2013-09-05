@@ -2,7 +2,7 @@ GIT_SRC="git://git.fritz.box/vmrecaster.git"
 GIT_DEST="build"
 GIT_TAG_FILTER="vmrecaster_"
 RPM_DEPENDS="bash"
-REPOSITORY_TYPE="private"
+REPOSITORY_TYPE="public"
 BUILD_TYPE="disttools"
 export GIT_SRC
 export GIT_DEST
