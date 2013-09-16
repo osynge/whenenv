@@ -1,0 +1,9 @@
+{
+    "name" : "chrootbuilder",
+    "variables" : {
+        "require_values" : { "PRODUCT" : "chrootbuilder"},
+        "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
+    },
+    "provides" : ["execution"],
+    "depends" : ["chrootbuilder_source","checkout_source","build_package","export_package"]
+}
