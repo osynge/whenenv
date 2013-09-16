@@ -188,26 +188,5 @@ class ChrootPackageInstallerRedhat(chroot_package_installer_base.ChrootPackageIn
         return True
     
     
-    
-    def installPackages(self,packages):
-        notinstalled = set([])
-        insalledPkg = self.updatePackages()
-        for pack in packages:
-            if pack in insalledPkg:
-                print pack, pack in insalledPkg
-                continue
-            notinstalled.add(pack)
-        
-        extra = insalledPkg.difference(packages)
-        
-        missing = set(packages).difference(insalledPkg)
-        self.log.info("notinstalled %s" %(notinstalled))
-        self.log.info("extra %s" %(extra))
-        for pack in missing:
-            self.installPackage(pack)
-        insalledPkg = self.updatePackages()
-        missing = set(packages).difference(insalledPkg)
-        for pack in missing:
-            self.installPackage(pack)
-        
+
  
