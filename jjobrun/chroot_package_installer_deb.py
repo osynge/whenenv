@@ -256,9 +256,3 @@ class ChrootPackageInstallerDebian2(chroot_package_installer_base.ChrootPackageI
         missing = set(packages).difference(insalledPkg)
         for pack in missing:
             self.installPackage(pack)
-        
-        
-    def finalise(self):
-        if self.running.returncode == None:
-            self.running.Write("exit 0\n")
-
