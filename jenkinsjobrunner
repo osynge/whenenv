@@ -174,7 +174,10 @@ class jobPartRun:
             shutil.copyfile(src, dest)
         return True
     
-    def _installPackages(self,pi):
+    def _installPackages(self,pi,depnedacylist):
+        if len(depnedacylist) == 0:
+            self.log.info("no packages to install")
+            return True
         initok = pi.initialise()
         self.log.info("2222")
         if  initok == False:
@@ -203,18 +206,10 @@ class jobPartRun:
                 if "Debian" in jobpart["shell"]["dependancies"].keys():
                     self.log.info("found the answer")
                     depnedacylist = list(jobpart["shell"]["dependancies"]["Debian"])
-        if len(depnedacylist) == 0:
-            self.log.info("no packages to install")
-            return True
-        self.log.info("1111")
-        match_prompt = uuid.uuid1()
-        prompt = str(match_prompt)
-        packagesmissing = []
-        alreadyinstalled = []
         chrootdir = env['CHROOT']
         cmd = "/usr/sbin/chroot %s" % (chrootdir)
         pi = ChrootPackageInstaller(command = cmd,enviroment = env, packaging = "deb")
-        return self._installPackages(pi)
+        return self._installPackages(pi,depnedacylist)
         
     def packagesScientific(self,jobpart,env):
         self.log.info("packagesScientific(%s,%s)" % (jobpart,env))
@@ -226,18 +221,10 @@ class jobPartRun:
                 if "Scientific" in jobpart["shell"]["dependancies"].keys():
                     self.log.info("found the answer")
                     depnedacylist = list(jobpart["shell"]["dependancies"]["Scientific"])
-        if len(depnedacylist) == 0:
-            self.log.info("no packages to install")
-            return True
-        
-        match_prompt = uuid.uuid1()
-        prompt = str(match_prompt)
-        packagesmissing = []
-        alreadyinstalled = []
         chrootdir = env['CHROOT']
         cmd = "/usr/sbin/chroot %s /bin/sh" % (chrootdir)
         pi = ChrootPackageInstaller(command = cmd,enviroment = env,packaging = "rpm")
-        return self._installPackages(pi)
+        return self._installPackages(pi,depnedacylist)
         
         
         
