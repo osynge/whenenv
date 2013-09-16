@@ -231,7 +231,7 @@ class jobPartRun:
         alreadyinstalled = []
         chrootdir = env['CHROOT']
         cmd = "/usr/sbin/chroot %s /bin/sh" % (chrootdir)
-        pi = ChrootPackageInstaller(command = cmd,enviroment = env)
+        pi = ChrootPackageInstaller(command = cmd,enviroment = env,packaging = "rpm")
         self.log.info("11111111")
         initok = pi.initialise()
         if  initok == False:
