@@ -37,6 +37,7 @@ class ChrootPackageInstallerDebian2(chroot_package_installer_base.ChrootPackageI
         # we still need these things chrootCmd, env):
         self.log = logging.getLogger("ChrootPackageInstallerDebian2")
         self.cmdInstallPackage = "apt-get install -y "
+        self.cmdQueryPackageInstalled = "/usr/bin/dpkg-query -W -f '{ \"Package\" : \"${Package}\", \"Status\" : \"${Status}\" }"
     def logOutputPkg(self,fd,data,args,keys):
         lines = data.split('\n')
         for line in lines:
@@ -125,54 +126,3 @@ class ChrootPackageInstallerDebian2(chroot_package_installer_base.ChrootPackageI
         
         
         
-
-        
-    def updatePackages(self):
-        Now = datetime.datetime.now()
-        self.SyncTime = syncDelay + Now
-        TimeOutTime = timeoutDelay + Now
-        self.waitingOnPromptPkgCatUpdateEnd = False
-        
-        self.waitingOnPromptPkgCatUpdateStart = True
-        self.PkgCatInstalled = set([])
-        #self.shell.Write("apt-get update -y\n")
-        cmd = "/usr/bin/dpkg-query -W -f '{ \"Package\" : \"${Package}\", \"Status\" : \"${Status}\" }\n'"
-        self.running.CbAddOnFdRead(self.logOutputPkgCatUpdate)
-        startPrompt = prompts.GeneratePrompt()
-        endPrompt = prompts.GeneratePrompt()
-        
-        self.promptPkgCatUpdateStart = re.compile(startPrompt)
-        self.promptPkgCatUpdateEnd = re.compile(endPrompt)
-        
-        self.running.Write("echo %s\n" % (startPrompt))
-        
-        while self.promptPkgCatUpdateStart == True:
-            self.running.Comunicate(timeout = 1)
-            Now = datetime.datetime.now()
-            if Now > self.SyncTime:
-                self.log.error("echo sync")
-                self.running.Write("echo %s\n" % (startPrompt))
-                self.SyncTime = syncDelay + Now
-            if Now > TimeOutTime:
-                self.log.error("updatePackages time out 1")
-                break
-        self.SyncTime = syncDelay + Now
-        TimeOutTime = timeoutDelay + Now
-        self.running.Write("%s\n" % (cmd))
-        self.waitingOnPromptPkgCatUpdateEnd = True
-        counter = 0
-        self.running.Write("echo %s\n" % (endPrompt))
-        while self.waitingOnPromptPkgCatUpdateEnd == True:
-            self.running.Comunicate(timeout = 1)
-            Now = datetime.datetime.now()
-            if Now > self.SyncTime:
-                self.log.error("echo sync")
-                self.running.Write("echo %s\n" % (endPrompt))
-                self.SyncTime = syncDelay + Now
-                
-            if Now > TimeOutTime:
-                self.log.error("updatePackages time out 2")
-                break
-        self.running.CbDelOnFdRead(self.logOutputPkgCatUpdate)
-        return self.PkgCatInstalled
-    

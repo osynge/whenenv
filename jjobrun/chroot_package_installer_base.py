@@ -145,3 +145,67 @@ class ChrootPackageInstallerBase(object):
     
     
  
+    
+    def updatePackages(self):
+        
+        rc = self.running.returncode()
+        self.log.error("rc=%s" % (rc))
+        Now = datetime.datetime.now()
+        self.SyncTime = syncDelay + Now
+        TimeOutTime = timeoutDelay + Now
+        self.waitingOnPromptPkgCatUpdateEnd = False
+        
+        self.waitingOnPromptPkgCatUpdateStart = True
+        self.PkgCatInstalled = set([])
+        #self.shell.Write("apt-get update -y\n")
+        cmd = "%s\n'" % (self.cmdQueryPackageInstalled)
+        #cmd = "\necho\n"
+        self.running.CbAddOnFdRead(self.logOutputPkgCatUpdate)
+        startPrompt = prompts.GeneratePrompt()
+        endPrompt = prompts.GeneratePrompt()
+        self.running.CbAddOnFdRead(self.logOutput)
+        self.promptPkgCatUpdateStart = re.compile(startPrompt)
+        self.promptPkgCatUpdateEnd = re.compile(endPrompt)
+        self.log.error("starting lookp one")
+        self.running.Write("echo %s\n" % (startPrompt))
+        
+        while self.promptPkgCatUpdateStart == True:
+            self.running.Comunicate(timeout = 1)
+            rc = self.running.returncode()
+            if rc != None:
+                self.log.error("rc=%s" % (rc))
+            Now = datetime.datetime.now()
+            if Now > self.SyncTime:
+                self.log.error("echo sync")
+                self.running.Write("echo %s\n" % (startPrompt))
+                self.SyncTime = syncDelay + Now
+            if Now > TimeOutTime:
+                self.log.error("updatePackages time out 1")
+                break
+        self.SyncTime = syncDelay + Now
+        TimeOutTime = timeoutDelay + Now
+        self.running.Write("%s\n" % (cmd))
+        self.running.Write("echo %s\n" % (endPrompt))
+        self.waitingOnPromptPkgCatUpdateEnd = True
+        self.log.error("starting lookp two")
+        self.SyncTime = syncDelayShort + Now
+        TimeOutTime = timeoutDelayShort + Now
+        while self.waitingOnPromptPkgCatUpdateEnd == True:
+            self.running.Comunicate(timeout = 1)
+            Now = datetime.datetime.now()
+            rc = self.running.returncode()
+            if rc != None:
+                self.log.error("rc=%s" % (rc))
+            if Now > self.SyncTime:
+                
+                self.log.error("echo sync 44")
+                self.running.Write("\necho %s\n" % (endPrompt))
+                self.SyncTime = syncDelayShort + Now
+                
+            if Now > TimeOutTime:
+                self.log.error("updatePackages time out 2")
+                break
+        self.running.CbDelOnFdRead(self.logOutputPkgCatUpdate)
+        self.running.CbDelOnFdRead(self.logOutput)
+        return self.PkgCatInstalled
+
