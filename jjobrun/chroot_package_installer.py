@@ -151,9 +151,6 @@ class chrootPackageFacard(object):
     def updatePackages(self):
         if hasattr(self, '_packageInstallerImp'):
             return self._packageInstallerImp.updatePackages()
-    def installPackages(self,packages):
-        if hasattr(self, '_packageInstallerImp'):
-            return self._packageInstallerImp.installPackages(packages)
 
 def tester_owen():
     obj2test = ChrootPackageInstallerRedhat()
