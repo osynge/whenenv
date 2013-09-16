@@ -158,7 +158,7 @@ class ChrootPackageInstallerBase(object):
         self.waitingOnPromptPkgCatUpdateStart = True
         self.PkgCatInstalled = set([])
         #self.shell.Write("apt-get update -y\n")
-        cmd = "%s\n'" % (self.cmdQueryPackageInstalled)
+        cmd = "%s\n" % (self.cmdQueryPackageInstalled)
         #cmd = "\necho\n"
         self.running.CbAddOnFdRead(self.logOutputPkgCatUpdate)
         startPrompt = prompts.GeneratePrompt()
