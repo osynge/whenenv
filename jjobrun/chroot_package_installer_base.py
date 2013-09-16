@@ -38,7 +38,8 @@ class ChrootPackageInstallerBase(object):
         self.chrootCmd = kwargs.get('command', None)
         self.logOut = logging.getLogger("pkg.out")
         self.logErr = logging.getLogger("pkg.err")
-    
+        self.cmdInstallPackage = None
+
     def logOutput(self,fd,data,args,keys):
         log = self.log
         if fd == 0:
@@ -88,3 +89,59 @@ class ChrootPackageInstallerBase(object):
         for pack in missing:
             self.installPackage(pack)
         
+    def installPackage(self,package):
+        if self.cmdInstallPackage == None:
+            self.log.error("programing error")
+        Now = datetime.datetime.now()
+        self.SyncTime = syncDelay + Now
+        TimeOutTime = timeoutDelay + Now
+        self.waitingOnPromptPkgInstallStart = True
+        self.waitingOnPromptPkgInstallEnd = False
+        passenv_ignored = set(["PATH","SHLVL","OLDPWD","PS1"])
+        startPrompt = prompts.GeneratePrompt()
+        endPrompt = prompts.GeneratePrompt()
+        self.promptPkgInstallStart = re.compile(startPrompt)
+        self.promptPkgInstallEnd = re.compile(endPrompt)
+        self.log.debug("promptPkgInstallStart %s" %(startPrompt))
+        self.log.debug("promptPkgInstallEnd %s" %(endPrompt))
+        self.running.CbAddOnFdRead(self.logOutputPkginstall)
+        self.running.Write("echo %s\n" % (startPrompt))
+        
+        while self.waitingOnPromptPkgInstallStart == True:
+            self.running.Comunicate(timeout = 1)
+            Now = datetime.datetime.now()
+            if Now > self.SyncTime:
+                self.log.error("echo sync")
+                self.running.Write("echo %s\n" % (startPrompt))
+                self.SyncTime = syncDelay + Now
+            if Now > TimeOutTime:
+                self.log.error("installPackage time out 1")
+                break
+        
+        
+        self.waitingOnPromptPkgInstallStart = True
+        self.waitingOnPromptPkgInstallEnd = False
+        self.running.Write("echo %s\n" % (startPrompt))
+        cmd = '%s %s\n' % (self.cmdInstallPackage,package)
+        self.running.Write(cmd)
+        self.log.info("PkgInstall %s" %(cmd.strip()))
+        self.running.Comunicate(timeout = 1)
+        self.running.Write("echo %s\n" % (endPrompt))
+        Now = datetime.datetime.now()
+        self.SyncTime = syncDelay + Now
+        TimeOutTime = timeoutDelay + Now
+        while self.waitingOnPromptPkgInstallEnd == True:
+            self.running.Comunicate(timeout = 1)
+            if Now > self.SyncTime:
+                self.log.error("echo sync")
+                self.running.Write("echo %s\n" % (endPrompt))
+                self.SyncTime = syncDelay + Now
+            if Now > TimeOutTime:
+                self.log.error("installPackage time out 2")
+                break
+        self.running.CbDelOnFdRead(self.logOutputPkginstall)
+        
+        return True
+    
+    
+ 

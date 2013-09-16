@@ -37,6 +37,7 @@ class ChrootPackageInstallerRedhat(chroot_package_installer_base.ChrootPackageIn
         # we still need these things chrootCmd, env):
         chroot_package_installer_base.ChrootPackageInstallerBase.__init__(self,args, kwargs)
         self.log = logging.getLogger("ChrootPackageInstallerRedhat")
+        self.cmdInstallPackage = "yum install -y -q"
         
     def logOutputPkg(self,fd,data,args,keys):
         lines = data.split('\n')
@@ -156,37 +157,5 @@ class ChrootPackageInstallerRedhat(chroot_package_installer_base.ChrootPackageIn
         self.running.CbDelOnFdRead(self.logOutputPkgCatUpdate)
         self.running.CbDelOnFdRead(self.logOutput)
         return self.PkgCatInstalled
-    def installPackage(self,package):  
-        self.log.info("installPackage")
-        self.running.CbAddOnFdRead(self.logOutput)
-        self.running.CbAddOnFdRead(self.logOutputPkg)
-        passenv_ignored = set(["PATH","SHLVL","OLDPWD","PS1"])
-        startPrompt = prompts.GeneratePrompt()
-        endPrompt = prompts.GeneratePrompt()
-        self.promptPkgInstallStart = re.compile(startPrompt)
-        self.promptPkgInstallEnd = re.compile(endPrompt)
-        self.log.info("promptPkgInstallStart %s" %(startPrompt))
-        self.log.info("promptPkgInstallEnd %s" %(endPrompt))
-        self.waitingOnPromptPkgInstallStart = True
-        self.waitingOnPromptPkgInstallEnd = False
-        self.running.Write("echo %s\n" % (startPrompt))
-        counter = 0
-        
-        cmd = "yum install -y -q %s\n" % (package)
-        self.log.info(cmd.strip())
-        self.log.info("PkgInstall %s" %(cmd.strip()))
-        self.running.Write(cmd)
-        self.log.info("PkgInstall %s" %(cmd.strip()))
-        self.running.Comunicate(timeout = 1)
-        self.running.Write("echo %s\n" % (endPrompt))
-        self.running.CbAddOnFdRead(self.logOutputPkg)
-        while self.waitingOnPromptPkgInstallEnd == True:
-            self.running.Comunicate(timeout = 1)
-        self.running.CbDelOnFdRead(self.logOutputPkg)
-        self.running.CbDelOnFdRead(self.logOutput)
-        
-        return True
-    
-    
 
  
