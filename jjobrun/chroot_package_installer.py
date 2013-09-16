@@ -144,14 +144,18 @@ class chrootPackageFacard(object):
         if hasattr(self, '_packageInstallerImp'):
             remotepath = self.transforExtUri(externalURI)
             return self._packageInstallerImp.installPackages(packages)
+        else:
+            self.log.error("No implementation")
     def initialise(self):
         if hasattr(self, '_packageInstallerImp'):
             return self._packageInstallerImp.initialise()
-    
+        else:
+            self.log.error("No implementation")
     def updatePackages(self):
         if hasattr(self, '_packageInstallerImp'):
             return self._packageInstallerImp.updatePackages()
-
+        else:
+            self.log.error("No implementation")
 def tester_owen():
     obj2test = ChrootPackageInstallerRedhat()
     print updatePackages
