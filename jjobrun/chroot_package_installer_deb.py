@@ -33,14 +33,9 @@ timeoutDelayShort = datetime.timedelta(seconds=5)
 class ChrootPackageInstallerDebian2(chroot_package_installer_base.ChrootPackageInstallerBase):
 
     def __init__(self, *args, **kwargs):
-        chroot_package_installer_base.ChrootPackageInstallerBase.__init__(self)
+        chroot_package_installer_base.ChrootPackageInstallerBase.__init__(self,args, kwargs)
         # we still need these things chrootCmd, env):
         self.log = logging.getLogger("ChrootPackageInstallerDebian2")
-        self.chrootCmd = kwargs.get('command', None)
-        self.logOut = logging.getLogger("pkg.out")
-        self.logErr = logging.getLogger("pkg.err")
-        
-        
         
     def logOutputPkg(self,fd,data,args,keys):
         lines = data.split('\n')
