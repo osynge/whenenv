@@ -24,32 +24,19 @@ import time
 import json
 import datetime
 
+import chroot_package_installer_base
 
 syncDelay = datetime.timedelta(seconds=100)
 timeoutDelay = datetime.timedelta(seconds=500)
 syncDelayShort = datetime.timedelta(seconds=1)
 timeoutDelayShort = datetime.timedelta(seconds=5)
 
-class ChrootPackageInstallerRedhat(object):
+class ChrootPackageInstallerRedhat(chroot_package_installer_base.ChrootPackageInstallerBase):
 
     def __init__(self, *args, **kwargs):
         # we still need these things chrootCmd, env):
+        chroot_package_installer_base.ChrootPackageInstallerBase.__init__(self,args, kwargs)
         self.log = logging.getLogger("ChrootPackageInstallerRedhat")
-        self.chrootCmd = kwargs.get('command', None)
-        self.logOut = logging.getLogger("pkg.out")
-        self.logErr = logging.getLogger("pkg.err")
-        
-    
-    def logOutput(self,fd,data,args,keys):
-        log = self.log
-        if fd == 0:
-            log = self.logOut
-        if fd == 1:
-            log = self.logErr
-        for line in data.split('\n'):
-            cleanline = line.strip()
-            if len(cleanline) > 0:
-                log.info(cleanline)
         
     def logOutputPkg(self,fd,data,args,keys):
         lines = data.split('\n')
@@ -229,7 +216,4 @@ class ChrootPackageInstallerRedhat(object):
         for pack in missing:
             self.installPackage(pack)
         
-        
-    def finalise(self):
-        if self.running.returncode == None:
-            self.running.Write("exit 0\n")
+ 
