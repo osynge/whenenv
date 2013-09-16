@@ -12,7 +12,7 @@ import re
 import base64
 import shutil
 
-from jjobrun.chroot_package_installer import ChrootPackageInstallerRedhat ,ChrootPackageInstallerDebian2
+from jjobrun.chroot_package_installer import chrootPackageFacard
 from jjobrun.chroot_script_runner import runnershell2  as runnershell
 
 
@@ -194,7 +194,7 @@ class jobPartRun:
         alreadyinstalled = []
         chrootdir = env['CHROOT']
         cmd = "/usr/sbin/chroot %s" % (chrootdir)
-        pi = ChrootPackageInstallerDebian2(command = cmd,enviroment = env)
+        pi = chrootPackageFacard(command = cmd,enviroment = env, packaging = "deb")
         initok = pi.initialise()
         self.log.info("2222")
         if  initok == False:
@@ -231,7 +231,7 @@ class jobPartRun:
         alreadyinstalled = []
         chrootdir = env['CHROOT']
         cmd = "/usr/sbin/chroot %s /bin/sh" % (chrootdir)
-        pi = ChrootPackageInstallerRedhat(command = cmd,enviroment = env)
+        pi = ChrootPackageInstaller(command = cmd,enviroment = env)
         self.log.info("11111111")
         initok = pi.initialise()
         if  initok == False:

@@ -34,10 +34,14 @@ class chrootPackageFacard(object):
     """Facade class for mulitple implementations of uploader,
     Should be robust for setting the impleemntation or attributes
     in any order."""
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         self.log = logging.getLogger("uploaderFacade")
         self._packageInstallerImp = None
+        self.packaging = kwargs.get('packaging', None)
+        self.chrootCmd = kwargs.get('command', None)
+        self.chrootEnv = kwargs.get('enviroment', None)
         self.externalPrefix = None
+        
     def HasImplementation(self):
         if hasattr(self, '_packageInstallerImp'):
             return True
@@ -52,10 +56,10 @@ class chrootPackageFacard(object):
             if hasattr(self, '_packageInstallerImp'):
                 if self._packageInstallerImp != None:
                     if hasattr(self._packageInstallerImp,'remotePrefix'):
-                        return self._packageInstallerImp.remotePrefix
+                        return self._packageInstallerImp.chrootPath
                     else:
                         return None
-            return self._remotePrefix
+            return self._chrootPath
 
         def fset(self, path):
             self._chrootPath = path
@@ -64,6 +68,50 @@ class chrootPackageFacard(object):
                     self._packageInstallerImp.chrootPath = path
         def fdel(self):
             del self._chrootPath
+        return locals()
+
+    @Property
+    def chrootCmd():
+        doc = "The person's name"
+
+        def fget(self):
+            if hasattr(self, '_packageInstallerImp'):
+                if self._packageInstallerImp != None:
+                    if hasattr(self._packageInstallerImp,'chrootCmd'):
+                        return self._packageInstallerImp.chrootCmd
+                    else:
+                        return None
+            return self._chrootCmd
+
+        def fset(self, cmd):
+            self._chrootCmd = path
+            if hasattr(self, '_packageInstallerImp'):
+                if self._packageInstallerImp != None:
+                    self._packageInstallerImp.chrootCmd = cmd
+        def fdel(self):
+            del self._chrootCmd
+        return locals()
+
+    @Property
+    def chrootEnv():
+        doc = "The person's name"
+
+        def fget(self):
+            if hasattr(self, '_packageInstallerImp'):
+                if self._packageInstallerImp != None:
+                    if hasattr(self._packageInstallerImp,'chrootEnv'):
+                        return self._packageInstallerImp.chrootEnv
+                    else:
+                        return None
+            return self._chrootEnv
+
+        def fset(self, env):
+            self._chrootEnv = env
+            if hasattr(self, '_packageInstallerImp'):
+                if self._packageInstallerImp != None:
+                    self._packageInstallerImp.chrootEnv = env
+        def fdel(self):
+            del self._chrootEnv
         return locals()
 
     @Property
@@ -84,8 +132,10 @@ class chrootPackageFacard(object):
                 self.log.error("Invalid packagin sellected '%s'" % (name))
                 del(self._packageInstallerImp)
             if hasattr(self, '_packageInstallerImp'):
-                self._packageInstallerImp.remotePrefix = self.remotePrefix            
-            
+                self._packageInstallerImp.chrootEnv = self.chrootEnv
+                self._packageInstallerImp.chrootCmd = self.chrootCmd
+                self._packageInstallerImp.chrootPath = self.chrootPath
+
         def fdel(self):
             del self._uploader
         return locals()
@@ -93,6 +143,15 @@ class chrootPackageFacard(object):
     def installPackages(self,packages):
         if hasattr(self, '_packageInstallerImp'):
             remotepath = self.transforExtUri(externalURI)
+            return self._packageInstallerImp.installPackages(packages)
+    def initialise(self):
+        if hasattr(self, '_packageInstallerImp'):
+            return self._packageInstallerImp.initialise()
+    def updatePackages(self, '_packageInstallerImp'):
+        if hasattr(self, '_packageInstallerImp'):
+            return self._packageInstallerImp.updatePackages()
+    def installPackages(self,packages):
+        if hasattr(self, '_packageInstallerImp'):
             return self._packageInstallerImp.installPackages(packages)
 
 def tester_owen():
