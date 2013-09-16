@@ -142,7 +142,6 @@ class chrootPackageFacard(object):
 
     def installPackages(self,packages):
         if hasattr(self, '_packageInstallerImp'):
-            remotepath = self.transforExtUri(externalURI)
             return self._packageInstallerImp.installPackages(packages)
         else:
             self.log.error("No implementation")
