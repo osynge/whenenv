@@ -173,6 +173,25 @@ class jobPartRun:
             self.log.info("Copying directory=%s,src=%s,dest=%s" % (directory,src,dest))
             shutil.copyfile(src, dest)
         return True
+    
+    def _installPackages(self,pi):
+        initok = pi.initialise()
+        self.log.info("2222")
+        if  initok == False:
+            self.log.info("INITIALISATION FAILED")
+            return False
+        self.log.info("bbb")
+        initok = pi.updatePackages()
+        if  initok == False:
+            return False
+        self.log.info("aaa")
+        initok = pi.installPackages(depnedacylist)
+        if  initok == False:
+            return False
+        self.log.info("333")
+        pi.finalise()
+        return True
+    
             
     def packagesDebain(self,jobpart,env):
         self.log.info("packagesDebain(%s,%s)" % (jobpart,env))
@@ -195,22 +214,7 @@ class jobPartRun:
         chrootdir = env['CHROOT']
         cmd = "/usr/sbin/chroot %s" % (chrootdir)
         pi = ChrootPackageInstaller(command = cmd,enviroment = env, packaging = "deb")
-        initok = pi.initialise()
-        self.log.info("2222")
-        if  initok == False:
-            self.log.info("INITIALISATION FAILED")
-            return False
-        self.log.info("bbb")
-        initok = pi.updatePackages()
-        if  initok == False:
-            return False
-        self.log.info("aaa")
-        initok = pi.installPackages(depnedacylist)
-        if  initok == False:
-            return False
-        self.log.info("333")
-        initok.finalise()
-        return True
+        return self._installPackages(pi)
         
     def packagesScientific(self,jobpart,env):
         self.log.info("packagesScientific(%s,%s)" % (jobpart,env))
@@ -233,23 +237,7 @@ class jobPartRun:
         chrootdir = env['CHROOT']
         cmd = "/usr/sbin/chroot %s /bin/sh" % (chrootdir)
         pi = ChrootPackageInstaller(command = cmd,enviroment = env,packaging = "rpm")
-        self.log.info("11111111")
-        initok = pi.initialise()
-        if  initok == False:
-            self.log.info("INITIALISATION FAILED")
-            return False
-        self.log.info("222222222222")
-        initok = pi.updatePackages()
-        if  initok == False:
-            self.log.info("updatePackages failed")
-            return False
-        self.log.info("333333333333")
-        initok = pi.installPackages(depnedacylist)
-        if  initok == False:
-            return False
-        self.log.info("44444444")
-        initok.finalise()
-        return True
+        return self._installPackages(pi)
         
         
         
