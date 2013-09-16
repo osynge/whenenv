@@ -84,7 +84,7 @@ class chrootPackageFacard(object):
             return self._chrootCmd
 
         def fset(self, cmd):
-            self._chrootCmd = path
+            self._chrootCmd = cmd
             if hasattr(self, '_packageInstallerImp'):
                 if self._packageInstallerImp != None:
                     self._packageInstallerImp.chrootCmd = cmd
