@@ -147,7 +147,8 @@ class chrootPackageFacard(object):
     def initialise(self):
         if hasattr(self, '_packageInstallerImp'):
             return self._packageInstallerImp.initialise()
-    def updatePackages(self, '_packageInstallerImp'):
+    
+    def updatePackages(self):
         if hasattr(self, '_packageInstallerImp'):
             return self._packageInstallerImp.updatePackages()
     def installPackages(self,packages):
