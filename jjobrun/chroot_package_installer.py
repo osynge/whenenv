@@ -18,6 +18,8 @@ import time
 import json
 import datetime
 
+import chroot_package_installer_deb
+import chroot_package_installer_rpm
 
 
 syncDelay = datetime.timedelta(seconds=100)
@@ -25,460 +27,73 @@ timeoutDelay = datetime.timedelta(seconds=500)
 syncDelayShort = datetime.timedelta(seconds=1)
 timeoutDelayShort = datetime.timedelta(seconds=5)
 
+def Property(func):
+    return property(**func())
 
-
-class ChrootPackageInstallerDebian2(object):
-
-    def __init__(self, *args, **kwargs):
-        # we still need these things chrootCmd, env):
-        self.log = logging.getLogger("ChrootPackageInstallerDebian2")
-        self.chrootCmd = kwargs.get('command', None)
-        self.logOut = logging.getLogger("pkg.out")
-        self.logErr = logging.getLogger("pkg.err")
-        
-    
-    def logOutput(self,fd,data,args,keys):
-        log = self.log
-        if fd == 0:
-            log = self.logOut
-        if fd == 1:
-            log = self.logErr
-        for line in data.split('\n'):
-            cleanline = line.strip()
-            if len(cleanline) > 0:
-                log.info(cleanline)
-        
-    def logOutputPkg(self,fd,data,args,keys):
-        lines = data.split('\n')
-        for line in lines:
-            if len(line) == 0:
-                continue
-            if self.waitingOnPromptPkgInstallEnd == True:
-                matches = self.promptPkgInstallEnd.match(line)
-                if matches != None:
-                    self.waitingOnPromptPkgInstallEnd = False
-                    continue
-            if self.waitingOnPromptPkgInstallStart == True:
-                matches = self.promptPkgInstallStart.match(line)
-                if matches != None:
-                    self.waitingOnPromptPkgInstallStart = False
-                    self.waitingOnPromptPkgInstallEnd = True
-                    continue
-                
-            #self.logOutput(fd,data,args,keys)
-            
-    def logOutputPkgCatUpdate(self,fd,data,args,keys):
-        lines = data.split('\n')
-        foundpackages = set([])
-        deinstalledPackages = set([])
-        for line in lines:
-            cleanline = line.strip()
-            if len(cleanline) == 0:
-                continue
-            if self.waitingOnPromptPkgCatUpdateEnd == True:
-                matches = self.promptPkgCatUpdateEnd.match(line)
-                if matches != None:
-                    self.waitingOnPromptPkgCatUpdateEnd = False
-                    continue
-            if self.waitingOnPromptPkgCatUpdateStart == True:
-                matches = self.promptPkgCatUpdateStart.match(line)
-                if matches != None:
-                    self.waitingOnPromptPkgCatUpdateStart = False
-                    self.waitingOnPromptPkgCatUpdateEnd = True
-                    continue
-            if not cleanline[:15] == '{ "Package" : "':
-               continue
-            fred = json.loads(cleanline)
-            
-            if fred["Status"] ==  'install ok installed':
-                if fred["Package"] == "rpm":
-                    print "adding rpm",fred["Status"]
-                foundpackages.add(str(fred["Package"]))
-                continue
-            if fred["Status"] ==  u'deinstall ok config-files':
-                deinstalledPackages.add(str(fred["Package"]))
-                continue
-            #print fred
-            self.logOutput(fd,data,args,keys)
-        
-        missing = foundpackages.difference(self.PkgCatInstalled)
-        for item in missing:
-            self.PkgCatInstalled.add(item)
-        missing = deinstalledPackages.difference(self.PkgCatInstalled)
-        for item in missing:
-            self.PkgCatDeinstall.add(item)
-        
-        
-        return True
-    def logOutputPkginstall(self,fd,data,args,keys):
-        #self.log.info("logOutputPkginstall")
-        Now = datetime.datetime.now()
-        self.SyncTime = syncDelay + Now
-        self.logOutput(fd,data,args,keys)
-        lines = data.split('\n')
-        foundpackages = set([])
-        deinstalledPackages = set([])
-        for line in lines:
-            cleanline = line.strip()
-            if len(cleanline) == 0:
-                continue
-            if self.waitingOnPromptPkgInstallEnd == True:
-                matches = self.promptPkgInstallEnd.match(line)
-                if matches != None:
-                    self.waitingOnPromptPkgInstallEnd = False
-                    continue
-            if self.waitingOnPromptPkgInstallStart == True:
-                matches = self.promptPkgInstallStart.match(line)
-                if matches != None:
-                    self.waitingOnPromptPkgInstallStart = False
-                    self.waitingOnPromptPkgInstallEnd = True
-                    continue
-        
-        
-        
-    def initialise(self):
-        if self.chrootCmd == None:
-            self.log.error("No chroot command set")
+class chrootPackageFacard(object):
+    """Facade class for mulitple implementations of uploader,
+    Should be robust for setting the impleemntation or attributes
+    in any order."""
+    def __init__(self):
+        self.log = logging.getLogger("uploaderFacade")
+        self._packageInstallerImp = None
+        self.externalPrefix = None
+    def HasImplementation(self):
+        if hasattr(self, '_packageInstallerImp'):
+            return True
+        else:
             return False
-        self.running = watcher.LogRunShell(command=self.chrootCmd)
-        self.running.Start()
-        self.running.Write("set -x \n")
-        self.running.Write("set -e \n")
-        
-    def updatePackages(self):
-        Now = datetime.datetime.now()
-        self.SyncTime = syncDelay + Now
-        TimeOutTime = timeoutDelay + Now
-        self.waitingOnPromptPkgCatUpdateEnd = False
-        
-        self.waitingOnPromptPkgCatUpdateStart = True
-        self.PkgCatInstalled = set([])
-        #self.shell.Write("apt-get update -y\n")
-        cmd = "/usr/bin/dpkg-query -W -f '{ \"Package\" : \"${Package}\", \"Status\" : \"${Status}\" }\n'"
-        self.running.CbAddOnFdRead(self.logOutputPkgCatUpdate)
-        startPrompt = prompts.GeneratePrompt()
-        endPrompt = prompts.GeneratePrompt()
-        
-        self.promptPkgCatUpdateStart = re.compile(startPrompt)
-        self.promptPkgCatUpdateEnd = re.compile(endPrompt)
-        
-        self.running.Write("echo %s\n" % (startPrompt))
-        
-        while self.promptPkgCatUpdateStart == True:
-            self.running.Comunicate(timeout = 1)
-            Now = datetime.datetime.now()
-            if Now > self.SyncTime:
-                self.log.error("echo sync")
-                self.running.Write("echo %s\n" % (startPrompt))
-                self.SyncTime = syncDelay + Now
-            if Now > TimeOutTime:
-                self.log.error("updatePackages time out 1")
-                break
-        self.SyncTime = syncDelay + Now
-        TimeOutTime = timeoutDelay + Now
-        self.running.Write("%s\n" % (cmd))
-        self.waitingOnPromptPkgCatUpdateEnd = True
-        counter = 0
-        self.running.Write("echo %s\n" % (endPrompt))
-        while self.waitingOnPromptPkgCatUpdateEnd == True:
-            self.running.Comunicate(timeout = 1)
-            Now = datetime.datetime.now()
-            if Now > self.SyncTime:
-                self.log.error("echo sync")
-                self.running.Write("echo %s\n" % (endPrompt))
-                self.SyncTime = syncDelay + Now
-                
-            if Now > TimeOutTime:
-                self.log.error("updatePackages time out 2")
-                break
-        self.running.CbDelOnFdRead(self.logOutputPkgCatUpdate)
-        return self.PkgCatInstalled
-    def installPackage(self,package):  
-        Now = datetime.datetime.now()
-        self.SyncTime = syncDelay + Now
-        TimeOutTime = timeoutDelay + Now
-        self.waitingOnPromptPkgInstallStart = True
-        self.waitingOnPromptPkgInstallEnd = False
-        passenv_ignored = set(["PATH","SHLVL","OLDPWD","PS1"])
-        startPrompt = prompts.GeneratePrompt()
-        endPrompt = prompts.GeneratePrompt()
-        self.promptPkgInstallStart = re.compile(startPrompt)
-        self.promptPkgInstallEnd = re.compile(endPrompt)
-        self.log.debug("promptPkgInstallStart %s" %(startPrompt))
-        self.log.debug("promptPkgInstallEnd %s" %(endPrompt))
-        self.running.CbAddOnFdRead(self.logOutputPkginstall)
-        self.running.Write("echo %s\n" % (startPrompt))
-        
-        while self.waitingOnPromptPkgInstallStart == True:
-            self.running.Comunicate(timeout = 1)
-            Now = datetime.datetime.now()
-            if Now > self.SyncTime:
-                self.log.error("echo sync")
-                self.running.Write("echo %s\n" % (startPrompt))
-                self.SyncTime = syncDelay + Now
-            if Now > TimeOutTime:
-                self.log.error("installPackage time out 1")
-                break
-        
-        
-        self.waitingOnPromptPkgInstallStart = True
-        self.waitingOnPromptPkgInstallEnd = False
-        self.running.Write("echo %s\n" % (startPrompt))
-        cmd = 'apt-get install -y %s\n' % (package)
-        self.running.Write(cmd)
-        self.log.info("PkgInstall %s" %(cmd.strip()))
-        self.running.Comunicate(timeout = 1)
-        self.running.Write("echo %s\n" % (endPrompt))
-        Now = datetime.datetime.now()
-        self.SyncTime = syncDelay + Now
-        TimeOutTime = timeoutDelay + Now
-        while self.waitingOnPromptPkgInstallEnd == True:
-            self.running.Comunicate(timeout = 1)
-            if Now > self.SyncTime:
-                self.log.error("echo sync")
-                self.running.Write("echo %s\n" % (endPrompt))
-                self.SyncTime = syncDelay + Now
-            if Now > TimeOutTime:
-                self.log.error("installPackage time out 2")
-                break
-        self.running.CbDelOnFdRead(self.logOutputPkginstall)
-        
-        return True
     
-    
-    
+    @Property
+    def chrootPath():
+        doc = "The person's name"
+
+        def fget(self):
+            if hasattr(self, '_packageInstallerImp'):
+                if self._packageInstallerImp != None:
+                    if hasattr(self._packageInstallerImp,'remotePrefix'):
+                        return self._packageInstallerImp.remotePrefix
+                    else:
+                        return None
+            return self._remotePrefix
+
+        def fset(self, path):
+            self._chrootPath = path
+            if hasattr(self, '_packageInstallerImp'):
+                if self._packageInstallerImp != None:
+                    self._packageInstallerImp.chrootPath = path
+        def fdel(self):
+            del self._chrootPath
+        return locals()
+
+    @Property
+    def packaging():
+        doc = """packaging type
+        can be rpm or deb"""
+
+        def fget(self):
+            return self._uploaderName
+
+        def fset(self, name):
+            self._uploader = name
+            if name == "rpm":
+                self._packageInstallerImp = chroot_package_installer_rpm.ChrootPackageInstallerRedhat()
+            elif name == "deb":
+                self._packageInstallerImp = chroot_package_installer_deb.ChrootPackageInstallerDebian2()
+            else:
+                self.log.error("Invalid packagin sellected '%s'" % (name))
+                del(self._packageInstallerImp)
+            if hasattr(self, '_packageInstallerImp'):
+                self._packageInstallerImp.remotePrefix = self.remotePrefix            
+            
+        def fdel(self):
+            del self._uploader
+        return locals()
+
     def installPackages(self,packages):
-        notinstalled = set([])
-        insalledPkg = self.updatePackages()
-        for pack in packages:
-            if pack in insalledPkg:
-                print pack, pack in insalledPkg
-                continue
-            notinstalled.add(pack)
-        
-        extra = insalledPkg.difference(packages)
-        
-        missing = set(packages).difference(insalledPkg)
-        #self.log.info("notinstalled %s" %(notinstalled))
-        #self.log.info("extra %s" %(extra))
-        for pack in missing:
-            self.installPackage(pack)
-        insalledPkg = self.updatePackages()
-        missing = set(packages).difference(insalledPkg)
-        for pack in missing:
-            self.installPackage(pack)
-        
-        
-    def finalise(self):
-        if self.running.returncode == None:
-            self.running.Write("exit 0\n")
-
-
-
-
-class ChrootPackageInstallerRedhat(object):
-
-    def __init__(self, *args, **kwargs):
-        # we still need these things chrootCmd, env):
-        self.log = logging.getLogger("ChrootPackageInstallerRedhat")
-        self.chrootCmd = kwargs.get('command', None)
-        self.logOut = logging.getLogger("pkg.out")
-        self.logErr = logging.getLogger("pkg.err")
-        
-    
-    def logOutput(self,fd,data,args,keys):
-        log = self.log
-        if fd == 0:
-            log = self.logOut
-        if fd == 1:
-            log = self.logErr
-        for line in data.split('\n'):
-            cleanline = line.strip()
-            if len(cleanline) > 0:
-                log.info(cleanline)
-        
-    def logOutputPkg(self,fd,data,args,keys):
-        lines = data.split('\n')
-        for line in lines:
-            if len(line) == 0:
-                continue
-            if self.waitingOnPromptPkgInstallEnd == True:
-                matches = self.promptPkgInstallEnd.match(line)
-                if matches != None:
-                    self.waitingOnPromptPkgInstallEnd = False
-                    continue
-            if self.waitingOnPromptPkgInstallStart == True:
-                matches = self.promptPkgInstallStart.match(line)
-                if matches != None:
-                    self.waitingOnPromptPkgInstallStart = False
-                    self.waitingOnPromptPkgInstallEnd = True
-                    continue
-                
-            self.logOutput(fd,data,args,keys)
-            
-    def logOutputPkgCatUpdate(self,fd,data,args,keys):
-        self.log.error("logOutputPkgCatUpdate start")
-        lines = data.split('\n')
-        foundpackages = set([])
-        deinstalledPackages = set([])
-        for line in lines:
-            cleanline = line.strip()
-            if len(cleanline) == 0:
-                continue
-            if self.waitingOnPromptPkgCatUpdateEnd == True:
-                matches = self.promptPkgCatUpdateEnd.match(line)
-                if matches != None:
-                    self.waitingOnPromptPkgCatUpdateEnd = False
-                    continue
-                for item in line.split(','):
-                    if len(item) == 0:
-                        continue
-                    foundpackages.add(item)
-            if self.waitingOnPromptPkgCatUpdateStart == True:
-                matches = self.promptPkgCatUpdateStart.match(line)
-                if matches != None:
-                    self.waitingOnPromptPkgCatUpdateStart = False
-                    self.waitingOnPromptPkgCatUpdateEnd = True
-                    print "hereh"
-                    continue
-            
-            
-            #print fred
-            #self.logOutput(fd,data,args,keys)
-        self.PkgCatInstalled = foundpackages
-        self.log.error("logOutputPkgCatUpdate end %s" % (len(foundpackages)))
-        return True
-    def logOutputPkginstall(self,fd,data,args,keys):    
-        self.logOutputPkg(fd,data,args,keys)
-    def initialise(self):
-        if self.chrootCmd == None:
-            self.log.error("No chroot command set")
-            return False
-        self.running = watcher.LogRunShell(command=self.chrootCmd)
-        self.running.Start()
-        self.running.Write("set -x \n")
-        self.running.Write("set -e \n")
-        
-    def updatePackages(self):
-        
-        rc = self.running.returncode()
-        self.log.error("rc=%s" % (rc))
-        Now = datetime.datetime.now()
-        self.SyncTime = syncDelay + Now
-        TimeOutTime = timeoutDelay + Now
-        self.waitingOnPromptPkgCatUpdateEnd = False
-        
-        self.waitingOnPromptPkgCatUpdateStart = True
-        self.PkgCatInstalled = set([])
-        #self.shell.Write("apt-get update -y\n")
-        cmd = '\nrpm -qa --qf ",%{NAME}"\n'
-        #cmd = "\necho\n"
-        self.running.CbAddOnFdRead(self.logOutputPkgCatUpdate)
-        startPrompt = prompts.GeneratePrompt()
-        endPrompt = prompts.GeneratePrompt()
-        self.running.CbAddOnFdRead(self.logOutput)
-        self.promptPkgCatUpdateStart = re.compile(startPrompt)
-        self.promptPkgCatUpdateEnd = re.compile(endPrompt)
-        self.log.error("starting lookp one")
-        self.running.Write("echo %s\n" % (startPrompt))
-        
-        while self.promptPkgCatUpdateStart == True:
-            self.running.Comunicate(timeout = 1)
-            rc = self.running.returncode()
-            if rc != None:
-                self.log.error("rc=%s" % (rc))
-            Now = datetime.datetime.now()
-            if Now > self.SyncTime:
-                self.log.error("echo sync")
-                self.running.Write("echo %s\n" % (startPrompt))
-                self.SyncTime = syncDelay + Now
-            if Now > TimeOutTime:
-                self.log.error("updatePackages time out 1")
-                break
-        self.SyncTime = syncDelay + Now
-        TimeOutTime = timeoutDelay + Now
-        self.running.Write("%s\n" % (cmd))
-        self.running.Write("echo %s\n" % (endPrompt))
-        self.waitingOnPromptPkgCatUpdateEnd = True
-        self.log.error("starting lookp two")
-        self.SyncTime = syncDelayShort + Now
-        TimeOutTime = timeoutDelayShort + Now
-        while self.waitingOnPromptPkgCatUpdateEnd == True:
-            self.running.Comunicate(timeout = 1)
-            Now = datetime.datetime.now()
-            rc = self.running.returncode()
-            if rc != None:
-                self.log.error("rc=%s" % (rc))
-            if Now > self.SyncTime:
-                
-                self.log.error("echo sync 44")
-                self.running.Write("\necho %s\n" % (endPrompt))
-                self.SyncTime = syncDelayShort + Now
-                
-            if Now > TimeOutTime:
-                self.log.error("updatePackages time out 2")
-                break
-        self.running.CbDelOnFdRead(self.logOutputPkgCatUpdate)
-        self.running.CbDelOnFdRead(self.logOutput)
-        return self.PkgCatInstalled
-    def installPackage(self,package):  
-        self.log.info("installPackage")
-        self.running.CbAddOnFdRead(self.logOutput)
-        self.running.CbAddOnFdRead(self.logOutputPkg)
-        passenv_ignored = set(["PATH","SHLVL","OLDPWD","PS1"])
-        startPrompt = prompts.GeneratePrompt()
-        endPrompt = prompts.GeneratePrompt()
-        self.promptPkgInstallStart = re.compile(startPrompt)
-        self.promptPkgInstallEnd = re.compile(endPrompt)
-        self.log.info("promptPkgInstallStart %s" %(startPrompt))
-        self.log.info("promptPkgInstallEnd %s" %(endPrompt))
-        self.waitingOnPromptPkgInstallStart = True
-        self.waitingOnPromptPkgInstallEnd = False
-        self.running.Write("echo %s\n" % (startPrompt))
-        counter = 0
-        
-        cmd = "yum install -y -q %s\n" % (package)
-        self.log.info(cmd.strip())
-        self.log.info("PkgInstall %s" %(cmd.strip()))
-        self.running.Write(cmd)
-        self.log.info("PkgInstall %s" %(cmd.strip()))
-        self.running.Comunicate(timeout = 1)
-        self.running.Write("echo %s\n" % (endPrompt))
-        self.running.CbAddOnFdRead(self.logOutputPkg)
-        while self.waitingOnPromptPkgInstallEnd == True:
-            self.running.Comunicate(timeout = 1)
-        self.running.CbDelOnFdRead(self.logOutputPkg)
-        self.running.CbDelOnFdRead(self.logOutput)
-        
-        return True
-    
-    
-    
-    def installPackages(self,packages):
-        notinstalled = set([])
-        insalledPkg = self.updatePackages()
-        for pack in packages:
-            if pack in insalledPkg:
-                print pack, pack in insalledPkg
-                continue
-            notinstalled.add(pack)
-        
-        extra = insalledPkg.difference(packages)
-        
-        missing = set(packages).difference(insalledPkg)
-        self.log.info("notinstalled %s" %(notinstalled))
-        self.log.info("extra %s" %(extra))
-        for pack in missing:
-            self.installPackage(pack)
-        insalledPkg = self.updatePackages()
-        missing = set(packages).difference(insalledPkg)
-        for pack in missing:
-            self.installPackage(pack)
-        
-        
-    def finalise(self):
-        if self.running.returncode == None:
-            self.running.Write("exit 0\n")
+        if hasattr(self, '_packageInstallerImp'):
+            remotepath = self.transforExtUri(externalURI)
+            return self._packageInstallerImp.installPackages(packages)
 
 def tester_owen():
     obj2test = ChrootPackageInstallerRedhat()
