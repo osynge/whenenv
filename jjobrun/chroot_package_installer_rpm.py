@@ -89,16 +89,10 @@ class ChrootPackageInstallerRedhat(chroot_package_installer_base.ChrootPackageIn
         self.PkgCatInstalled = foundpackages
         self.log.error("logOutputPkgCatUpdate end %s" % (len(foundpackages)))
         return True
+
     def logOutputPkginstall(self,fd,data,args,keys):    
         self.logOutputPkg(fd,data,args,keys)
-    def initialise(self):
-        if self.chrootCmd == None:
-            self.log.error("No chroot command set")
-            return False
-        self.running = watcher.LogRunShell(command=self.chrootCmd)
-        self.running.Start()
-        self.running.Write("set -x \n")
-        self.running.Write("set -e \n")
+
         
     def updatePackages(self):
         
