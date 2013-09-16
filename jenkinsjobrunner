@@ -209,6 +209,7 @@ class jobPartRun:
         if  initok == False:
             return False
         self.log.info("333")
+        initok.finalise()
         return True
         
     def packagesScientific(self,jobpart,env):
@@ -247,6 +248,7 @@ class jobPartRun:
         if  initok == False:
             return False
         self.log.info("44444444")
+        initok.finalise()
         return True
         
         

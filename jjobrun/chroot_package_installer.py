@@ -155,6 +155,11 @@ class chrootPackageFacard(object):
             return self._packageInstallerImp.updatePackages()
         else:
             self.log.error("No implementation")
+    def finalise(self):
+        if hasattr(self, '_packageInstallerImp'):
+            return self._packageInstallerImp.updatePackages()
+        else:
+            self.log.error("No implementation")
 def tester_owen():
     obj2test = ChrootPackageInstallerRedhat()
     print updatePackages
