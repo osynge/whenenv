@@ -206,6 +206,8 @@ class jobPartRun:
                 if "Debian" in jobpart["shell"]["dependancies"].keys():
                     self.log.info("found the answer")
                     depnedacylist = list(jobpart["shell"]["dependancies"]["Debian"])
+        if not 'CHROOT' in env.keys():
+            return True
         chrootdir = env['CHROOT']
         cmd = "/usr/sbin/chroot %s" % (chrootdir)
         pi = ChrootPackageInstaller(command = cmd,enviroment = env, packaging = "deb")
@@ -221,6 +223,8 @@ class jobPartRun:
                 if "Scientific" in jobpart["shell"]["dependancies"].keys():
                     self.log.info("found the answer")
                     depnedacylist = list(jobpart["shell"]["dependancies"]["Scientific"])
+        if not 'CHROOT' in env.keys():
+            return True
         chrootdir = env['CHROOT']
         cmd = "/usr/sbin/chroot %s /bin/sh" % (chrootdir)
         pi = ChrootPackageInstaller(command = cmd,enviroment = env,packaging = "rpm")
