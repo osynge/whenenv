@@ -61,7 +61,7 @@ class ChrootPackageInstallerRedhat(chroot_package_installer_base.ChrootPackageIn
             self.logOutput(fd,data,args,keys)
             
     def logOutputPkgCatUpdate(self,fd,data,args,keys):
-        self.log.error("logOutputPkgCatUpdate start")
+        self.log.debug("logOutputPkgCatUpdate start")
         lines = data.split('\n')
         foundpackages = set([])
         deinstalledPackages = set([])
@@ -92,7 +92,7 @@ class ChrootPackageInstallerRedhat(chroot_package_installer_base.ChrootPackageIn
             #print fred
             #self.logOutput(fd,data,args,keys)
         self.PkgCatInstalled = foundpackages
-        self.log.error("logOutputPkgCatUpdate end %s" % (len(foundpackages)))
+        self.log.debug("logOutputPkgCatUpdate end len(foundpackages)=%s" % (len(foundpackages)))
         return True
 
     def logOutputPkginstall(self,fd,data,args,keys):    
