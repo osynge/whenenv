@@ -64,9 +64,13 @@ class ChrootPackageInstallerBase(object):
         
         
     def finalise(self):
-        if self.running.returncode == None:
-            self.running.Write("exit 0\n")
-
+        self.waitingOnExit = (self.running.returncode == None)
+        while self.waitingOnExit == True:
+            time.sleep(1)
+            if self.running.returncode != None:
+                    self.waitingOnExit = False
+            self.running.Write("\nexit 0\n")
+            
     
     def installPackages(self,packages):
         notinstalled = set([])
@@ -140,7 +144,6 @@ class ChrootPackageInstallerBase(object):
                 self.log.error("installPackage time out 2")
                 break
         self.running.CbDelOnFdRead(self.logOutputPkginstall)
-        
         return True
     
     
