@@ -89,7 +89,7 @@ class ChrootPackageInstallerDebian2(chroot_package_installer_base.ChrootPackageI
                 deinstalledPackages.add(str(fred["Package"]))
                 continue
             #print fred
-            self.logOutput(fd,data,args,keys)
+            #self.logOutput(fd,data,args,keys)
         
         missing = foundpackages.difference(self.PkgCatInstalled)
         for item in missing:

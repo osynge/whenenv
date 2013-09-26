@@ -15,7 +15,14 @@ if [ "X${ROOTDIR}" = "X" ] ; then
 fi
 tar -zxvf artifacts.tgz
 rm -f artifacts.tgz
-RELEASE_TYPE="release"
+RELEASE_TYPE="nightly"
+#if "X$RELEASE" == "Xdevelopment" then
+#    RELEASE_TYPE="nightly"
+#fi
+if "X$RELEASE" == "Xproduction" then
+    RELEASE_TYPE="release"
+fi
+
 PLATFORM="x86_64"
 FLAVOR="debian/wheezy"
 mkdir -p ${ROOTDIR}
