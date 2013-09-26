@@ -7,7 +7,7 @@ rm -f *.upload
 #rm -rf build
 ls
 #git clone https://github.com/osynge/deb-grid-virt-sort.git build
-
+STARTDIR=`pwd`
 cd build
 
 
@@ -48,5 +48,7 @@ git commit -m"changing dist" debian/changelog
 DIST=${DIST} ARCH=${ARCH} git-buildpackage --git-builder="git-pbuilder"  --git-cleaner="fakeroot debian/rules clean"
 
 #pdebuild --use-pdebuild-internal
-dput -u yokel_public_${RELEASE} ../*.changes
+cd $STARTDIR
+ls
+dput -u yokel_public_${RELEASE} *.changes
 #lockfile-remove /tmp/foo
