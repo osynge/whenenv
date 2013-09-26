@@ -66,6 +66,7 @@ class ChrootPackageInstallerBase(object):
     def finalise(self):
         self.waitingOnExit = (self.running.returncode == None)
         while self.waitingOnExit == True:
+            self.log.error("Waiting for exit.")
             time.sleep(1)
             if self.running.returncode != None:
                     self.waitingOnExit = False
