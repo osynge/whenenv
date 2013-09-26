@@ -14,7 +14,7 @@ cd $BUILD_SRC
 python setup.py sdist
 for src in $(ls dist/*.tar.gz | grep -v .src.tar.gz )
 do
-newname=$( echo ${src} | sed -e "s/tar\.gz/src\.tar\.gz/")
+newname=$( echo ${src} | sed -e "s/tar\.gz/${SRC_VERSION}.src\.tar\.gz/")
 mv $src $newname
 done
 
