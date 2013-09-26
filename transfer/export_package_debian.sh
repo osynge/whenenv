@@ -24,7 +24,7 @@ if [ "X$RELEASE" = "Xproduction" ] ; then
 fi
 
 PLATFORM="x86_64"
-FLAVOR="debian/wheezy"
+FLAVOR="debian/7"
 mkdir -p ${ROOTDIR}
 dir_tgz="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/src/tgz"
 dir_btgz="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/tgz"
