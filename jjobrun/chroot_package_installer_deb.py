@@ -104,7 +104,7 @@ class ChrootPackageInstallerDebian2(chroot_package_installer_base.ChrootPackageI
         #self.log.info("logOutputPkginstall")
         Now = datetime.datetime.now()
         self.SyncTime = syncDelay + Now
-        self.logOutput(fd,data,args,keys)
+        #self.logOutput(fd,data,args,keys)
         lines = data.split('\n')
         foundpackages = set([])
         deinstalledPackages = set([])
