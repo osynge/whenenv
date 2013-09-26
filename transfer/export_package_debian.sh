@@ -19,7 +19,7 @@ RELEASE_TYPE="nightly"
 #if "X$RELEASE" == "Xdevelopment" then
 #    RELEASE_TYPE="nightly"
 #fi
-if "X$RELEASE" == "Xproduction" then
+if [ "X$RELEASE" = "Xproduction" ] ; then
     RELEASE_TYPE="release"
 fi
 
