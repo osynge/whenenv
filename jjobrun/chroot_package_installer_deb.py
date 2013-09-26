@@ -37,7 +37,7 @@ class ChrootPackageInstallerDebian2(chroot_package_installer_base.ChrootPackageI
         # we still need these things chrootCmd, env):
         self.log = logging.getLogger("ChrootPackageInstallerDebian2")
         self.cmdInstallPackage = "apt-get install -y "
-        self.cmdQueryPackageInstalled = "/usr/bin/dpkg-query -W -f '{ \"Package\" : \"${Package}\", \"Status\" : \"${Status}\" }"
+        self.cmdQueryPackageInstalled = """/usr/bin/dpkg-query -W -f '{ "Package" : "${Package}", "Status" : "${Status}" }\n'"""
     def logOutputPkg(self,fd,data,args,keys):
         lines = data.split('\n')
         for line in lines:
