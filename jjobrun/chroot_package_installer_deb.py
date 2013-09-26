@@ -38,7 +38,11 @@ class ChrootPackageInstallerDebian2(chroot_package_installer_base.ChrootPackageI
         self.log = logging.getLogger("ChrootPackageInstallerDebian2")
         self.cmdInstallPackage = "apt-get install -y "
         self.cmdQueryPackageInstalled = """/usr/bin/dpkg-query -W -f '{ "Package" : "${Package}", "Status" : "${Status}" }\n'"""
+    
+    
     def logOutputPkg(self,fd,data,args,keys):
+        Now = datetime.datetime.now()
+        self.SyncTime = syncDelay + Now
         lines = data.split('\n')
         for line in lines:
             if len(line) == 0:
@@ -58,6 +62,8 @@ class ChrootPackageInstallerDebian2(chroot_package_installer_base.ChrootPackageI
             #self.logOutput(fd,data,args,keys)
             
     def logOutputPkgCatUpdate(self,fd,data,args,keys):
+        Now = datetime.datetime.now()
+        self.SyncTime = syncDelay + Now
         lines = data.split('\n')
         foundpackages = set([])
         deinstalledPackages = set([])
