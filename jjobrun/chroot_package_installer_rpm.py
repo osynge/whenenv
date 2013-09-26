@@ -38,7 +38,8 @@ class ChrootPackageInstallerRedhat(chroot_package_installer_base.ChrootPackageIn
         chroot_package_installer_base.ChrootPackageInstallerBase.__init__(self,args, kwargs)
         self.log = logging.getLogger("ChrootPackageInstallerRedhat")
         self.cmdInstallPackage = "yum install -y -q"
-        self.cmdQueryPackageInstalled = 'rpm -qa --qf ",%{NAME}"'
+        #self.cmdQueryPackageInstalled = 'rpm -qa --qf ",%{NAME}"'
+        self.cmdQueryPackageInstalled = """rpm -qa --qf '\{ "Package" : "%{NAME}", "Vendor" : "%{VENDOR}" \}\n'"""
         
     def logOutputPkg(self,fd,data,args,keys):
         lines = data.split('\n')
@@ -73,10 +74,10 @@ class ChrootPackageInstallerRedhat(chroot_package_installer_base.ChrootPackageIn
                 if matches != None:
                     self.waitingOnPromptPkgCatUpdateEnd = False
                     continue
-                for item in line.split(','):
-                    if len(item) == 0:
-                        continue
-                    foundpackages.add(item)
+                #for item in line.split(','):
+                #    if len(item) == 0:
+                #        continue
+                #    foundpackages.add(item)
             if self.waitingOnPromptPkgCatUpdateStart == True:
                 matches = self.promptPkgCatUpdateStart.match(line)
                 if matches != None:
@@ -84,8 +85,10 @@ class ChrootPackageInstallerRedhat(chroot_package_installer_base.ChrootPackageIn
                     self.waitingOnPromptPkgCatUpdateEnd = True
                     print "hereh"
                     continue
-            
-            
+            if not cleanline[:15] == '{ "Package" : "':
+               continue
+            fred = json.loads(cleanline)
+            foundpackages.add(str(fred["Package"]))
             #print fred
             #self.logOutput(fd,data,args,keys)
         self.PkgCatInstalled = foundpackages

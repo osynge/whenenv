@@ -122,7 +122,7 @@ class ChrootPackageInstallerBase(object):
             if Now > TimeOutTime:
                 self.log.error("installPackage time out 1")
                 break
-        
+        # we have now synced 
         
         self.waitingOnPromptPkgInstallStart = True
         self.waitingOnPromptPkgInstallEnd = False
