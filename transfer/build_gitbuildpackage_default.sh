@@ -4,6 +4,7 @@ rm -f *.debian.tar.gz
 rm -f *.dsc
 rm -f *.deb
 rm -f *.upload
+rm -f *.build
 #rm -rf build
 ls
 #git clone https://github.com/osynge/deb-grid-virt-sort.git build
