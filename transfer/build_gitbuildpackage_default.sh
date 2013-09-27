@@ -32,12 +32,20 @@ cd build
 #  git reset --hard origin/master
 #fi
 
-version=`awk '{gsub("[()]", ""); print $2; exit}' debian/changelog`
 
+if [ "X${RELEASE}" = "Xdevelopment" ] ; then
+version=`awk '{gsub("[()]", ""); print $2; exit}' debian/changelog`
 dch --force-distribution  -v "${version}+${DIST}${BUILD_NUMBER}${ARCH}" "Yokel ${DIST} build #${BUILD_NUMBER}" --distribution $DIST
 #dch --distribution ${DIST}
-
 git commit -m"changing dist" debian/changelog
+fi
+if [ "X${RELEASE}" = "Xproduction" ] ; then
+version=`awk '{gsub("[()]", ""); print $2; exit}' debian/changelog`
+dch --force-distribution  -v "${version}" "Yokel ${DIST} build #${BUILD_NUMBER}" --distribution $DIST
+#dch --distribution ${DIST}
+git commit -m"changing dist" debian/changelog
+fi
+
 #ctrlpatrh=`find | grep control`
 #cat $ctrlpatrh
 #TMPDIR=/tmp/jenkins_pbuilder_${BUILD_ID}_${EXECUTOR_NUMBER}/build
