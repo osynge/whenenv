@@ -37,6 +37,7 @@ class ChrootPackageInstallerRedhat(chroot_package_installer_base.ChrootPackageIn
         # we still need these things chrootCmd, env):
         chroot_package_installer_base.ChrootPackageInstallerBase.__init__(self,args, kwargs)
         self.log = logging.getLogger("ChrootPackageInstallerRedhat")
+        self.cmdUpdatePackageList = "yum update"
         self.cmdInstallPackage = "yum install -y -q"
         #self.cmdQueryPackageInstalled = 'rpm -qa --qf ",%{NAME}"'
         self.cmdQueryPackageInstalled = """rpm -qa --qf '\{ "Package" : "%{NAME}", "Vendor" : "%{VENDOR}" \}\n'"""

@@ -171,7 +171,7 @@ class ChrootPackageInstallerBase(object):
         self.promptPkgCatUpdateStart = re.compile(startPrompt)
         self.promptPkgCatUpdateEnd = re.compile(endPrompt)
         self.log.error("starting lookp one")
-        self.running.Write("echo %s\n" % (startPrompt))
+        self.running.Write("%s\necho %s\n" % (self.cmdUpdatePackageList,startPrompt))
         
         while self.promptPkgCatUpdateStart == True:
             self.running.Comunicate(timeout = 1)
