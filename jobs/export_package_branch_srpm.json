@@ -3,7 +3,7 @@
     "provides" : ["export_package"],
     "script" : "export_python_branch_srpm_scientific.sh",
     "variables" : {
-        "require_values" : { "RELEASE" : "development", "OPERATING_SYSTEM" : "Scientific"},
+        "require_values" : { "RELEASE" : "development", "OPERATING_SYSTEM" : "RHEL"},
         "require_keys" : []
     }
 }

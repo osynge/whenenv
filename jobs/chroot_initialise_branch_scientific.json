@@ -3,7 +3,7 @@
     "provides" : ["chroot_buildup_image"],
     "script" : "chroot-scientific-6-buildup-trunk.sh",
     "variables" : {
-        "require_values" : { "RELEASE" : "development", "OPERATING_SYSTEM" : "Scientific"},
+        "require_values" : { "RELEASE" : "development", "OPERATING_SYSTEM" : "RHEL"},
         "require_keys" : []
     }
 }

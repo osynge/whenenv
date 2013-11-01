@@ -4,7 +4,7 @@
     "script" : "build_autotools_tag_scientific.sh",
     "inherits" : ["branch_testing"],
     "variables" : {
-        "require_values" : { "OPERATING_SYSTEM" : "Scientific", 
+        "require_values" : { "OPERATING_SYSTEM" : "RHEL", 
             "BUILD_TYPE" : "autotools"},
         "require_keys" : ["SRC_VERSION","PRODUCT","BUILD_SRC"]
     }
