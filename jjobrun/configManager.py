@@ -318,6 +318,7 @@ class loaderBase(object):
         for CfgFile in knownFiles:
             if not os.path.isfile(CfgFile):
                 continue
+            self.log.debug("Load :%s" % (CfgFile))
             fp = open(CfgFile)
             try:
                 parsedJson = json.load(fp)
