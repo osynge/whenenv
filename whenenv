@@ -71,7 +71,6 @@ def main():
         LoggingLevel = logging.FATAL
     if LoggingLevelCounter >= 5:
         LoggingLevel = logging.CRITICAL
-    print LoggingLevel
     if options.log_config:
         logFile = options.log_config
     if logFile != None:
@@ -110,7 +109,7 @@ def main():
         log.error("No Enviroment variables set on the command line")
         sys.exit(4)
     
-    log.info("dirJobs=%s" % (jobsDir))
+    log.debug("dirJobs=%s" % (jobsDir))
     
     runnerObj = jjobrun.configManager.matrixRunner(matrixEnv=envvardict,
         dirEnviroments=envDir,
