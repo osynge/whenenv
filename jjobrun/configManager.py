@@ -258,6 +258,8 @@ class containerJobs(containerBase):
         lenMatchesKey = len(matches) 
         if lenMatchesKey == 0:
             self.log.error("No matching jobs for '%s' with %s" % (requirement,enviroment))
+            self.log.debug("possiblePlans count %s" % (len(possiblePlans)))
+            
             return []
         if lenMatchesKey == 1:
             return matches
