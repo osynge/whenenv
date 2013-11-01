@@ -370,7 +370,7 @@ class loaderJobs(loaderBase):
         resolutionStack = {}
         dependacyStack = {}
         if len(tree.keys()) == 0:
-            self.log.error("No matching jobs for")
+            self.log.error("No matching jobs plan")
             return []
         for key in tree.keys():
             DoneJob = set()
