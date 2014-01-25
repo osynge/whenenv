@@ -1,10 +1,11 @@
-
-from jjobrun.chroot_package_installer import ChrootPackageInstallerRedhat ,ChrootPackageInstallerDebian2
+from jjobrun.chroot_package_installer_rpm import ChrootPackageInstallerRedhat
+from jjobrun.chroot_package_installer_deb import ChrootPackageInstallerDebian2
 from jjobrun.chroot_script_runner import runnershell2
 import jjobrun.watcher
 import logging
 import time
 
+import unittest
 logging.basicConfig(level=logging.INFO)
 def t1():
     foo = ChrootPackageInstallerDebian(command="/bin/bash")
@@ -105,5 +106,12 @@ def t5():
     #foo.finalise()
 
 #t4()
-t5()
+#t5()
+import nose
 
+
+class TestModule_runnershell2(unittest.TestCase):
+    def test_initialise(self):    
+        foo = runnershell2("/bin/bash",{})
+        rc = foo.initialise()
+        nose.tools.assert_equal(rc ,False)

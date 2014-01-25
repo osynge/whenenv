@@ -1,7 +1,9 @@
 from jjobrun.__version__ import version
 from sys import version_info
-
-from distutils.core import setup
+try:
+    from setuptools import setup
+except:
+    from distutils.core import setup
 import os
 
 Application = 'whenenv'
@@ -37,8 +39,9 @@ setup(name=Application,
     author_email="owen.synge@desy.de",
     license='Apache Sytle License (2.0)',
     install_requires=[
-       "bash",
+       "nose >= 1.1.0",
         ],
+    test_suite = 'nose.collector',
     url = 'https://github.com/hepix-virtualisation/hepixvmilsubscriber',
     packages = ['jjobrun'],
     classifiers=[

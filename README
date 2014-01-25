@@ -1,14 +1,15 @@
 When Env
 ~~~~~~~~
 
-Simple application for doing continuous builds.
-
 whenenv is designed to keep the branching involved in build and 
 functional test scripts from growing out of control.
 
+You specify a list of enviroment variables and whenenv will then 
+try and reuse existing scritps to process the request.
 
+If it fails to find suitable scripts you shoudl specify soem minium script.
 
-components of the build isolated and reusable.
+When launching whenenv, always specify the PRODUCT enviroment variable. The components of the build are isolated and reusable.
 
 
 
