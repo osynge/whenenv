@@ -93,7 +93,7 @@ class ChrootPackageInstallerBase(object):
         missing = set(packages).difference(insalledPkg)
         for pack in missing:
             self.installPackage(pack)
-        
+
     def installPackage(self,package):
         self.log.info("PkgInstall start")
         rc = self.running.returncode()
@@ -157,6 +157,7 @@ class ChrootPackageInstallerBase(object):
                 break
         self.log.info("checking loop finished %s" %(cmd.strip()))
         self.running.CbDelOnFdRead(self.logOutputPkginstall)
+        self.log.info("PkgInstall finished")
         return True
     
     
