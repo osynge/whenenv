@@ -95,6 +95,15 @@ class ChrootPackageInstallerBase(object):
             self.installPackage(pack)
         
     def installPackage(self,package):
+<<<<<<< HEAD
+=======
+        self.log.info("PkgInstall start")
+        rc = self.running.returncode()
+        if rc != None:
+            self.log.info("Package install shell stopped")
+            self.initialise()
+        
+>>>>>>> 61bf947... soem better handling of packages
         if self.cmdInstallPackage == None:
             self.log.error("programing error")
         Now = datetime.datetime.now()
@@ -178,6 +187,7 @@ class ChrootPackageInstallerBase(object):
             rc = self.running.returncode()
             if rc != None:
                 self.log.error("rc=%s" % (rc))
+                break
             Now = datetime.datetime.now()
             if Now > self.SyncTime:
                 self.log.error("echo sync")
@@ -200,6 +210,7 @@ class ChrootPackageInstallerBase(object):
             rc = self.running.returncode()
             if rc != None:
                 self.log.error("rc=%s" % (rc))
+                break
             if Now > self.SyncTime:
                 
                 self.log.error("echo sync 44")
