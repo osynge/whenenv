@@ -116,8 +116,11 @@ class ChrootPackageInstallerBase(object):
         self.log.debug("promptPkgInstallEnd %s" %(endPrompt))
         self.running.CbAddOnFdRead(self.logOutputPkginstall)
         self.running.Write("echo %s\n" % (startPrompt))
-        
         while self.waitingOnPromptPkgInstallStart == True:
+            rc = self.running.returncode()
+            if rc != None:
+                self.log.error("rc=%s" % (rc))
+                break
             self.running.Comunicate(timeout = 1)
             Now = datetime.datetime.now()
             if Now > self.SyncTime:
@@ -141,6 +144,10 @@ class ChrootPackageInstallerBase(object):
         self.SyncTime = syncDelay + Now
         TimeOutTime = timeoutDelay + Now
         while self.waitingOnPromptPkgInstallEnd == True:
+            rc = self.running.returncode()
+            if rc != None:
+                self.log.error("rc=%s" % (rc))
+                break
             self.running.Comunicate(timeout = 1)
             if Now > self.SyncTime:
                 self.log.error("echo sync")
