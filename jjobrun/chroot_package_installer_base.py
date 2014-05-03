@@ -132,9 +132,8 @@ class ChrootPackageInstallerBase(object):
                 break
         # we have now synced 
         
-        self.waitingOnPromptPkgInstallStart = True
-        self.waitingOnPromptPkgInstallEnd = False
-        self.running.Write("echo %s\n" % (startPrompt))
+        self.waitingOnPromptPkgInstallStart = False
+        self.waitingOnPromptPkgInstallEnd = True
         cmd = '%s %s\n' % (self.cmdInstallPackage,package)
         self.running.Write(cmd)
         self.log.info("PkgInstall %s" %(cmd.strip()))
@@ -156,6 +155,7 @@ class ChrootPackageInstallerBase(object):
             if Now > TimeOutTime:
                 self.log.error("installPackage time out 2")
                 break
+        self.log.info("checking loop finished %s" %(cmd.strip()))
         self.running.CbDelOnFdRead(self.logOutputPkginstall)
         return True
     
