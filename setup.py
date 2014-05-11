@@ -1,9 +1,15 @@
 from jjobrun.__version__ import version
 from sys import version_info
+
 try:
-    from setuptools import setup
-except:
-    from distutils.core import setup
+    from setuptools import setup, find_packages
+except ImportError:
+	try:
+            from distutils.core import setup
+	except ImportError:
+            from ez_setup import use_setuptools
+            use_setuptools()
+            from setuptools import setup, find_packages
 import os
 
 Application = 'whenenv'

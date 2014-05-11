@@ -1,0 +1,6 @@
+Changelog
+~~~~~~~~~~
+
+whenenv-0.0.7
+    * default to use setuptools rather than distutils
+    * added nosetests as setup.py target
