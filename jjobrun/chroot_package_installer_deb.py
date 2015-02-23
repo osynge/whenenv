@@ -37,7 +37,8 @@ class ChrootPackageInstallerDebian2(chroot_package_installer_base.ChrootPackageI
         # we still need these things chrootCmd, env):
         self.log = logging.getLogger("ChrootPackageInstallerDebian2")
         self.cmdUpdatePackageList = "apt-get update"
-        self.cmdInstallPackage = "apt-get install -y "
+        #self.cmdInstallPackage = "apt-get install -y "
+        self.cmdInstallPackage = "export http_proxy=http://192.168.89.41:3128 ; apt-get install -y "
         self.cmdQueryPackageInstalled = """/usr/bin/dpkg-query -W -f '{ "Package" : "${Package}", "Status" : "${Status}" }\n'"""
     
     
