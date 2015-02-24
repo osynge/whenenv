@@ -1,6 +1,9 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.9
+    * Deleted lots of unmaintianed examples.
+
 whenenv-0.0.8
     * Fixed whenenv --version to show the correct number.
     * Added support for N script directories
