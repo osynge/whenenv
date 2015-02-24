@@ -534,12 +534,14 @@ class matrixRequiresStackPointer(object):
         script = self.JobContainer.allcontianed[item].dictionary["script"]
         fullpath = None
         for sdir in self.scriptDir:
-            tmpPath = "%s/%s" % (self.scriptDir , script)
+            tmpPath = "%s/%s" % (sdir , script)
             if not os.path.isfile(tmpPath):
                 continue
             fullpath = tmpPath    
         self.log.info("Running is script '%s'" % (script))
         self.log.info("Running is script '%s'" % (fullpath))
+        if fullpath == None:
+            return -1
         output = rs.runscript(fullpath)
         if output != 0:
             self.log.error("Job Part '%s' failed with '%s'" % (script,output))

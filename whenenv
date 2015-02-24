@@ -39,7 +39,7 @@ def main():
     envvardict = {}
     
     currentDir = os.path.dirname(os.path.realpath(__file__))
-    envDir = "%s/enviroments/" % (currentDir)
+    envDir = ["%s/enviroments/" % (currentDir)]
     jobsDir = ["%s/jobs/" % (currentDir)]
     scriptsDir  = ["%s/transfer/" % (currentDir)]
     
