@@ -1,6 +1,11 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.8
+    * Fixed whenenv --version to show the correct number.
+    * Added support for N script directories
+    * Added support for N Job directories.
+
 whenenv-0.0.7
     * default to use setuptools rather than distutils
     * added nosetests as setup.py target

@@ -4,6 +4,7 @@ import os
 import sys
 import optparse
 import jjobrun.configManager
+from jjobrun.__version__ import version
 
 def runJob(os,release):
     return 0
@@ -13,13 +14,13 @@ def main():
     reload(sys)
     sys.setdefaultencoding('utf-8')
     log = logging.getLogger("main")
-    p = optparse.OptionParser(version = "%prog " + "0.0.1")
+    p = optparse.OptionParser(version = "%prog " + version)
     p.add_option('--verbose', action ='count',help='Change global log level, increasing log output.', metavar='LOGFILE')
     p.add_option('--quiet', action ='count',help='Change global log level, decreasing log output.', metavar='LOGFILE')
     p.add_option('--log-config', action ='store',help='Logfile configuration file, (overrides command line).', metavar='LOGFILE')
-    p.add_option('--envvar', action ='append',help='Which enfiroment variables to whitelist.', metavar='ENVIROMENT VAR')
-    p.add_option('--dir-jobs', action ='append',help='directory storing json jobs.', metavar='ENVIROMENT VAR')
-    p.add_option('--dir-scripts', action ='append',help='directory storing jobs scripts.', metavar='ENVIROMENT VAR')
+    p.add_option('--envvar', action ='append',help='Which enfiroment variables to whitelist.', metavar='ENVIROMENT_VAR')
+    p.add_option('--dir-jobs', action ='append',help='directory storing json jobs.', metavar='DIR_JOB')
+    p.add_option('--dir-scripts', action ='append',help='directory storing jobs scripts.', metavar='DIR_SCRIPT')
     
     
     options, arguments = p.parse_args()

@@ -36,7 +36,6 @@ class holderBase(object):
     def getProvides(self):
         if u'provides' in self.dictionary.keys():
             value = self.dictionary["provides"]
-            #print value
             if isinstance(value, basestring):
                 value = [value]
                 
@@ -312,7 +311,6 @@ class loaderBase(object):
             return False
         
         for directory in self.cfgDir:
-            print directory, self.cfgDir
             if not os.path.isdir(directory):
                 continue
             for root, dirs, files in os.walk(directory):
