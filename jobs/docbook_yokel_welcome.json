@@ -1,9 +1,0 @@
-{
-    "name" : "docbook_yokel_welcome",
-    "variables" : {
-        "require_values" : { "PRODUCT" : "yokel-welcome-book" },
-        "require_keys" : [ "RELEASE" ]
-    },
-    "provides" : ["execution"],
-    "depends" : ["docbook_yokel_welcome_source","checkout_source","build_docbook","export_docbook"]
-}
