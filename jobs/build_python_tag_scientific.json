@@ -6,7 +6,7 @@
     "variables" : {
         "require_values" : { "RELEASE" : "production",
             "BUILD_TYPE" : "disttools",
-            "OPERATING_SYSTEM" : "RHEL"},
+            "OPERATING_SYSTEM" : "Scientific"},
         "require_keys" : []
     }
 }

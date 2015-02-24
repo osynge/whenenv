@@ -3,7 +3,7 @@
     "provides" : ["chroot_teardown"],
     "script" : "chroot-scientific-6-teardown.sh",
     "variables" : {
-        "require_values" : { "OPERATING_SYSTEM" : "RHEL"},
+        "require_values" : { "OPERATING_SYSTEM" : "Scientific"},
         "require_keys" : []
     }
 }

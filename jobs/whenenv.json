@@ -5,5 +5,5 @@
         "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
     },
     "provides" : ["execution"],
-    "depends" : ["whenenv_source","checkout_source","build_package","export_package"]
+    "depends" : ["whenenv_source","checkout_source","unittests","build_package","export_package"]
 }

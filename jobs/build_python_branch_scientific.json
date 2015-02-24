@@ -5,7 +5,7 @@
     "inherits" : ["branch_testing"],
     "variables" : {
         "require_values" : { "RELEASE" : "development" , 
-            "OPERATING_SYSTEM" : "RHEL" ,
+            "OPERATING_SYSTEM" : "Scientific" ,
             "BUILD_TYPE" : "disttools" },
         "require_keys" : []
     }
