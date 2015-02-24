@@ -1,9 +1,0 @@
-{
-    "name" : "pbuilder_matrix",
-    "variables" : {
-        "require_values" : { "PRODUCT" : "deb-grid-virt-sort"},
-        "require_keys" : ["NODE","ARCH","DIST","RELEASE"]
-    },
-    "provides" : ["execution"],
-    "depends" : ["deb_grid_virt_sort_source","checkout_source","build_package"]
-}

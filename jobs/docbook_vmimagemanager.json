@@ -1,9 +1,0 @@
-{
-    "name" : "docbook_vmimagemanager",
-    "variables" : {
-        "require_values" : { "PRODUCT" : "vmimagemanager_book"},
-        "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
-    },
-    "provides" : ["execution"],
-    "depends" : ["docbook_vmimagemanager_source","checkout_source","build_docbook_vmim","export_docbook"]
-}

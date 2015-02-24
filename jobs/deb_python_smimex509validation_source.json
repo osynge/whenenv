@@ -1,6 +1,0 @@
-{
-    "name" : "deb_python_smimex509validation_source",
-    "provides" : ["deb_python_smimex509validation_source"],
-    "script" : "deb_python_smimex509validation.sh",
-    "variables" : { "provides_keys" : ["GIT_SRC","GIT_DEST","GIT_TAG_FILTER"] }
-}

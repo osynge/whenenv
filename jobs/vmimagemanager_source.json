@@ -1,6 +1,0 @@
-{
-    "name" : "vmimagemanager_source",
-    "provides" : ["vmimagemanager_source"],
-    "script" : "vmimagemanager_source.sh",
-    "variables" : { "provides_keys" : ["GIT_SRC","GIT_DEST","GIT_TAG_FILTER"] }
-}

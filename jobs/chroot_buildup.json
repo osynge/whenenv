@@ -1,9 +1,0 @@
-{
-    "name" : "chroot_buildup",
-    "provides" : ["chroot_buildup"],
-    "variables" : {
-        "require_values" : { },
-        "require_keys" : []
-    },
-    "depends" : ["chroot_buildup_image","chroot_packages_install"]
-}

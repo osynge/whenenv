@@ -1,9 +1,0 @@
-{
-    "name" : "smimeX509validation",
-    "variables" : {
-        "require_values" : { "PRODUCT" : "smimeX509validation"},
-        "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
-    },
-    "provides" : ["execution"],
-    "depends" : ["smimeX509validation_source","checkout_source","build_package","export_package"]
-}

@@ -1,6 +1,0 @@
-{
-    "name" : "org-desy-grid-virt-sort-release_source",
-    "provides" : ["org-desy-grid-virt-sort-release_source"],
-    "script" : "org-desy-grid-virt-sort-release_source.sh",
-    "variables" : { "provides_keys" : ["SVN_SRC","SVN_DEST","SVN_TAG_FILTER"] }
-}

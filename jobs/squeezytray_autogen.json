@@ -1,6 +1,0 @@
-{
-    "name" : "squeezytray_autogen",
-    "provides" : ["squeezytray_autogen"],
-    "script" : "squeezytray_autogen.sh",
-    "variables" : { "provides_keys" : [] }
-}

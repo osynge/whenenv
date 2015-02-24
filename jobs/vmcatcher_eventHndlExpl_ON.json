@@ -1,9 +1,0 @@
-{
-    "name" : "vmcatcher_eventHndlExpl_ON",
-    "variables" : {
-        "require_values" : { "PRODUCT" : "vmcatcher_eventHndlExpl_ON"},
-        "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
-    },
-    "provides" : ["execution"],
-    "depends" : ["vmcatcher_eventHndlExpl_ON_source","checkout_source","build_package","export_package"]
-}

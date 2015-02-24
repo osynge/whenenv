@@ -1,9 +1,0 @@
-{
-    "name" : "vmimagemanager",
-    "variables" : {
-        "require_values" : { "PRODUCT" : "vmimagemanager"},
-        "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
-    },
-    "provides" : ["execution"],
-    "depends" : ["vmimagemanager_source","checkout_source","build_package","export_package"]
-}

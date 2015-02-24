@@ -1,8 +1,0 @@
-{
-    "name" : "deb_grid_virt_sort_source",
-    "provides" : ["deb_grid_virt_sort_source"],
-    "script" : "deb_grid_virt_sort_source.sh",
-    "variables" : { "provides_keys" : ["GIT_SRC","GIT_DEST","GIT_TAG_FILTER"] ,
-        "require_values" : { "PRODUCT" : "deb-grid-virt-sort" }
-    }
-}

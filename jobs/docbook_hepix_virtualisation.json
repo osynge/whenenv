@@ -1,9 +1,0 @@
-{
-    "name" : "docbook_hepix_virtualisation",
-    "variables" : {
-        "require_values" : { "PRODUCT" : "hepix-virtualisation-book" },
-        "require_keys" : [ "RELEASE" ]
-    },
-    "provides" : ["execution"],
-    "depends" : ["docbook_hepix_virtualisation_source","checkout_source","build_docbook","export_docbook"]
-}
