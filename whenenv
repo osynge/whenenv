@@ -18,8 +18,8 @@ def main():
     p.add_option('--quiet', action ='count',help='Change global log level, decreasing log output.', metavar='LOGFILE')
     p.add_option('--log-config', action ='store',help='Logfile configuration file, (overrides command line).', metavar='LOGFILE')
     p.add_option('--envvar', action ='append',help='Which enfiroment variables to whitelist.', metavar='ENVIROMENT VAR')
-    p.add_option('--dir-jobs', action ='store',help='directory storing json jobs.', metavar='ENVIROMENT VAR')
-    p.add_option('--dir-scripts', action ='store',help='directory storing jobs scripts.', metavar='ENVIROMENT VAR')
+    p.add_option('--dir-jobs', action ='append',help='directory storing json jobs.', metavar='ENVIROMENT VAR')
+    p.add_option('--dir-scripts', action ='append',help='directory storing jobs scripts.', metavar='ENVIROMENT VAR')
     
     
     options, arguments = p.parse_args()
@@ -39,8 +39,8 @@ def main():
     
     currentDir = os.path.dirname(os.path.realpath(__file__))
     envDir = "%s/enviroments/" % (currentDir)
-    jobsDir = "%s/jobs/" % (currentDir)
-    scriptsDir  = "%s/transfer/" % (currentDir)
+    jobsDir = ["%s/jobs/" % (currentDir)]
+    scriptsDir  = ["%s/transfer/" % (currentDir)]
     
     if 'VMCHNDL_ON_LOG_CONF' in os.environ:
         logFile = os.environ['VMCHNDL_ON_LOG_CONF']
@@ -110,7 +110,6 @@ def main():
         sys.exit(4)
     
     log.debug("dirJobs=%s" % (jobsDir))
-    
     runnerObj = jjobrun.configManager.matrixRunner(matrixEnv=envvardict,
         dirEnviroments=envDir,
         dirJobs=jobsDir,

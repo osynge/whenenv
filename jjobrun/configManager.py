@@ -123,7 +123,7 @@ class holderEnviroment(holderBase):
 class containerBase(object):
     def __init__(self, *args, **kwargs):
         self.log = logging.getLogger("containerBase")
-        self.cfgDir = kwargs.get('dirJobs', None)
+        self.cfgDir = kwargs.get('dirJobs', [])
         self.allcontianed = {}
         self.provides = {}
         
@@ -303,17 +303,22 @@ class containerEnviroment(containerBase):
 class loaderBase(object):
     def __init__(self, *args, **kwargs):
         self.log = logging.getLogger("loaderBase")
-        self.cfgDir = kwargs.get('cfgDir', None)
+        self.cfgDir = kwargs.get('cfgDir', [])
         self.cfgContainer = containerBase(dirJobs=self.cfgDir)
     def load(self):
         knownFiles = []
-        if self.cfgDir == None:
+        if self.cfgDir == []:
             self.log.error("cfgDir=None")
             return False
-        for root, dirs, files in os.walk(self.cfgDir):
-            for fileName in files:
-                filepath = "%s/%s" % (root , fileName)
-                knownFiles.append(filepath)
+        
+        for directory in self.cfgDir:
+            print directory, self.cfgDir
+            if not os.path.isdir(directory):
+                continue
+            for root, dirs, files in os.walk(directory):
+                for fileName in files:
+                    filepath = "%s/%s" % (root , fileName)
+                    knownFiles.append(filepath)
         if len(knownFiles) == 0:
             self.log.warning("could not fine any files in :%s" % (self.cfgDir))
         result = True
@@ -529,10 +534,14 @@ class matrixRequiresStackPointer(object):
         initialEnv = rs.getEnv()
         self.log.info("self.scriptDir='%s'" % (self.scriptDir))
         script = self.JobContainer.allcontianed[item].dictionary["script"]
-        fullpath = "%s/%s" % (self.scriptDir , script)
+        fullpath = None
+        for sdir in self.scriptDir:
+            tmpPath = "%s/%s" % (self.scriptDir , script)
+            if not os.path.isfile(tmpPath):
+                continue
+            fullpath = tmpPath    
         self.log.info("Running is script '%s'" % (script))
         self.log.info("Running is script '%s'" % (fullpath))
-        
         output = rs.runscript(fullpath)
         if output != 0:
             self.log.error("Job Part '%s' failed with '%s'" % (script,output))
@@ -596,8 +605,8 @@ class matrixRunner(object):
     def __init__(self, *args, **kwargs):
         self.log = logging.getLogger("matrixRunner")
         dirEnviroments = kwargs.get('dirEnviroments', None)
-        self.dirJobs = kwargs.get('dirJobs', None)
-        self.dirScripts = kwargs.get('dirScripts', None)
+        self.dirJobs = kwargs.get('dirJobs', [])
+        self.dirScripts = kwargs.get('dirScripts', [])
         self.log.info("dirJobs=%s" % (self.dirJobs))
         
         self.jobs = loaderJobs(cfgDir=self.dirJobs)

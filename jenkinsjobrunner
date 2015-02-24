@@ -538,6 +538,7 @@ def runJob (jobname):
     if not jobname in mappings.keys():
         log.error("job is not mapped '%s' " % (jobname) )
         return 1
+    log.info("job found '%s' " % (jobname) )
     enviroment = {}
     for jobpart in mappings[jobname]:
         jobDetails = {}
