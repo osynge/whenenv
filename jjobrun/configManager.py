@@ -186,7 +186,7 @@ class containerBase(object):
             for inheritor in set(inherits):
                 if not inheritor in inherits:
                     continue
-                inheritasnceList = list(self.allcontianed[inheritor].dictionary["inherits"])
+                inheritasnceList = list(self.allcontianed[inheritor].dictionary.get("inherits",[]))
                 inheritasnceSet = set(inheritasnceList)
                 if inheritor in inheritasnceSet:
                     self.log.info("Undefined removed inheritance:'%s':'%s'" % (inheritor,inheritasnceList))
