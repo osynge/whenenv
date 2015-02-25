@@ -1,0 +1,10 @@
+{
+    "name" : "export_package_scientific7_tag_srpm",
+    "provides" : ["export_package"],
+    "script" : "export_python_tag_srpm_scientific_6.sh",
+    "inherits" : ["branch_testing"],
+    "variables" : {
+        "require_values" : { "RELEASE" : "production", "OPERATING_SYSTEM" : "Scientific7"},
+        "require_keys" : []
+    }
+}

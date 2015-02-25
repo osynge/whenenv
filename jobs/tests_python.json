@@ -1,0 +1,11 @@
+{
+    "name" : "tests_python",
+    "provides" : ["unittests"],
+    "script" : "nosetests_python.sh",
+    "variables" : {
+        "require_values" : {
+            "BUILD_TYPE" : "disttools" ,
+            "TESTS" : "nosetests"},
+        "require_keys" : []
+    }
+}
