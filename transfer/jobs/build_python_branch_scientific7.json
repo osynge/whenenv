@@ -1,0 +1,12 @@
+{
+    "name" : "build_python_branch_scientific7",
+    "provides" : ["build_package"],
+    "script" : "build_python_branch_scientific.sh",
+    "inherits" : ["branch_testing"],
+    "variables" : {
+        "require_values" : { "RELEASE" : "development" , 
+            "OPERATING_SYSTEM" : "Scientific7" ,
+            "BUILD_TYPE" : "disttools" },
+        "require_keys" : []
+    }
+}
