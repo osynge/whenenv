@@ -16,7 +16,6 @@ whenenv-0.0.12
         - set_version_autotools_branch.sh
         - tests_skip.sh
         
-        
 whenenv-0.0.11
     * Fixed a bug introduced with N directories support
 
