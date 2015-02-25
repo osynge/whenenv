@@ -1,6 +1,22 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.12
+    * added build jobs previously lost 
+        - build_autotools_tag_scientific7.json
+        - build_python_branch_scientific7.json
+        - build_python_tag_scientific7
+        - export_package_scientific7_branch_srpm
+        - export_package_scientific7_tag_srpm
+        - tests_autotools
+        - tests_python
+        - tests_skip
+    * added build scripts previously lost 
+        - nosetests_python.sh
+        - set_version_autotools_branch.sh
+        - tests_skip.sh
+        
+        
 whenenv-0.0.11
     * Fixed a bug introduced with N directories support
 
