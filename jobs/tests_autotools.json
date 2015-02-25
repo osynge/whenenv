@@ -1,0 +1,10 @@
+{
+    "name" : "tests_autotools",
+    "provides" : ["unittests"],
+    "script" : "tests_skip.sh",
+    "variables" : {
+        "require_values" : {
+            "BUILD_TYPE" : "autotools" },
+        "require_keys" : []
+    }
+}
