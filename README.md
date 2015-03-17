@@ -3,12 +3,12 @@
 whenenv is designed to keep the branching involved in build and 
 functional test scripts from growing out of control.
 
-You specify a list of enviroment variables and whenenv will then 
-try and reuse existing scritps to process the request.
+You specify a list of environment variables and whenenv will then 
+try and reuse existing scrimps to process the request.
 
-If it fails to find suitable scripts you shoudl specify soem minium script.
+If it fails to find suitable scripts you should specify some minium script.
 
-When launching whenenv, always specify the PRODUCT enviroment variable. The
+When launching whenenv, always specify the PRODUCT environment variable. The
 components of the build are isolated and reusable.
 
 
@@ -17,53 +17,39 @@ components of the build are isolated and reusable.
 ## Background.
 
 Using this "Configuration Matrix" plugin in for Jenkins Builds makes it 
-difficult to decouple the matrix settings from the to seperate out reusable code
-from branching paramters. whenenv addresses this problem, but may well have other uses.
+difficult to decouple the matrix settings from the to separate out reusable code
+from branching parameters. whenenv addresses this problem, but may well have other uses.
 
 whenenv was designed with the assumption that matrix jobs will be in a regular state of change around axis and thier values.
 
-Managing jenkins builds usually requires a different script for every job, but with whenenv, all of the envroment variable branching is coded in pattern matching, leaving you to consentrate on excptional cases and reuse all your build script fragments.
+Managing jenkins builds usually requires a different script for every job, but with whenenv, all of the environment variable branching is coded in pattern matching, leaving you to concentrate on exceptional cases and reuse all your build script fragments.
 
 
 ## How does whenenv work?
 
-(A) whenenv reads enviroment variables, presented from a jenkisn matrix job and
-tries to run jobs to execute a goal.
+1. whenenv reads environment variables, presented from a jenkins matrix job and tries to run jobs to execute a goal.
+2. The jobs that make up a goal are executed in order defined by the goals requirements.
+3. Goals are specified as jobs with dependencies, that scripts can provide solutions for. Goals can be nested.
+4. Goals are achieved when each dependency has been resolved with a Job that provides the dependency.
+5. The most specific job will be selected in preference to the least specific job. This binding is as late as possible allowing execution to be overwritten easily.
+6. Jobs may execute shell scripts and publish the results to later scripts.
+7. Any successful job providing a met dependency will never be run a second time and that requirement is considered handled.
 
-(B) The jobs that make up a goal are exeuted in order defined by the goals
-requirements.
+These simple rules allow Jobs to be processed in an order that is defined by the matrix parameters which are presented to whenenv as environment variables.
 
-(B) Goals are specified as jobs with dependancies, that scripts can provide solutions for.
-Goals can be nested.
-
-(C) Goals are achived when each dependacy has beeen resolved with a Job that
-provides the dependacy.
-
-(D) The most specific job will be selected in preferance to the least specific
-job. This binding is as late as possible allowing execution to be overwriten
-easily.
-
-(E) Jobs may excute shell scripts and publish the results to later scripts.
-
-(F) any successfull job providing a met depednacy will never be run a second time and that requirement is considered handled.
-
-These simple rules allow Jobs to be processed in an order that is defined by the matrix paramters which are presented to whenenv as enviroment variables.
-
-A simple stack and processed job log is used to preven jobs being run more than once during goal completion.
-
-
+A simple stack and processed job log is used to prevent jobs being run more than once during goal completion.
 
 ## About Jenkins
 
-Jenkins is a very flexable tool for doing automated builds.
+Jenkins is a very flexible tool for doing automated builds.
 
-Jenkins "Configuration Matrix" plugin make Jenkisn a tool for testing ranges of
-settings, displaying agregate test results and easily identifying job failures.
+Jenkins "Configuration Matrix" plugin make Jenkins a tool for testing ranges of
+settings, displaying aggregate test results and easily identifying job failures.
 
 Matrix (range) testing is commonly used for portability testing, comparative
-branch testing, and seeing how build paramters effect tests.
+branch testing, and seeing how build parameters effect tests.
 
-whenenv aims is to reduce the maintenance work for writing matrix jobs, and to benifit from code reuse.
+whenenv aims is to reduce the maintenance work for writing matrix jobs, and to benefit from code reuse.
 
 Assuming you are running a 3 axis matrix job, with the following axis:
 
@@ -89,7 +75,7 @@ Add the following script as a build step:
         --dir-scripts /usr/share/whenenv/transfer \
         --dir-scripts private_repo/scripts
 
-Note: In this example whenenv will trigger jobs based on 3 enviroment variables,
+Note: In this example whenenv will trigger jobs based on 3 environment variables,
 and will search 3 directories for jobs, and search for scripts also in 3 directories. This also give a clue as to how to use your version control system to drive job execution.
 
 ## A walk through of whenenv on whenenv
@@ -115,17 +101,15 @@ Included in this package is an example "whenenv.json"
 
 ### Format notes:
 
-(A) name must be unique.
-(B) This job 'provides' "execution" so will be invoked by the command line.
-(C) This job 'depends' on 5 jobs to 'provide' for the dependacies.
-(D) This job will only be able to provide "execution" if the "PRODUCT" variable
-    is "whenenv" and it has both "RELEASE" and "OPERATING_SYSTEM" as variables 
-    but the value is not fixed.
+* name must be unique.
+* This job 'provides' "execution" so will be invoked by the command line.
+* This job 'depends' on 5 jobs to 'provide' for the dependency.
+* This job will only be able to provide "execution" if the "PRODUCT" variable is "whenenv" and it has both "RELEASE" and "OPERATING_SYSTEM" as variables but the value is not fixed.
 
 Since this is the entry point for a execution goal, this is the most common type
 of job you will havre to write when extending whenenv to your goal.
 
-when env will then try to match each requirement in its order specified.
+whenenv will then try to match each requirement in its order specified.
 
 The only job that "provides" , "whenenv_source" is "whenenv_source.json"
 
@@ -143,14 +127,14 @@ The only job that "provides" , "whenenv_source" is "whenenv_source.json"
 
 ### Format notes:
 
-(A) Has a script attribute which will need to execute before its finsihed.
-(B) This script will populate the goals name space withthe variables "GIT_SRC",
+* Has a script attribute which will need to execute before its finished.
+* This script will populate the goals name space with the variables "GIT_SRC",
     "GIT_DEST" and "GIT_TAG_FILTER"
 
 After  "whenenv_source.json" provides "whenenv_source", we will still need to 
 process "checkout_source". 
 
-5 files provide "checkout_source" and the most specific will be selected.
+In total 5 files provide "checkout_source" and the most specific will be selected.
 
     git_checkout_gitbuildpackage.json
     git_checkout_tag.json
@@ -163,7 +147,7 @@ The "SVN_SRC" variable being required for 2 of them, 1 requires build type
 
 This leaves "git_checkout_trunk.json" or "git_checkout_tag.json".
 
-The orginal matrix paramters "RELEASE" can be of 2 values, "development" or
+The ordinal matrix parameters "RELEASE" can be of 2 values, "development" or
 "production". For the following example we show it as "development".
 
 
@@ -180,7 +164,7 @@ The orginal matrix paramters "RELEASE" can be of 2 values, "development" or
     }
 
 This script sets up a git cache if none exists, and checks out the source with 
-referance to the local cache so reducing git download speeds dramatically.
+reference to the local cache so reducing git download speeds dramatically.
 
 After "git_checkout_trunk" provides "checkout_source" the next dependency is 
 "unittests" and the following jobs provide this:
@@ -220,7 +204,7 @@ The following are all included in the search.
     build_python_tag_scientific.json
 
 
-Due to a serises of seelction critieria, depenentent on the matrix enviroment variables:
+Due to a series of selection criteria, dependent on the matrix enviroment variables:
 
     build_python_branch_scientific7.json
 
