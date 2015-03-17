@@ -1,5 +1,4 @@
-When Env
-~~~~~~~~
+# When Env
 
 whenenv is designed to keep the branching involved in build and 
 functional test scripts from growing out of control.
@@ -15,8 +14,7 @@ components of the build are isolated and reusable.
 
 
 
-Background.
-~~~~~~~~~~
+## Background.
 
 Using this "Configuration Matrix" plugin in for Jenkins Builds makes it 
 difficult to decouple the matrix settings from the to seperate out reusable code
@@ -27,8 +25,7 @@ whenenv was designed with the assumption that matrix jobs will be in a regular s
 Managing jenkins builds usually requires a different script for every job, but with whenenv, all of the envroment variable branching is coded in pattern matching, leaving you to consentrate on excptional cases and reuse all your build script fragments.
 
 
-How does whenenv work?
-~~~~~~~~~~~~~~~~~~~~~~
+## How does whenenv work?
 
 (A) whenenv reads enviroment variables, presented from a jenkisn matrix job and
 tries to run jobs to execute a goal.
@@ -56,8 +53,7 @@ A simple stack and processed job log is used to preven jobs being run more than 
 
 
 
-About Jenkins
-~~~~~~~~~~~~~
+## About Jenkins
 
 Jenkins is a very flexable tool for doing automated builds.
 
@@ -68,9 +64,6 @@ Matrix (range) testing is commonly used for portability testing, comparative
 branch testing, and seeing how build paramters effect tests.
 
 whenenv aims is to reduce the maintenance work for writing matrix jobs, and to benifit from code reuse.
-
-
-
 
 Assuming you are running a 3 axis matrix job, with the following axis:
 
@@ -99,8 +92,7 @@ Add the following script as a build step:
 Note: In this example whenenv will trigger jobs based on 3 enviroment variables,
 and will search 3 directories for jobs, and search for scripts also in 3 directories. This also give a clue as to how to use your version control system to drive job execution.
 
-A walk through of whenenv on whenenv
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+## A walk through of whenenv on whenenv
 
 Included in this package is an example "whenenv.json"
 
@@ -121,7 +113,7 @@ Included in this package is an example "whenenv.json"
                     "export_package"]
     }
 
-Format notes:
+### Format notes:
 
 (A) name must be unique.
 (B) This job 'provides' "execution" so will be invoked by the command line.
@@ -149,7 +141,7 @@ The only job that "provides" , "whenenv_source" is "whenenv_source.json"
             "GIT_TAG_FILTER"] }
     }
 
-Format notes:
+### Format notes:
 
 (A) Has a script attribute which will need to execute before its finsihed.
 (B) This script will populate the goals name space withthe variables "GIT_SRC",
@@ -193,9 +185,9 @@ referance to the local cache so reducing git download speeds dramatically.
 After "git_checkout_trunk" provides "checkout_source" the next dependency is 
 "unittests" and the following jobs provide this:
 
-tests_autotools.json
-tests_python.json
-tests_skip.json
+    tests_autotools.json
+    tests_python.json
+    tests_skip.json
 
 Since the "BUILD_TYPE" variable will have the value "disttools" only 
 "tests_python.json" can be selected.
