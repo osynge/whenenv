@@ -58,7 +58,7 @@ setup(name=Application,
         'Programming Language :: Python',
         ],
     scripts=['whenenv','jenkinsjobrunner'],
-    data_files=[('/usr/share/doc/%s-%s' % (Application,version),['README','LICENSE','ChangeLog']),
+    data_files=[('/usr/share/doc/%s-%s' % (Application,version),['README.md','LICENSE','ChangeLog']),
         ('/usr/share/lib/%s/jobs' % (Application),jobsIncludeList),
         ('/usr/share/lib/%s/scripts' % (Application),scriptsIncludeList),
         ]    
