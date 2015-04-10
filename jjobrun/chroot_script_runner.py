@@ -15,8 +15,8 @@ transtbl = string.maketrans(
         )
 
 
-syncDelay = datetime.timedelta(seconds=100)
-timeoutDelay = datetime.timedelta(seconds=2000)
+syncDelay = datetime.timedelta(seconds=1000)
+timeoutDelay = datetime.timedelta(seconds=20000)
 
 
 
@@ -250,6 +250,8 @@ class runnershell2(object):
         self.running.Write(cmd)
         while self.waitingOnPromptGetEnvStart == True:
             self.running.Comunicate()
+            if None != self.running.returncode():
+                break
         self.FoundEnv = {}
         self.running.Write("env\n")
         self.running.Write("echo %s\n" % (endPrompt))
@@ -260,6 +262,8 @@ class runnershell2(object):
                 counter = 0
                 self.running.Write("echo %s\n" % (endPrompt))
             self.running.Comunicate()
+            if None != self.running.returncode():
+                break
         self.running.CbDelOnFdRead(self.logOutputGetEnv)
         self.running.CbDelOnExit(self.ScriptOnExit)
         self.log.debug("getEnv end")
