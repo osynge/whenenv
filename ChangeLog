@@ -1,6 +1,9 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.13
+    * Moved README REAMME.md and added some markdown.
+
 whenenv-0.0.12
     * added build jobs previously lost 
         - build_autotools_tag_scientific7.json
