@@ -1,0 +1,7 @@
+{
+    "name" : "build_autotools_make_package_default",
+    "provides" : ["autotools_make_package"],
+    "variables" : {
+        "require_values" : { "BUILD_TYPE" : "autotools"}
+    }
+}

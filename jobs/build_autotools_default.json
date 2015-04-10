@@ -7,5 +7,11 @@
         "require_values" : { "BUILD_TYPE" : "autotools"},
         "require_keys" : ["SRC_VERSION","PRODUCT","BUILD_SRC"]
     },
-    "depends" : ["set_version_autotools"]
+    "depends" : [
+        "autotools_version_build",
+        "autotools_version_bootstrap",
+        "autotools_configure",
+        "autotools_make",
+        "autotools_make_package"
+        ]
 }

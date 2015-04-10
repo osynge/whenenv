@@ -1,0 +1,8 @@
+{
+    "name" : "build_autotools_make",
+    "provides" : ["autotools_make"],
+    "script" : "build_autotools_make.sh",
+    "variables" : {
+        "require_values" : { "BUILD_TYPE" : "autotools"}
+    }
+}

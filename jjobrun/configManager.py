@@ -91,8 +91,14 @@ class holderBase(object):
         if OtherLenRequiredValues < SelfLenRequiredValues:
             return 1
         
-        SelfLenHasValues = len(self.dictionary[u'variables']['require_keys'])
-        OtherLenHasValues = len(Aholder.dictionary[u'variables']['require_keys'])
+        try:
+            SelfLenHasValues = len(self.dictionary[u'variables']['require_keys'])
+        except KeyError:
+            SelfLenHasValues = 0
+        try:
+            OtherLenHasValues = len(Aholder.dictionary[u'variables']['require_keys'])
+        except KeyError:
+            OtherLenHasValues = 0
         if OtherLenHasValues > SelfLenHasValues:
             return -1
         if OtherLenHasValues < SelfLenHasValues:

@@ -1,0 +1,11 @@
+{
+    "name" : "autotools_tag_version",
+    "provides" : ["autotools_version_build"],
+    "variables" : {
+        "require_values" : { 
+            "BUILD_TYPE" : "autotools",
+            "RELEASE" : "production"
+            },
+        "require_keys" : []
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "name" : "build_autotools_make_package_scientific_7",
+    "provides" : ["autotools_make_package"],
+    "script" : "build_autotools_make_package_scientific_6.sh",
+    "variables" : {
+        "require_keys" : ["SRC_VERSION","PRODUCT","BUILD_SRC"],
+        "require_values" : { 
+            "BUILD_TYPE" : "autotools",
+            "OPERATING_SYSTEM" : "Scientific7" 
+            }
+    }
+}
