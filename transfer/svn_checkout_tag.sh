@@ -14,7 +14,7 @@ ORIGINALDIR=`pwd`
 SVN_TAGS="${SVN_SRC}/tags"
 
 
-TAG_LAST=$(svn ls ${SVN_TAGS} | org_desy_grid_virt_sort_release.py  | tail -n 1)
+TAG_LAST=$(svn ls ${SVN_TAGS} | sort --version-sort  | tail -n 1)
 
 svn co ${SVN_SRC}/tags/${TAG_LAST} ${SVN_DEST}
 

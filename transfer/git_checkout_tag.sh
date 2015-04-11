@@ -54,12 +54,7 @@ set -e
 
 cd ${GIT_DEST}
 
-if [ "X${sorter_path}" != "X" ] ; then
-GIT_TAG_LAST=$(git tag | grep "${GIT_TAG_FILTER}" | sort -V | tail -n 1)
-else
-echo may be using old version of code.
-GIT_TAG_LAST=$(git tag | grep "${GIT_TAG_FILTER}" | tail -n 1)
-fi
+GIT_TAG_LAST=$(git tag | grep "${GIT_TAG_FILTER}" | sort --version-sort | tail -n 1)
 
 
 
