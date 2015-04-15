@@ -1,0 +1,10 @@
+{
+    "name" : "build_python_sdist_rename_production",
+    "provides" : ["build_python_sdist_rename"],
+    "script" : "build_python_sdist_rename_production.sh",
+    "variables" : {
+        "require_values" : { 
+            "BUILD_TYPE" : "disttools",
+            "RELEASE" : "production"}        
+    }
+}

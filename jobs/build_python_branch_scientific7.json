@@ -1,12 +1,19 @@
 {
     "name" : "build_python_branch_scientific7",
     "provides" : ["build_package"],
-    "script" : "build_python_branch_scientific.sh",
-    "inherits" : ["branch_testing"],
     "variables" : {
         "require_values" : { "RELEASE" : "development" , 
             "OPERATING_SYSTEM" : "Scientific7" ,
             "BUILD_TYPE" : "disttools" },
         "require_keys" : []
-    }
+    },
+    "depends" : [
+        "build_python_sdist",
+        "build_python_sdist",
+        "build_python_sdist_rename",
+        "build_python_bdist",
+        "build_python_bdist_rename",
+        "build_python_package",
+        "build_python_artifacts"
+        ]
 }

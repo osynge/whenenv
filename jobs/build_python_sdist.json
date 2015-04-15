@@ -1,0 +1,9 @@
+{
+    "name" : "build_python_sdist",
+    "provides" : ["build_python_sdist"],
+    "script" : "build_python_sdist.sh",
+    "variables" : {
+        "require_values" : {
+            "BUILD_TYPE" : "disttools" }
+    }
+}

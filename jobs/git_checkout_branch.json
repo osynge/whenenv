@@ -1,0 +1,9 @@
+{
+    "name" : "git_checkout_branch",
+    "provides" : ["checkout_source"],
+    "script" : "git_checkout_branch.sh",
+    "enviroment" : "chroot",
+    "variables" : { "provides_keys" : ["BUILD_SRC"],
+        "require_keys" : [ "GIT_SRC" ,"BRANCH"]
+    }
+}

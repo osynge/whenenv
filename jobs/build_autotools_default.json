@@ -5,7 +5,11 @@
     "inherits" : ["branch_testing"],
     "variables" : {
         "require_values" : { "BUILD_TYPE" : "autotools"},
-        "require_keys" : ["SRC_VERSION","PRODUCT","BUILD_SRC"]
+        "require_keys" : [
+            "SRC_VERSION",
+            "PRODUCT",
+            "BUILD_SRC"
+            ]
     },
     "depends" : [
         "autotools_version_build",

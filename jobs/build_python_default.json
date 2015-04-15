@@ -1,11 +1,8 @@
 {
-    "name" : "build_python_tag_scientific",
-    "provides" : ["build_package"],
-    "script" : "build_python_package_production_rpm.sh",
+    "name" : "build_python_default",
+    "provides" : [ "build_package" ],
     "variables" : {
-        "require_values" : { "RELEASE" : "production",
-            "BUILD_TYPE" : "disttools",
-            "OPERATING_SYSTEM" : "Scientific"},
+        "require_values" : { "BUILD_TYPE" : "disttools" },
         "require_keys" : []
     },
     "depends" : [

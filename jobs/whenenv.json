@@ -1,8 +1,7 @@
 {
     "name" : "whenenv",
     "variables" : {
-        "require_values" : { "PRODUCT" : "whenenv"},
-        "require_keys" : ["RELEASE","OPERATING_SYSTEM"]
+        "require_values" : { "PRODUCT" : "whenenv"}
     },
     "provides" : ["execution"],
     "depends" : ["whenenv_source","checkout_source","unittests","build_package","export_package"]

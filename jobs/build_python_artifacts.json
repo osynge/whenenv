@@ -1,0 +1,10 @@
+{
+    "name" : "build_python_artifacts",
+    "provides" : ["build_python_artifacts"],
+    "script" : "build_python_artifacts.sh",
+    "variables" : {
+        "require_values" : { 
+            "BUILD_TYPE" : "disttools"
+            }
+    }
+}

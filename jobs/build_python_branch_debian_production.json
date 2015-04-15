@@ -1,8 +1,6 @@
 {
     "name" : "build_python_branch_debian_production",
     "provides" : [ "build_package" ],
-    "script" : "build_python_tag_debian.sh",
-    "inherits" : [ "branch_testing" ],
     "variables" : {
         "require_values" : { 
             "RELEASE" : "production", 
@@ -10,5 +8,14 @@
             "BUILD_TYPE" : "disttools"
             },
         "require_keys" : []
-    }
+    },
+    "depends" : [
+        "build_python_sdist",
+        "build_python_sdist",
+        "build_python_sdist_rename",
+        "build_python_bdist",
+        "build_python_bdist_rename",
+        "build_python_package",
+        "build_python_artifacts"
+        ]
 }

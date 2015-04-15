@@ -1,0 +1,9 @@
+{
+    "name" : "build_python_bdist",
+    "provides" : ["build_python_bdist"],
+    "script" : "build_python_bdist.sh",
+    "variables" : {
+        "require_values" : {
+            "BUILD_TYPE" : "disttools" }
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "name" : "build_python_bdist_rename_branch",
+    "provides" : ["build_python_bdist_rename"],
+    "script" : "build_python_bdist_rename_development.sh",
+    "variables" : {
+        "require_values" : { "BUILD_TYPE" : "disttools"},
+        "require_keys" : [ "BRANCH" ]
+    }
+}

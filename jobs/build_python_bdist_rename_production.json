@@ -1,0 +1,11 @@
+{
+    "name" : "build_python_bdist_rename_production",
+    "provides" : ["build_python_bdist_rename"],
+    "script" : "build_python_bdist_rename_production.sh",
+    "variables" : {
+        "require_values" : { 
+            "RELEASE" : "production",
+            "BUILD_TYPE" : "disttools"
+        }
+    }
+}

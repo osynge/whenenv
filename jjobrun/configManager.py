@@ -262,7 +262,7 @@ class containerJobs(containerBase):
             matches.append(plan)
         lenMatchesKey = len(matches) 
         if lenMatchesKey == 0:
-            self.log.error("No matching jobs for '%s' with %s" % (requirement,enviroment))
+            self.log.error("No matching jobs for '%s' with %s" % (requirement,json.dumps(enviroment,sort_keys=True, indent=4)))
             self.log.debug("possiblePlans count %s" % (len(possiblePlans)))
             
             return []
@@ -554,12 +554,18 @@ class matrixRequiresStackPointer(object):
             return output
         
         finalEnv = rs.getEnv()
-        initialKeys = set(initialEnv.keys())
-        finalKeys = set(finalEnv.keys())
-        newkeys = finalKeys.difference(initialKeys)
-        for key in newkeys:
-            
-            self.enviroment[key] = finalEnv[key]
+        for key in finalEnv.keys():
+            if not key in initialEnv.keys():
+                self.enviroment[key] = finalEnv[key]
+                continue
+            if initialEnv[key] != finalEnv[key]:
+                self.enviroment[key] = finalEnv[key]
+                continue
+        #initialKeys = set(initialEnv.keys())
+        #finalKeys = set(finalEnv.keys())
+        #newkeys = finalKeys.difference(initialKeys)
+        #for key in newkeys:
+        #    self.enviroment[key] = finalEnv[key]
         return 0
             
     def getNextJob(self):

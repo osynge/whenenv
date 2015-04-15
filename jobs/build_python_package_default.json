@@ -1,0 +1,7 @@
+{
+    "name" : "build_python_package_default",
+    "provides" : ["build_python_package"],
+    "variables" : {
+        "require_values" : { "BUILD_TYPE" : "disttools"}
+    }
+}

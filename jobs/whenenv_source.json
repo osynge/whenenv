@@ -2,5 +2,12 @@
     "name" : "whenenv_source",
     "provides" : ["whenenv_source"],
     "script" : "whenenv_source.sh",
-    "variables" : { "provides_keys" : ["GIT_SRC","GIT_DEST","GIT_TAG_FILTER"] }
+    "variables" : { "provides_keys" : [
+            "GIT_SRC",
+            "GIT_DEST",
+            "GIT_TAG_FILTER",
+            "BUILD_TYPE",
+            "TESTS"
+            ]
+    }
 }
