@@ -26,6 +26,14 @@ def determine_path ():
         print "There is no __file__ variable. Please contact the author."
         sys.exit ()
 
+installdir_doc = "/usr/share/doc/%s-%s" % (Application,version)
+installdir_jobs = '/usr/share/lib/%s/jobs' % (Application)
+installdir_scripts = '/usr/share/lib/%s/scripts' % (Application)
+if "VIRTUAL_ENV" in  os.environ:
+    installdir_doc = 'doc'
+    installdir_jobs = 'jobs'
+    installdir_scripts = 'scripts'
+
 jobsIncludeList = []
 scriptsIncludeList = []
 path = determine_path ()
@@ -58,8 +66,8 @@ setup(name=Application,
         'Programming Language :: Python',
         ],
     scripts=['whenenv','jenkinsjobrunner'],
-    data_files=[('/usr/share/doc/%s-%s' % (Application,version),['README.md','LICENSE','ChangeLog']),
-        ('/usr/share/lib/%s/jobs' % (Application),jobsIncludeList),
-        ('/usr/share/lib/%s/scripts' % (Application),scriptsIncludeList),
+    data_files=[(installdir_doc,['README.md','LICENSE','ChangeLog']),
+        (installdir_jobs,jobsIncludeList),
+        (installdir_scripts,scriptsIncludeList),
         ]    
 )
