@@ -1,6 +1,14 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.15
+    * When enviroment variable exists but but scripts
+      Override it still override it.
+    * Dump enviroment when missing as formatted JSON.
+    * Reorganize python building to make it more like 
+      autotools.
+    * Start supporting building of branches.
+
 whenenv-0.0.14
     * Fix to checking out the latest tag version.
       - svn_checkout_tag.sh
