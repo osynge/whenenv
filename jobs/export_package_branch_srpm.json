@@ -3,7 +3,9 @@
     "provides" : ["export_package"],
     "script" : "export_python_branch_srpm_scientific.sh",
     "variables" : {
-        "require_values" : { "OPERATING_SYSTEM" : "Scientific"},
-        "require_keys" : [ "BRANCH" ]
+        "require_values" : {
+            "RELEASE" : "development",
+            "OPERATING_SYSTEM" : "Scientific"},
+        "require_keys" : []
     }
 }

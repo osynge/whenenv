@@ -1,0 +1,12 @@
+{
+    "name" : "build_python_package_development_scientific_6",
+    "provides" : ["build_python_package"],
+    "script" : "build_python_package_development_rpm.sh",
+    "variables" : {
+        "require_values" : {
+            "BUILD_TYPE" : "disttools",
+            "OPERATING_SYSTEM" : "Scientific",
+            "RELEASE" : "development"
+            }
+    }
+}
