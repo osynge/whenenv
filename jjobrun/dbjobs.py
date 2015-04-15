@@ -39,7 +39,7 @@ class TaskProvide(Base):
     uuid = Column(String(100),nullable = False,unique=True)
     name = Column(String(100),nullable = False,unique=True)
     fkType = Column(Integer, ForeignKey(Task.id, onupdate="CASCADE", ondelete="CASCADE"),nullable = False) 
-    provides_depends = Column(Bool(100),nullable = False,unique=True)
+    provides_depends = Column(Boolean(100),nullable = False,unique=True)
 
 
 class TaskDepend(Base):
@@ -48,21 +48,22 @@ class TaskDepend(Base):
     uuid = Column(String(100),nullable = False,unique=True)
     name = Column(String(100),nullable = False,unique=True)
     fkType = Column(Integer, ForeignKey(Task.id, onupdate="CASCADE", ondelete="CASCADE"),nullable = False) 
-    Depends_depends = Column(Bool(100),nullable = False,unique=True)
+    Depends_depends = Column(Boolean(100),nullable = False,unique=True)
 
 
 
 
 
 class Job(Base):
-    __tablename__ = 'mapping'
+    __tablename__ = 'jobs'
     id = Column(Integer, primary_key=True)
     uuid = Column(String(100),nullable = False,unique=True)
     name = Column(String(100),nullable = False,unique=True)
-    lastexecuted = Column(DateTime,nullable = True
-    
+    lastexecuted = Column(DateTime,nullable = True)
+
+
 class JobProxides(Base):
-    __tablename__ = 'mapping'
+    __tablename__ = 'jobprovides'
     id = Column(Integer, primary_key=True)
-    fkJob = Column(Integer, ForeignKey(Provide.id, onupdate="CASCADE", ondelete="CASCADE"),nullable = False) 
+    fkJob = Column(Integer, ForeignKey(Job.id, onupdate="CASCADE", ondelete="CASCADE"),nullable = False) 
     fkProvide = Column(Integer, ForeignKey(Job.id, onupdate="CASCADE", ondelete="CASCADE"),nullable = False) 
