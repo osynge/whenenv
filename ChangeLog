@@ -1,6 +1,10 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.16
+
+    * fix to job autotools_branch_version so it matches branches
+
 whenenv-0.0.15
     * When enviroment variable exists but but scripts
       Override it still override it.
