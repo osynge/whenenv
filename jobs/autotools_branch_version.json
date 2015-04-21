@@ -4,9 +4,8 @@
     "script" : "autotools_branch_version.sh",
     "variables" : {
         "require_values" : { 
-            "BUILD_TYPE" : "autotools",
-            "RELEASE" : "development"
+            "BUILD_TYPE" : "autotools"
             },
-        "require_keys" : []
+        "require_keys" : [ "BRANCH" ]
     }
 }
