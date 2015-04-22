@@ -1,0 +1,12 @@
+{
+    "name" : "autotools_deveelopment_version",
+    "provides" : ["autotools_version_build"],
+    "script" : "autotools_branch_version.sh",
+    "variables" : {
+        "require_values" : { 
+            "BUILD_TYPE" : "autotools",
+            "RELEASE" : "development"
+            },
+        "require_keys" : []
+    }
+}
