@@ -1,6 +1,11 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.17
+
+    * Added job autotools_development_version so it matches development 
+      on master
+
 whenenv-0.0.16
 
     * fix to job autotools_branch_version so it matches branches
