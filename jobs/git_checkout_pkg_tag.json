@@ -1,0 +1,10 @@
+{
+    "name" : "git_checkout_pkg_tag",
+    "provides" : ["checkout_pkg_source"],
+    "script" : "git_checkout_pkg_tag.sh",
+    "enviroment" : "chroot",
+    "variables" : { "provides_keys" : ["BUILD_SRC"],
+        "require_values" : { "RELEASE" : "production" },
+        "require_keys" : [ "GIT_PKG_SRC" ]
+    }
+}
