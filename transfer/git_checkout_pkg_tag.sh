@@ -43,7 +43,7 @@ fi
 rm -rf ${GIT_PKG_DEST}
 
 set +e 
-git clone  --reference ${GIT_CLONE_DIR} ${GIT_PKG_SRC} ${GIT_PKG_DEST}
+git clone  --reference ${GIT_PKG_CLONE_DIR} ${GIT_PKG_SRC} ${GIT_PKG_DEST}
 git_rc=$?
 if [ X"$git_rc" != X"0" ] ; then
 sleep 120
