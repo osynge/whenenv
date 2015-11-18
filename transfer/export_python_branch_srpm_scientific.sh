@@ -30,16 +30,22 @@ rm -rf build/dist/*src.tar.gz
 /usr/bin/rsync -v --ignore-existing build/dist/*.bin.tar.gz \
     ${dir_btgz}
 rm -rf build/dist/*bin.tar.gz
+set +e
 files_srpm=$(ls build/dist/*.src.rpm)
+set -e
 if [ $files_srpm ] ; then
   /usr/bin/rsync -v --ignore-existing build/dist/*.src.rpm \
     ${dir_srpm}
   rm -rf build/dist/*.src.rpm
 fi
+
+set +e
 files_rpm=$(ls build/dist/*.rpm)
-if [ $files_rpm ] ; then
-  /usr/bin/rsync -v --ignore-existing build/dist/*.rpm \
-    ${dir_rpm}
-  rm -rf build/dist/*.rpm
-fi
+set -e
+if [ "X${files_rpm}" != "X" ] ; then
+for art_bin in $files_rpm
+do
+/usr/bin/rsync -v --ignore-existing ${art_bin} ${dir_srpm}
+  rm -f ${art_bin}
+done
 
