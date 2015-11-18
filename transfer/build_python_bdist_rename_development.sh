@@ -8,4 +8,7 @@ for src in $(ls dist/*.tar.gz | grep $architecture )
 do
 newname=$( echo ${src} | sed -e "s/tar\.gz/rc${BUILD_NUMBER}\.bin\.tar\.gz/")
 mv $src $newname
+if [ "X${DIR_ART_BIN}" != "X" ] ; then
+cp $newname ${DIR_ART_BIN}
+fi
 done
