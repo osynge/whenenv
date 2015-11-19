@@ -6,9 +6,11 @@
     "provides" : ["execution"],
     "depends" : [
         "whenenv_source",
+        "artifact_setup",
+        "export_directories",
         "checkout_source",
         "unittests",
         "build_package",
-        "export_package"
+        "artifact_export"
         ]
 }
