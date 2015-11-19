@@ -4,5 +4,11 @@
         "require_values" : { "PRODUCT" : "whenenv"}
     },
     "provides" : ["execution"],
-    "depends" : ["whenenv_source","checkout_source","unittests","build_package","export_package"]
+    "depends" : [
+        "whenenv_source",
+        "checkout_source",
+        "unittests",
+        "build_package",
+        "export_package"
+        ]
 }

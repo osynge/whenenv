@@ -9,3 +9,4 @@ fi
 ORIGINALDIR=`pwd`
 cd $BUILD_SRC
 python setup.py sdist
+echo "made src"
