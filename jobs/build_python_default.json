@@ -6,11 +6,12 @@
         "require_keys" : []
     },
     "depends" : [
+            "artifact_setup",
+            "export_directories"
             "build_python_sdist",
             "build_python_sdist_rename",
             "build_python_bdist",
             "build_python_bdist_rename",
             "build_python_package",
-            "build_python_artifacts"
         ]
 }
