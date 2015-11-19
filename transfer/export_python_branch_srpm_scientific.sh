@@ -40,12 +40,12 @@ if [ $files_srpm ] ; then
 fi
 
 set +e
-files_rpm=$(ls build/dist/*.rpm)
+files_rpm=$(ls build/dist/*.rpm ${DIR_ART_RPMS}/*.rpm)
 set -e
 if [ "X${files_rpm}" != "X" ] ; then
 for art_bin in $files_rpm
 do
-/usr/bin/rsync -v --ignore-existing ${art_bin} ${dir_srpm}
+/usr/bin/rsync -v --ignore-existing ${art_bin} ${dir_rpm}
   rm -f ${art_bin}
 done
-
+fi
