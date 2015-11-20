@@ -6,3 +6,13 @@ fi
 cd $BUILD_SRC
 python setup.py bdist_rpm \
     --requires  "${RPM_DEPENDS}"
+
+if [ "X${DIR_ART_SRPMS}" != "X" ] ; then
+mv dist/*.src.rpm \
+    ${DIR_ART_SRPMS}
+fi
+
+if [ "X${DIR_ART_RPMS}" != "X" ] ; then
+mv dist/*.rpm \
+    ${DIR_ART_RPMS}
+fi
