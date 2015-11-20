@@ -1,0 +1,16 @@
+{
+    "name" : "artifact_export",
+    "provides" : ["artifact_export"],
+    "script" : "artifact_export.sh",
+    "variables" : {
+        "require_values" : {},
+        "require_keys" : [ "DIR_ART_SRPMS",
+            "DIR_ART_RPMS",
+            "DIR_ART_BIN",
+            "DIR_ART_SRC",
+            "DIR_EXPORT_TGZ",
+            "DIR_EXPORT_BTGZ",
+            "DIR_EXPORT_SRPM",
+            "DIR_EXPORT_RPM" ]
+    }
+}

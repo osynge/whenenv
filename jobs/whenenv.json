@@ -2,7 +2,7 @@
     "name" : "whenenv",
     "variables" : {
         "require_values" : { "PRODUCT" : "whenenv"},
-        "require_keys" : [] },
+        "require_keys" : ["RELEASE","OPERATING_SYSTEM"] },
     "provides" : ["execution"],
     "depends" : ["whenenv_source",
         "artifact_setup",

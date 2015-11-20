@@ -1,6 +1,14 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.18
+
+    * Added modules:
+      - artifact_setup, export_directories, artifact_export
+    * Removed modules:
+      - export_package
+        * Please use artifacts as a replacement.
+
 whenenv-0.0.17
 
     * Added job autotools_development_version so it matches development 

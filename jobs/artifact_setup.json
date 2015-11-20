@@ -1,0 +1,11 @@
+{
+    "name" : "artifact_setup",
+    "provides" : ["artifact_setup"],
+    "script" : "artifact_setup.sh",
+    "variables" : {
+        "provides_keys" : [ "DIR_ART_SRPMS",
+            "DIR_ART_RPMS",
+            "DIR_ART_BIN",
+            "DIR_ART_SRC" ]
+    }
+}
