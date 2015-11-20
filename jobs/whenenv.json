@@ -8,6 +8,7 @@
         "whenenv_source",
         "artifact_setup",
         "export_directories",
+        "export_directories",
         "checkout_source",
         "unittests",
         "build_package",
