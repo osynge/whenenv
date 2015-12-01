@@ -61,6 +61,9 @@ fi
 if [ "X${PY_OS}" = "XScientific Linux" ] ; then
 FLAVOR="scientific/${PY_OS_VER_MAJ}"
 fi
+if [ "X${PY_OS}" = "XopenSUSE " ] ; then
+FLAVOR="openSUSE/${PY_OS_VER_MAJ}"
+fi
 fi
 if [ "X${FLAVOR}" = "X" ] ; then
 echo "No flavour defined"
