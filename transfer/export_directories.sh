@@ -53,7 +53,7 @@ fi
 
 if [ "X${FLAVOR}" = "X" ] ; then
 echo "FLAVOR not defined"
-PY_OS=`python -c "import platform; import sys; sys.stdout.write(platform.linux_distribution()[0])"`
+PY_OS=`python -c "import platform; import sys; sys.stdout.write(platform.linux_distribution()[0].strip())"`
 PY_OS_VER_MAJ=`python -c "import platform; import sys; sys.stdout.write(platform.linux_distribution()[1].split('.')[0])"`
 if [ "X${PY_OS}" = "Xdebian" ] ; then
 FLAVOR="debian/${PY_OS_VER_MAJ}"
@@ -61,15 +61,19 @@ fi
 if [ "X${PY_OS}" = "XScientific Linux" ] ; then
 FLAVOR="scientific/${PY_OS_VER_MAJ}"
 fi
-if [ "X${PY_OS}" = "XopenSUSE " ] ; then
+if [ "X${PY_OS}" = "XopenSUSE" ] ; then
 FLAVOR="openSUSE/${PY_OS_VER_MAJ}"
 fi
+if [ "X${PY_OS}" = "XFedora" ] ; then
+FLAVOR="Fedora/${PY_OS_VER_MAJ}"
+fi
+
 fi
 if [ "X${FLAVOR}" = "X" ] ; then
 echo "No flavour defined"
-sleep 1
-exit 1
+FLAVOR="${PY_OS}/${PY_OS_VER_MAJ}"
 fi
+
 if [ "X${RELEASE_TYPE}" = "X" ] ; then
 echo "No RELEASE_TYPE defined"
 sleep 1
