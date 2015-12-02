@@ -6,5 +6,7 @@
         "require_values" : {},
         "require_keys" : [ "OPERATING_SYSTEM" , "RELEASE" ],
         "provides_keys" : [ "DIR_EXPORT_TGZ", "DIR_EXPORT_BTGZ", "DIR_EXPORT_SRPM", "DIR_EXPORT_RPM" ]
-    }
+    },
+    "depends" : [ "build_env_discover" ]
+
 }

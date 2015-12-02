@@ -1,0 +1,10 @@
+{
+    "name" : "build_env_discover",
+    "provides" : [ "build_env_discover" ],
+    "script" : "build_env_discover.sh",
+    "variables" : {
+        "require_values" : {},
+        "require_keys" : [ ],
+        "provides_keys" : [ "PKG_FORMAT" ]
+    }
+}
