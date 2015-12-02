@@ -1,6 +1,11 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.20
+
+    * Removed lots of OPERATING_SYSTEM requirements jobs from the system
+      - This removes lots of duplication from the jobs directory
+
 whenenv-0.0.18
 
     * Added modules:
