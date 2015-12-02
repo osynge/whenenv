@@ -1,11 +1,11 @@
 {
-    "name" : "build_python_package_tag_scientific_7",
+    "name" : "build_python_package_tag_rpm",
     "provides" : ["build_python_package"],
     "script" : "build_python_package_production_rpm.sh",
     "variables" : {
         "require_values" : { 
             "BUILD_TYPE" : "disttools",
-            "OPERATING_SYSTEM" : "Scientific7",
+            "PKG_FORMAT" : "rpm",
             "RELEASE" : "production"
             }
     }
