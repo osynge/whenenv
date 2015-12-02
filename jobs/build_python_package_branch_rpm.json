@@ -1,11 +1,11 @@
 {
-    "name" : "build_python_package_branch_scientific_6",
+    "name" : "build_python_package_branch_rpm",
     "provides" : ["build_python_package"],
     "script" : "build_python_package_development_rpm.sh",
     "variables" : {
         "require_values" : { 
             "BUILD_TYPE" : "disttools",
-            "OPERATING_SYSTEM" : "Scientific"
+            "PKG_FORMAT" : "rpm",
             },
         "require_keys" : [ "BRANCH" ]
     }
