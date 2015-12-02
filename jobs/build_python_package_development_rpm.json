@@ -1,0 +1,13 @@
+{
+    "name" : "build_python_package_development_rpm",
+    "provides" : ["build_python_package"],
+    "script" : "build_python_package_development_rpm.sh",
+    "variables" : {
+        "require_values" : {
+            "BUILD_TYPE" : "disttools",
+            "PKG_FORMAT" : "rpm",
+            "RELEASE" : "development"
+            },
+        "require_keys" : []
+    }
+}
