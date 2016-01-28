@@ -3,7 +3,11 @@
     "provides" : ["chroot_buildup_image"],
     "script" : "chroot-scientific-6-buildup-prod.sh",
     "variables" : {
-        "require_values" : { "RELEASE" : "production", "OPERATING_SYSTEM" : "Scientific"},
+        "require_values" : {
+            "RELEASE" : "production",
+            "PY_OS": "Scientific Linux",
+            "PY_OS_VER_MAJ": "6"
+            },
         "require_keys" : []
     }
 }

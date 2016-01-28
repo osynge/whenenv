@@ -3,7 +3,11 @@
     "provides" : ["chroot_buildup_image"],
     "script" : "chroot-debian-wheezy-buildup.sh",
     "variables" : {
-        "require_values" : { "RELEASE" : "development", "OPERATING_SYSTEM" : "Debian"},
+        "require_values" : {
+            "RELEASE" : "development",
+            "PY_OS": "debian",
+            "PY_OS_VER_MAJ": "8"
+            },
         "require_keys" : []
     }
 }
