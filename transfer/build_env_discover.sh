@@ -17,4 +17,6 @@ fi
 if [ "X${PKG_FORMAT}" = "X" ] ; then
 PKG_FORMAT="None"
 fi
+export PY_OS
+export PY_OS_VER_MAJ
 export PKG_FORMAT
