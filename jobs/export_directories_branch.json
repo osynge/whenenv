@@ -1,0 +1,12 @@
+{
+    "name" : "export_directories_branch",
+    "provides" : [ "export_directories" ],
+    "script" : "export_directories.sh",
+    "variables" : {
+        "require_values" : {},
+        "require_keys" : [ "BRANCH" ],
+        "provides_keys" : [ "DIR_EXPORT_TGZ", "DIR_EXPORT_BTGZ", "DIR_EXPORT_SRPM", "DIR_EXPORT_RPM" ]
+    },
+    "depends" : [ "build_env_discover" ]
+
+}
