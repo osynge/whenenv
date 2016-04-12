@@ -61,17 +61,6 @@ sleep 1
 exit 1
 fi
 
-RELEASE_TYPE=${RELEASE}
-arch
-echo "RELEASE_TYPE=${RELEASE_TYPE}"
-
-if [ "X${RELEASE_TYPE}" = "X" ] ; then
-echo "RELEASE_TYPE not defined"
-sleep 10
-exit 1
-fi
-
-
 if [ "X${PLATFORM}" = "X" ] ; then
 echo "PLATFORM not defined"
 PLATFORM=`arch`
