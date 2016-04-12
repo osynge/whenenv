@@ -24,26 +24,24 @@ sleep 10
 exit 1
 fi
 
-if [ "X${RELEASE}" = "X" ] ; then
-echo "RELEASE_TYPE not defined"
-sleep 10
-exit 1
+if [ "X${RELEASE_TYPE}" = "X" ] ; then
+  if [ "X${BRANCH}" != "X" ] ; then
+    echo "release type defaulted from BRANCH"
+    RELEASE_TYPE="nightly/${BRANCH}"
+  fi
 fi
 
 if [ "X${RELEASE_TYPE}" = "X" ] ; then
-echo "release type not defined atempting to default"
+  echo "release type not defined atempting to default by RELEASE_TYPE"
+  if [ "X${RELEASE}" != "X" ] ; then
+    if [ "X${RELEASE}" = "Xdevelopment" ] ; then
+      RELEASE_TYPE="nightly/master"
+    fi
 
-if [ "X${RELEASE}" != "X" ] ; then
-
-if [ "X${RELEASE}" = "Xdevelopment" ] ; then
-RELEASE_TYPE="nightly/master"
-fi
-
-if [ "X${RELEASE}" = "Xproduction" ] ; then
-RELEASE_TYPE="production"
-fi
-
-fi
+    if [ "X${RELEASE}" = "Xproduction" ] ; then
+      RELEASE_TYPE="production"
+    fi
+  fi
 fi
 
 if [ "X${PLATFORM}" = "X" ] ; then
