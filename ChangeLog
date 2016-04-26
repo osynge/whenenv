@@ -1,6 +1,10 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.24
+
+    * Reorganise setup.py adding new enviroment options.
+
 whenenv-0.0.23
 
     * Allow building on a BRANCH or a RELEASE enviroment variable.
