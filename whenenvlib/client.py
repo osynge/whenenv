@@ -3,6 +3,7 @@ import uuid
 from random import choice
 import time
 import json
+from thingys_db import thingys_db
 
 context = zmq.Context()
 socket_sub = context.socket(zmq.SUB)
@@ -45,6 +46,10 @@ class thingy:
         self.identity = identity
         self.master = None
         
+        self.database = thingys_db()
+        self.database.sqla = 'sqlite:///:memory:'
+        self.database.dbstuff()
+        
     def register(self, message):
         msg = json.loads(message)
         self.master = msg["master"]
@@ -75,6 +80,7 @@ class thingy:
             print "got message"
             topic, msg = socket_sub.recv_multipart()
             print topic, msg
+            self.database.write_msg(topic, self.proc, msg)
             handler = self.topics.get(topic)
             if not handler is None:
                 handler(msg)
@@ -88,7 +94,7 @@ class thingy:
 
 identity = {
     'identity' : process_id,
-    'topics' : ['enviroment', 'executc']
+    'topics' : ['enviroment', 'execute']
 }
 
 poo = thingy(process_id, identity)
