@@ -76,5 +76,28 @@ class zmqClientInteraction(Base):
     def __repr__(self):
         return "<zmqClientInteraction(%s,%s,%s,%s)>" % (self.identifier,self.topic,self.recivedby, self.id)
 
+
+class zmqClientMetadata(Base):
+    """About the Client."""
+    __tablename__ = 'ZMQCLIENT_CLIENT_META DATA'
+    id = Column(Integer, primary_key=True)
+    client_version = Column(String(50),nullable = False)
+    osname = Column(String(50),unique=True,nullable = False)
+    osversion = Column(String(50),unique=True,nullable = False)
+    osfamily = Column(String(50),unique=True,nullable = False)
+    unix_id = Column(Integer)
+    unix_gid = Column(Integer)
+    role = Column(String(50),unique=True,nullable = False)
+    expires = Column(Integer, ForeignKey(zmqClientInteraction.id, onupdate="CASCADE", ondelete="CASCADE"))
+    def __init__(self, **kwargs):
+        self.client_version = kwargs.get('client_version', None)
+        self.osname = kwargs.get('osname', None)
+        self.osversion = kwargs.get('osversion', None)
+        self.osfamily = kwargs.get('osfamily', None)
+        self.unix_id = kwargs.get('unix_id', None)
+        self.unix_gid = kwargs.get('unix_gid', None)
+        self.expires = kwargs.get('expires', None)
+
+
 def init(engine):
     Base.metadata.create_all(engine)
