@@ -48,11 +48,9 @@ class zmqClient(Base):
     __tablename__ = 'ZMQCLIENT_CLIENT'
     id = Column(Integer, primary_key=True)
     uuid = Column(String(50),unique=True,nullable = False)
-    hostname = Column(String(50), nullable = False)
     def __init__(self, **kwargs):
         print 'here we are', kwargs
         self.uuid = kwargs.get('uuid', None)
-        self.hostname = kwargs.get('hostname', None)
         print 'here we are', self.uuid
     def __repr__(self):
         return "<zmqClient(%s,%s)>" % (self.uuid,self.id)
