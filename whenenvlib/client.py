@@ -4,36 +4,9 @@ from random import choice
 import time
 import json
 from thingys_db import thingys_db
+import logging
 
-context = zmq.Context()
-socket_sub = context.socket(zmq.SUB)
-socket_pub = context.socket(zmq.PUB)
-
-socket_pub.connect("tcp://127.0.0.1:5000")
-
-
-socket_sub.connect("tcp://127.0.0.1:5001")
-
-process_id = str(uuid.uuid4())
-
-
-knownchannles = {
-    "register" : "c2a4d156-114b-4ad8-ae87-cfa14b261bde"
-    }
-
-
-
-
-
-socket_sub.setsockopt(zmq.SUBSCRIBE, str(process_id))
-socket_sub.setsockopt(zmq.SUBSCRIBE, 'frog')
-
-master = None
-
-poller = zmq.Poller()
-poller.register(socket_sub, zmq.POLLIN)
-poller.register(socket_pub, zmq.POLLIN)
-    
+log = logging.getLogger("db_controler")
 
 
 class thingy:
@@ -45,11 +18,17 @@ class thingy:
         }
         self.identity = identity
         self.master = None
-        
+
         self.database = thingys_db()
         self.database.sqla = 'sqlite:///:memory:'
         self.database.dbstuff()
-        
+
+    def call_register_topic_cb(self,topic):
+        if self.register_topic_cb == None:
+            return
+        return self.register_topic_cb(topic)
+
+
     def register(self, message):
         msg = json.loads(message)
         self.master = msg["master"]
@@ -61,41 +40,70 @@ class thingy:
             print envid
             if not envid is None:
                 self.topics[envid] = self.enviroment
-                socket_sub.setsockopt(zmq.SUBSCRIBE, str(envid))
-                
+                #socket_sub.setsockopt(zmq.SUBSCRIBE, str(envid))
+                self.call_register_topic_cb(str(envid))
+
+
     def enviroment(self, message):
         print "got env" , message
         self.stop = True
-        
-    def sender(self):
-        if self.master is None:
-            socket_pub.send_multipart([knownchannles["register"], json.dumps(self.identity)])
-            return
-        
-        
-    def reciver(self):
 
-        socks = dict(poller.poll(50))
-        if socks.get(socket_sub) is not None:
+
+
+
+class thingy_ctrl:
+    def __init__(self, **kwargs):
+        self.context = zmq.Context()
+        self.socket_sub = self.context.socket(zmq.SUB)
+        self.socket_pub = self.context.socket(zmq.PUB)
+        self.socket_pub.connect("tcp://127.0.0.1:5000")
+        self.socket_sub.connect("tcp://127.0.0.1:5001")
+        self.process_id = str(uuid.uuid4())
+        self.knownchannles = {
+            "register" : "c2a4d156-114b-4ad8-ae87-cfa14b261bde"
+            }
+        self.socket_sub.setsockopt(zmq.SUBSCRIBE, self.process_id)
+        self.socket_sub.setsockopt(zmq.SUBSCRIBE, 'frog')
+
+        master = None
+
+        self.poller = zmq.Poller()
+        self.poller.register(self.socket_sub, zmq.POLLIN)
+        self.poller.register(self.socket_pub, zmq.POLLIN)
+
+
+    def run(self):
+        self.identity = {
+            'identity' : self.process_id,
+            'topics' : ['enviroment', 'execute']
+        }
+
+        self.poo = thingy(self.process_id, self.identity)
+        self.poo.register_topic_cb = self.subscribe_topic
+        self.loop()
+
+
+    def sendmsgs(self):
+        if self.poo.master is None:
+            self.socket_pub.send_multipart([self.knownchannles["register"], json.dumps(self.identity)])
+
+    def recivemsg(self):
+        socks = dict(self.poller.poll(50))
+        if socks.get(self.socket_sub) is not None:
             print "got message"
-            topic, msg = socket_sub.recv_multipart()
+            topic, msg = self.socket_sub.recv_multipart()
             print topic, msg
-            self.database.write_msg(topic, self.proc, msg)
-            handler = self.topics.get(topic)
+            self.poo.database.write_msg(topic, self.process_id, msg)
+            handler = self.poo.topics.get(topic)
             if not handler is None:
                 handler(msg)
 
     def loop(self):
-        while self.stop is False:
-            self.sender()
-            self.reciver()
+        while self.poo.stop is False:
+            self.sendmsgs()
+            self.recivemsg()
 
 
+    def subscribe_topic(self,topic):
+        self.socket_sub.setsockopt(zmq.SUBSCRIBE, topic)
 
-identity = {
-    'identity' : process_id,
-    'topics' : ['enviroment', 'execute']
-}
-
-poo = thingy(process_id, identity)
-poo.loop()
