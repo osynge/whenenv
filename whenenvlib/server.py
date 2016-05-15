@@ -5,20 +5,22 @@ import json
 import model
 import logging
 from thingys_db import thingys_db
+from zmq_pub import zmq_pub
 
 log = logging.getLogger("db_controler")
+
+
 
 class thingy:
     def __init__(self):
 
         context = zmq.Context()
+        self.addr_pub = "tcp://127.0.0.1:5001"
+
         self.socket_sub = context.socket(zmq.SUB)
 
 
-        self.socket_pub = context.socket(zmq.PUB)
-
         self.socket_sub.bind("tcp://127.0.0.1:5000")
-        self.socket_pub.bind("tcp://127.0.0.1:5001")
 
         self.process_id = str(uuid.uuid4())
 
@@ -29,6 +31,13 @@ class thingy:
         self.database = thingys_db()
         self.database.sqla = 'sqlite:///:memory:'
         self.database.dbstuff()
+
+
+        self.zmq_pub = zmq_pub(
+                addr = self.addr_pub,
+                process_id = self.process_id
+            )
+
 
     def register(self, msg):
         print "register=%s" % (msg)
@@ -43,7 +52,7 @@ class thingy:
                 topic_id = str(uuid.uuid4())
                 self.topics[topic] = topic_id
             output['topics'][topic] = topic_id
-        self.socket_pub.send_multipart([str(msg['identity']), str(json.dumps(output))])
+        self.zmq_pub.send_multipart(str(msg['identity']), str(json.dumps(output)))
 
 
     def process(self, msg):
@@ -73,7 +82,7 @@ class thingy:
                 self.database.write_msg(topic,self.process_id, msg)
                 handler = knownchannles.get(topic)
                 handler(msg)
-            if socks.get(self.socket_pub) is not None:
-                print "has message to send"
+            #if socks.get(self.socket_pub) is not None:
+            #    print "has message to send"
             for key in self.topics.keys():
-                self.socket_pub.send_multipart([str(self.topics.get(key)), str("dddd")])
+                self.zmq_pub.send_multipart(str(self.topics.get(key)), str("dddd"))
