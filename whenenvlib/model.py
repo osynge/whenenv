@@ -96,6 +96,7 @@ class zmqClientMetadata(Base):
         self.osfamily = kwargs.get('osfamily', None)
         self.unix_id = kwargs.get('unix_id', None)
         self.unix_gid = kwargs.get('unix_gid', None)
+        self.role = kwargs.get('role', None)
         self.expires = kwargs.get('expires', None)
 
 
