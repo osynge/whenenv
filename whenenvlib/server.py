@@ -6,21 +6,18 @@ import model
 import logging
 from thingys_db import thingys_db
 from zmq_pub import zmq_pub
+from zmq_sub import zmq_sub
+
 
 log = logging.getLogger("db_controler")
-
 
 
 class thingy:
     def __init__(self):
 
-        context = zmq.Context()
         self.addr_pub = "tcp://127.0.0.1:5001"
-
-        self.socket_sub = context.socket(zmq.SUB)
-
-
-        self.socket_sub.bind("tcp://127.0.0.1:5000")
+        self.addr_sub = "tcp://127.0.0.1:5000"
+        
 
         self.process_id = str(uuid.uuid4())
 
@@ -33,13 +30,17 @@ class thingy:
         self.database.dbstuff()
 
 
+        self.zmq_sub = zmq_sub(
+                addr = self.addr_sub,
+                process_id = self.process_id
+            )
         self.zmq_pub = zmq_pub(
                 addr = self.addr_pub,
                 process_id = self.process_id
             )
 
 
-    def register(self, msg):
+    def register(self, topic, msg):
         print "register=%s" % (msg)
         msg = json.loads(msg)
         output = {
@@ -55,7 +56,7 @@ class thingy:
         self.zmq_pub.send_multipart(str(msg['identity']), str(json.dumps(output)))
 
 
-    def process(self, msg):
+    def process(self, topic, msg):
         print "process=%s" % (msg)
 
 
@@ -69,20 +70,9 @@ class thingy:
         self.database.db_session()
 
         for key in knownchannles.keys():
-            self.socket_sub.setsockopt(zmq.SUBSCRIBE, key)
-        poller = zmq.Poller()
-        poller.register(self.socket_sub, zmq.POLLIN)
-        #poller.register(self.socket_pub, zmq.POLLIN)
+            self.zmq_sub.add_callback(key, knownchannles.get(key))
 
         while True:
-            socks = dict(poller.poll(50))
-            if socks.get(self.socket_sub) is not None:
-                print "got message"
-                topic, msg = self.socket_sub.recv_multipart()
-                self.database.write_msg(topic,self.process_id, msg)
-                handler = knownchannles.get(topic)
-                handler(msg)
-            #if socks.get(self.socket_pub) is not None:
-            #    print "has message to send"
+            self.zmq_sub.listen()
             for key in self.topics.keys():
                 self.zmq_pub.send_multipart(str(self.topics.get(key)), str("dddd"))
