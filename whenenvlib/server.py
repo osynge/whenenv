@@ -4,10 +4,11 @@ import time
 import json
 import model
 import logging
+import signal
 from thingys_db import thingys_db
 from zmq_pub import zmq_pub
 from zmq_sub import zmq_sub
-
+import threadpool_zmqpub
 
 log = logging.getLogger("db_controler")
 
@@ -38,10 +39,17 @@ class thingy:
                 addr = self.addr_pub,
                 process_id = self.process_id
             )
-
+        self.fred = threadpool_zmqpub.tp_zmqpub(
+            zmq_pub = self.zmq_pub
+            )
+        self.fred.zmq_pub = self.zmq_pub
+        self.fred.activate()
+        
+        signal.signal(signal.SIGINT, self.handle_signal)
+        
 
     def register(self, topic, msg):
-        print "register=%s" % (msg)
+        #print "register=%s" % (msg)
         msg = json.loads(msg)
         output = {
             'master' : str(self.process_id),
@@ -54,6 +62,17 @@ class thingy:
                 self.topics[topic] = topic_id
             output['topics'][topic] = topic_id
         self.zmq_pub.send_multipart(str(msg['identity']), str(json.dumps(output)))
+        #self.fred.send_multipart(str(msg['identity']), str(json.dumps(output)))
+
+
+    def handle_signal(self, signum, frame):
+        print 'Here you go'
+        print signum, frame.f_trace
+        self.fred.wait_completion()
+        self.should_listen = False
+        
+
+        
 
 
     def process(self, topic, msg):
@@ -71,8 +90,9 @@ class thingy:
 
         for key in knownchannles.keys():
             self.zmq_sub.add_callback(key, knownchannles.get(key))
-
-        while True:
+        self.should_listen = True
+        while self.should_listen is True:
             self.zmq_sub.listen()
             for key in self.topics.keys():
                 self.zmq_pub.send_multipart(str(self.topics.get(key)), str("dddd"))
+        
