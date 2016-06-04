@@ -5,8 +5,9 @@ import time
 import json
 from thingys_db import thingys_db
 import logging
+import threadpool_zmqpub
 
-log = logging.getLogger("db_controler")
+log = logging.getLogger(__name__)
 
 
 class thingy:
@@ -33,7 +34,7 @@ class thingy:
         msg = json.loads(message)
         self.master = msg["master"]
         rec_topics = msg.get("topics")
-        print msg
+        log.info("msg=", msg)
         if not rec_topics is None:
             print 'herde'
             envid = rec_topics.get("enviroment")
@@ -72,6 +73,15 @@ class thingy_ctrl:
         self.poller.register(self.socket_pub, zmq.POLLIN)
 
 
+        self.fred = threadpool_zmqpub.tp_zmqpub(
+            zmq_pub = self.socket_pub
+            
+            )
+        self.fred.zmq_pub= self.socket_pub
+        self.fred.activate()
+
+
+
     def run(self):
         self.identity = {
             'identity' : self.process_id,
@@ -86,6 +96,7 @@ class thingy_ctrl:
     def sendmsgs(self):
         if self.poo.master is None:
             self.socket_pub.send_multipart([self.knownchannles["register"], json.dumps(self.identity)])
+            self.fred.send_multipart(self.knownchannles["register"], json.dumps(self.identity))
 
     def recivemsg(self):
         socks = dict(self.poller.poll(50))
