@@ -18,7 +18,7 @@ class thingy:
 
         self.addr_pub = "tcp://127.0.0.1:5001"
         self.addr_sub = "tcp://127.0.0.1:5000"
-        
+
 
         self.process_id = str(uuid.uuid4())
 
@@ -44,9 +44,9 @@ class thingy:
             )
         self.fred.zmq_pub = self.zmq_pub
         self.fred.activate()
-        
+
         signal.signal(signal.SIGINT, self.handle_signal)
-        
+
 
     def register(self, topic, msg):
         #print "register=%s" % (msg)
@@ -70,9 +70,9 @@ class thingy:
         print signum, frame.f_trace
         self.fred.wait_completion()
         self.should_listen = False
-        
 
-        
+
+
 
 
     def process(self, topic, msg):
@@ -95,4 +95,4 @@ class thingy:
             self.zmq_sub.listen()
             for key in self.topics.keys():
                 self.zmq_pub.send_multipart(str(self.topics.get(key)), str("dddd"))
-        
+
