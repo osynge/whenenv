@@ -84,13 +84,18 @@ class holderBase(object):
         return True
     
     def matchCompare(self,Aholder):
-        SelfLenRequiredValues = len(self.dictionary[u'variables']['require_values'].keys())
-        OtherLenRequiredValues = len(Aholder.dictionary[u'variables']['require_values'].keys())
+        try:
+            SelfLenRequiredValues = len(self.dictionary[u'variables']['require_values'].keys())
+        except:
+            SelfLenRequiredValues = 0
+        try:
+            OtherLenRequiredValues = len(Aholder.dictionary[u'variables']['require_values'].keys())
+        except:
+            OtherLenRequiredValues = 0
         if OtherLenRequiredValues > SelfLenRequiredValues:
             return -1
         if OtherLenRequiredValues < SelfLenRequiredValues:
             return 1
-        
         try:
             SelfLenHasValues = len(self.dictionary[u'variables']['require_keys'])
         except KeyError:
