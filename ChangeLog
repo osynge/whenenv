@@ -5,6 +5,7 @@ whenenv-0.0.25
 
     * Add tox based testing
     * Improve export system
+    * Fix Exception in matchin when one party did not have "required_values"
 
 whenenv-0.0.24
 
