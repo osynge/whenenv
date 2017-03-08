@@ -1,6 +1,11 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.25
+
+    * Add tox based testing
+    * Improve export system
+
 whenenv-0.0.24
 
     * Reorganise setup.py adding new enviroment options.
