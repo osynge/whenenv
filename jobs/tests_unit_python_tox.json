@@ -1,0 +1,15 @@
+{
+    "name" : "unit_tests_python_tox",
+    "provides" : ["unittests"],
+    "script" : "tests_unit_python_tox.sh",
+    "variables" : {
+        "require_values" : {
+            "BUILD_TYPE" : "disttools",
+            "TESTS" : "tox"
+            },
+        "require_keys" : []
+    },
+    "depends" : [
+        "unit_tests_python_tox_env"
+        ]
+}

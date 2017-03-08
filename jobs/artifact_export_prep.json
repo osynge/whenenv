@@ -1,0 +1,10 @@
+{
+    "name" : "artifact_export_prep",
+    "provides" : ["artifact_export_prep"],
+    "script" : "artifact_export_prep.sh",
+    "variables" : {
+        "require_values" : {},
+        "require_keys" : ["REPOSITORY_TYPE"],
+        "provides_keys" : [ "ART_EXPORT_ROOTDIR"]
+    }
+}

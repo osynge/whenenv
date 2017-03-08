@@ -1,0 +1,12 @@
+{
+    "name" : "artifact_export_src",
+    "provides" : ["artifact_export_src"],
+    "script" : "artifact_export_src.sh",
+    "variables" : {
+        "require_values" : {},
+        "require_keys" : [
+            "DIR_ART_SRC",
+            "DIR_EXPORT_TGZ"
+            ]
+    }
+}

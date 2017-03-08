@@ -1,0 +1,13 @@
+{
+    "name" : "unit_tests_python_tox_noop",
+    "provides" : ["unittests"],
+    "script" : "tests_unit_python_tox_noop.sh",
+    "variables" : {
+        "require_values" : {
+            "BUILD_TYPE" : "disttools",
+            "TESTS" : "tox",
+            "OPERATING_SYSTEM" : "Scientific_Linux-6"
+            },
+        "require_keys" : []
+    }
+}

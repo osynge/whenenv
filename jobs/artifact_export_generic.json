@@ -1,0 +1,14 @@
+{
+    "name" : "artifact_export_generic",
+    "provides" : ["artifact_export"],
+    "depends" : [
+        "artifact_export_src",
+        "artifact_export_bin",
+        "artifact_export_spkg",
+        "artifact_export_pkg"
+        ],
+    "variables" : {
+        "require_values" : {},
+        "require_keys" : []
+    }
+}

@@ -5,6 +5,8 @@
     "variables" : {
         "require_values" : {},
         "require_keys" : [ ],
-        "provides_keys" : [ "PKG_FORMAT" ]
+        "provides_keys" : [ "PKG_FORMAT",
+            "PY_OS",
+            "PY_OS_VER_MAJ" ]
     }
 }

@@ -1,0 +1,9 @@
+{
+    "name" : "artifact_export_pkg",
+    "provides" : ["artifact_export_pkg"],
+    "variables" : {
+        "require_values" : {},
+        "require_keys" : [ ],
+        "provides_keys" : []
+    }
+}

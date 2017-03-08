@@ -1,0 +1,11 @@
+{
+    "name" : "export_directories_dpkg",
+    "provides" : [ "export_directories" ],
+    "script" : "export_directories_dpkg.sh",
+    "variables" : {
+        "require_values" : { "PKG_FORMAT" : "dpkg"},
+        "require_keys" : [ "RELEASE" ],
+        "provides_keys" : [ "DIR_EXPORT_TGZ", "DIR_EXPORT_BTGZ", "DIR_EXPORT_DPKG" ]
+    },
+    "depends" : [ "build_env_discover" ]
+}

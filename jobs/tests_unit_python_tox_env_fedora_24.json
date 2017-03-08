@@ -1,0 +1,10 @@
+{
+    "name" : "tests_unit_python_tox_env_fedora_24",
+    "provides" : ["unit_tests_python_tox_env"],
+    "script" : "tests_unit_python_tox_env_fedora_24.sh",
+    "variables" : {
+        "require_values" : {"OPERATING_SYSTEM" : "Fedora-24"},
+        "require_keys" : [],
+        "provides_keys" : ["TOXCMD","TOXDIR"]
+    }
+}

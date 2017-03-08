@@ -1,0 +1,9 @@
+{
+    "name" : "artifact_export_spkg",
+    "provides" : ["artifact_export_spkg"],
+    "variables" : {
+        "require_values" : {},
+        "require_keys" : [],
+        "provides_keys" : []
+    }
+}

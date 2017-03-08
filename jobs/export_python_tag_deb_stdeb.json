@@ -1,0 +1,13 @@
+{
+    "name" : "export_python_tag_deb_stdeb",
+    "provides" : ["export_package"],
+    "script" : "export_python_tag_deb_stdeb.sh",
+    "variables" : {
+        "require_values" : { 
+            "OPERATING_SYSTEM" : "Debian",
+            "RELEASE" : "production",
+            "BUILD_TYPE" : "disttools"
+            },
+        "require_keys" : []
+    }
+}

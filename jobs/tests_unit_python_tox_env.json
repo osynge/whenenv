@@ -1,0 +1,10 @@
+{
+    "name" : "unit_tests_python_tox_env",
+    "provides" : ["unit_tests_python_tox_env"],
+    "script" : "unit_tests_python_tox_env.sh",
+    "variables" : {
+        "require_values" : {},
+        "require_keys" : [],
+        "provides_keys" : ["TOXCMD","TOXDIR"]
+    }
+}

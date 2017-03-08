@@ -1,0 +1,12 @@
+{
+    "name" : "artifact_export_pkg_deb",
+    "provides" : ["artifact_export_pkg"],
+    "script" : "artifact_export_pkg_deb.sh",
+    "variables" : {
+        "require_values" : {},
+        "require_keys" : [
+            "DIR_EXPORT_DPKG",
+            "DIR_ART_DPKG" ],
+        "provides_keys" : []
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "name" : "artifact_export_bin",
+    "provides" : ["artifact_export_bin"],
+    "script" : "artifact_export_bin.sh",
+    "variables" : {
+        "require_values" : {},
+        "require_keys" : [
+            "DIR_EXPORT_BTGZ",
+            "DIR_ART_BIN"],
+        "provides_keys" : []
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "name" : "artifact_setup_dpkg",
+    "provides" : ["artifact_setup"],
+    "script" : "artifact_setup_dpkg.sh",
+    "variables" : {
+        "require_values" : { 
+            "PKG_FORMAT" : "dpkg",
+            "BUILD_TYPE" : "disttools"
+            },
+        "require_keys" : [],
+        "provides_keys" : [ "DIR_ART_DPKG",
+            "DIR_ART_BIN",
+            "DIR_ART_SRC" ]
+    }
+}

@@ -1,0 +1,12 @@
+{
+	"name": "build_python_package_deb",
+	"provides": ["build_python_package"],
+	"script": "build_python_package_deb.sh",
+	"variables": {
+		"require_values": {
+			"BUILD_TYPE": "disttools",
+			"PKG_FORMAT": "dpkg"
+		},
+		"require_keys": ["DIR_ART_DPKG"]
+	}
+}
