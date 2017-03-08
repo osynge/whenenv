@@ -1,0 +1,12 @@
+{
+    "name" : "artifact_export_spkg_srpm",
+    "provides" : ["artifact_export_spkg"],
+    "script" : "artifact_export_pkg_srpm.sh",
+    "variables" : {
+        "require_values" : {},
+        "require_keys" : [
+            "DIR_EXPORT_SRPM",
+            "DIR_ART_SRPM" ],
+        "provides_keys" : []
+    }
+}

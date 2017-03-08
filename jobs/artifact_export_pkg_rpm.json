@@ -1,0 +1,12 @@
+{
+    "name" : "artifact_export_pkg_rpm",
+    "provides" : ["artifact_export_pkg"],
+    "script" : "artifact_export_pkg_rpm.sh",
+    "variables" : {
+        "require_values" : {},
+        "require_keys" : [
+            "DIR_EXPORT_RPM",
+            "DIR_ART_RPM" ],
+        "provides_keys" : []
+    }
+}
