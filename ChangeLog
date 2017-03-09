@@ -1,6 +1,10 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.26
+
+    * Add missing script
+
 whenenv-0.0.25
 
     * Add tox based testing
