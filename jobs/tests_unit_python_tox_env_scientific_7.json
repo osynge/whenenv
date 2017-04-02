@@ -3,7 +3,10 @@
     "provides" : ["unit_tests_python_tox_env"],
     "script" : "tests_unit_python_tox_env_scientific_7.sh",
     "variables" : {
-        "require_values" : {"OPERATING_SYSTEM" : "Scientific_Linux-7"},
+        "require_values": {
+			"PY_OS": "Scientific Linux",
+			"PY_OS_VER_MAJ": "7"
+		},
         "require_keys" : [],
         "provides_keys" : ["TOXCMD","TOXDIR"]
     }
