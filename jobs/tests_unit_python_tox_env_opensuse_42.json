@@ -1,0 +1,13 @@
+{
+    "name" : "tests_unit_python_tox_env_opensuse_42",
+    "provides" : ["unit_tests_python_tox_env"],
+    "script" : "tests_unit_python_tox_env_opensuse_42.sh",
+    "variables" : {
+        "require_values": {
+			"PY_OS": "openSUSE",
+			"PY_OS_VER_MAJ": "42"
+		},
+        "require_keys" : [],
+        "provides_keys" : ["TOXCMD","TOXDIR"]
+    }
+}
