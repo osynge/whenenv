@@ -10,6 +10,8 @@
         "require_keys" : []
     },
     "depends" : [
+        "unit_tests_python_tox_workspace",
         "unit_tests_python_tox_env"
+        
         ]
 }

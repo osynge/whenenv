@@ -8,6 +8,6 @@
 			"PY_OS_VER_MAJ": "24"
 		},
         "require_keys" : [],
-        "provides_keys" : ["TOXCMD","TOXDIR"]
+        "provides_keys" : ["TOXCMD"]
     }
 }

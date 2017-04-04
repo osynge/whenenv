@@ -1,0 +1,10 @@
+{
+        "name": "unit_tests_python_tox_workspace",
+        "provides": ["unit_tests_python_tox_workspace"],
+        "script": "unit_tests_python_tox_workspace.sh",
+        "variables": {
+                "require_values": {},
+                "require_keys": [],
+                "provides_keys": ["TOXDIR"]
+        }
+}
