@@ -4,7 +4,8 @@
     "script" : "nosetests_python.sh",
     "variables" : {
         "require_values" : {
-            "BUILD_TYPE" : "disttools" },
+            "BUILD_TYPE" : "disttools",
+            "TESTS" : "nosetests"},
         "require_keys" : []
     }
 }
