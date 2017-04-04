@@ -1,6 +1,10 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.28
+
+    * Moving tox enviroment around
+
 whenenv-0.0.26
 
     * Better tox enviroment
