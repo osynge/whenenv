@@ -1,6 +1,14 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.30
+
+    * build_env_discover exampnded:
+        new variable: PY_OS_VER_MIN now gives minor version
+    * Syntax fix:
+      - chroot_packages_install_debian.json
+      - build_python_package_branch_rpm.json
+
 whenenv-0.0.29
 
     * better matchCompare handling
