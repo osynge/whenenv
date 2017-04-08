@@ -85,6 +85,34 @@ class holderBase(object):
     
     def matchCompare(self,Aholder):
         try:
+            SelfVariables = self.dictionary[u'variables']
+        except:
+            SelfVariables = None
+        try:
+            AholderVariables = Aholder.dictionary[u'variables']
+        except:
+            AholderVariables = None
+        if SelfVariables is None and AholderVariables is None:
+            return 0
+        if SelfVariables is None:
+            return -1
+        if AholderVariables is None:
+            return 1
+        try:
+            SelfRequireVariables = SelfVariables[u'require_values']
+        except:
+            SelfRequireVariables = None
+        try:
+            AholderRequireVariables = AholderVariables[u'require_values']
+        except:
+            AholderRequireVariables = None
+        if SelfRequireVariables is None and AholderRequireVariables is None:
+            return 0
+        if SelfRequireVariables is None:
+            return -1
+        if AholderRequireVariables is None:
+            return 1
+        try:
             SelfLenRequiredValues = len(self.dictionary[u'variables']['require_values'].keys())
         except:
             SelfLenRequiredValues = 0
