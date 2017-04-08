@@ -1,6 +1,11 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.29
+
+    * better matchCompare handling
+      - Remove errors when comparing variables for jobs
+
 whenenv-0.0.28
 
     * Moving tox enviroment around
