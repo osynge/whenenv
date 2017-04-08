@@ -1,11 +1,11 @@
 {
-    "name" : "chroot_packages_install_debian",
-    "provides" : ["chroot_packages_install"],
-    "script" : "chroot_packages_install_debian.sh",
-    "variables" : {
-        "require_values" : {
-            "PY_OS": "debian",
-            },
-        "require_keys" : []
-    }
+	"name": "chroot_packages_install_debian",
+	"provides": ["chroot_packages_install"],
+	"script": "chroot_packages_install_debian.sh",
+	"variables": {
+		"require_values": {
+			"PY_OS": "debian"
+		},
+		"require_keys": []
+	}
 }

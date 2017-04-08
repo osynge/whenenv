@@ -5,7 +5,7 @@
     "variables" : {
         "require_values" : { 
             "BUILD_TYPE" : "disttools",
-            "PKG_FORMAT" : "rpm",
+            "PKG_FORMAT" : "rpm"
             },
         "require_keys" : [ "BRANCH" ]
     }
