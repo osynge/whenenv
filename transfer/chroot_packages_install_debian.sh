@@ -8,10 +8,6 @@ apt-get install git \
     make \
     swig \
     gcc \
-    lcg-CA \
-    ca_BitFace \
-    fetch-crl \
-    vmcatcher \
     ntp \
     -y
 
