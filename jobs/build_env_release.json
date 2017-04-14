@@ -1,0 +1,13 @@
+{
+	"name": "build_env_release",
+	"provides": ["build_env_release"],
+	"script": "build_env_release.sh",
+	"variables": {
+		"require_values": {},
+		"require_keys": [],
+		"provides_keys": ["RELEASE_ENV"]
+	},
+	"depends": [
+		"build_env_os"
+	]
+}

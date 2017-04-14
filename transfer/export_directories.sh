@@ -24,22 +24,22 @@ sleep 10
 exit 1
 fi
 
-if [ "X${RELEASE_TYPE}" = "X" ] ; then
+if [ "X${RELEASE_ENV}" = "X" ] ; then
   if [ "X${BRANCH}" != "X" ] ; then
     echo "release type defaulted from BRANCH"
-    RELEASE_TYPE="nightly/${BRANCH}"
+    RELEASE_ENV="nightly/${BRANCH}"
   fi
 fi
 
-if [ "X${RELEASE_TYPE}" = "X" ] ; then
-  echo "release type not defined atempting to default by RELEASE_TYPE"
+if [ "X${RELEASE_ENV}" = "X" ] ; then
+  echo "release type not defined atempting to default by RELEASE_ENV"
   if [ "X${RELEASE}" != "X" ] ; then
     if [ "X${RELEASE}" = "Xdevelopment" ] ; then
-      RELEASE_TYPE="nightly/master"
+      RELEASE_ENV="nightly/master"
     fi
 
     if [ "X${RELEASE}" = "Xproduction" ] ; then
-      RELEASE_TYPE="production"
+      RELEASE_ENV="production"
     fi
   fi
 fi
@@ -49,47 +49,47 @@ echo "PLATFORM not defined"
 PLATFORM=`arch`
 fi
 
-if [ "X${FLAVOR}" = "X" ] ; then
-echo "FLAVOR not defined"
+if [ "X${RELEASE_FLAVOR}" = "X" ] ; then
+echo "RELEASE_FLAVOR not defined"
 PY_OS=`python -c "import platform; import sys; sys.stdout.write(platform.linux_distribution()[0].strip())"`
 PY_OS_VER_MAJ=`python -c "import platform; import sys; sys.stdout.write(platform.linux_distribution()[1].split('.')[0])"`
 if [ "X${PY_OS}" = "Xdebian" ] ; then
-FLAVOR="debian/${PY_OS_VER_MAJ}"
+RELEASE_FLAVOR="debian/${PY_OS_VER_MAJ}"
 fi
 if [ "X${PY_OS}" = "XScientific Linux" ] ; then
-FLAVOR="scientific/${PY_OS_VER_MAJ}"
+RELEASE_FLAVOR="scientific/${PY_OS_VER_MAJ}"
 fi
 if [ "X${PY_OS}" = "XopenSUSE" ] ; then
-FLAVOR="openSUSE/${PY_OS_VER_MAJ}"
+RELEASE_FLAVOR="openSUSE/${PY_OS_VER_MAJ}"
 fi
 if [ "X${PY_OS}" = "XFedora" ] ; then
-FLAVOR="Fedora/${PY_OS_VER_MAJ}"
+RELEASE_FLAVOR="Fedora/${PY_OS_VER_MAJ}"
 fi
 
 fi
-if [ "X${FLAVOR}" = "X" ] ; then
+if [ "X${RELEASE_FLAVOR}" = "X" ] ; then
 echo "No flavour defined"
-FLAVOR="${PY_OS}/${PY_OS_VER_MAJ}"
+RELEASE_FLAVOR="${PY_OS}/${PY_OS_VER_MAJ}"
 fi
 
-if [ "X${RELEASE_TYPE}" = "X" ] ; then
-echo "No RELEASE_TYPE defined"
+if [ "X${RELEASE_ENV}" = "X" ] ; then
+echo "No RELEASE_ENV defined"
 sleep 1
 exit 1
 fi
 
 
 if [ "X${DIR_EXPORT_TGZ}" = "X" ] ; then
-DIR_EXPORT_TGZ="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/src/tgz"
+DIR_EXPORT_TGZ="${ROOTDIR}/${RELEASE_FLAVOR}/${RELEASE_ENV}/src/tgz"
 fi
 if [ "X${DIR_EXPORT_BTGZ}" = "X" ] ; then
-DIR_EXPORT_BTGZ="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/tgz"
+DIR_EXPORT_BTGZ="${ROOTDIR}/${RELEASE_FLAVOR}/${RELEASE_ENV}/${PLATFORM}/tgz"
 fi
 if [ "X${DIR_EXPORT_SRPM}" = "X" ] ; then
-DIR_EXPORT_SRPM="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/src/srpm"
+DIR_EXPORT_SRPM="${ROOTDIR}/${RELEASE_FLAVOR}/${RELEASE_ENV}/src/srpm"
 fi
 if [ "X${DIR_EXPORT_RPM}" = "X" ] ; then
-DIR_EXPORT_RPM="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/rpm"
+DIR_EXPORT_RPM="${ROOTDIR}/${RELEASE_FLAVOR}/${RELEASE_ENV}/${PLATFORM}/rpm"
 fi
 
 export DIR_EXPORT_TGZ

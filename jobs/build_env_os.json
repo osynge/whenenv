@@ -1,0 +1,14 @@
+{
+	"name": "build_env_os",
+	"provides": ["build_env_os"],
+	"script": "build_env_os.sh",
+	"variables": {
+		"require_values": {},
+		"require_keys": [],
+		"provides_keys": ["PKG_FORMAT",
+			"PY_OS",
+			"PY_OS_VER_MAJ",
+			"PY_OS_VER_MIN"
+		]
+	}
+}

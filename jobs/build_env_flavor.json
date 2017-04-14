@@ -1,0 +1,14 @@
+{
+	"name": "build_env_flavor",
+	"provides": ["build_env_flavor"],
+	"script": "build_env_flavor.sh",
+	"variables": {
+		"require_values": {},
+		"require_keys": [],
+		"provides_keys": [ "RELEASE_FLAVOR" ]
+	},
+    "depends" : [
+        "build_env_os",
+        "build_env_release"
+        ]
+}
