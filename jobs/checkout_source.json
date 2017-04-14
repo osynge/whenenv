@@ -1,0 +1,13 @@
+{
+	"name": "checkout_source",
+	"provides": ["checkout_source"],
+	"variables": {
+		"provides_keys": [],
+		"require_values": {},
+		"require_keys": []
+	},
+	"depends": [
+		"checkout_date",
+		"checkout_vcs"
+	]
+}

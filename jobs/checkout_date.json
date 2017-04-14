@@ -1,0 +1,11 @@
+{
+	"name": "checkout_date",
+	"provides": ["checkout_date"],
+	"script": "checkout_date.sh",
+	"enviroment": "chroot",
+	"variables": {
+		"provides_keys": ["CHECKOUT_DATE"],
+		"require_values": {},
+		"require_keys": []
+	}
+}

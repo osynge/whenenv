@@ -1,6 +1,6 @@
 {
     "name" : "git_checkout_trunk",
-    "provides" : ["checkout_source"],
+    "provides" : ["checkout_vcs"],
     "script" : "git_checkout_development.sh",
     "enviroment" : "chroot",
     "variables" : { "provides_keys" : ["BUILD_SRC"],

@@ -1,6 +1,6 @@
 {
     "name" : "svn_checkout_tag",
-    "provides" : ["checkout_source"],
+    "provides" : ["checkout_vcs"],
     "script" : "svn_checkout_tag.sh",
     "enviroment" : "chroot",
     "variables" : { "provides_keys" : ["BUILD_SRC"],
