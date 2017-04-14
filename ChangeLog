@@ -1,6 +1,13 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.31
+
+    * Introduce more build enviroment variables for reuse
+      - RELEASE_ENV and RELEASE_FLAVOR
+        * Was only used in setting export directory
+        * Now made for global use
+
 whenenv-0.0.30
 
     * build_env_discover exampnded:
