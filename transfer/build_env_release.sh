@@ -5,7 +5,7 @@ if [ "X${RELEASE_ENV}" = "X" ] ; then
     if [ "X${RELEASE}" = "Xproduction" ] ; then
       RELEASE_ENV="production"
     fi
-  elif
+  else
     RELEASE_ENV="nightly/master"
   fi
   if [ "X${BRANCH}" != "X" ] ; then
