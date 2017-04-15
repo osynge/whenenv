@@ -5,7 +5,7 @@ if [ "X${BUILD_SRC}" = "X" ] ; then
 fi
 cd $BUILD_SRC
 python setup.py bdist_rpm \
-    --release rc${BUILD_NUMBER} \
+    --release rc${CHECKOUT_DATE} \
     --requires  "${RPM_DEPENDS}"
 
 if [ "X${DIR_ART_SRPMS}" != "X" ] ; then

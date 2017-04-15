@@ -1,10 +1,18 @@
 echo "GIT_SRC=${GIT_SRC}"
 echo "GIT_DEST=${GIT_DEST}"
 
-if [  "X${GIT_SRC}" = "XX" ] ; then
+if [  "X${GIT_SRC}" = "X" ] ; then
     echo "GIT_SRC not defined"
     exit 1
 fi
+
+
+if [  "X${CHECKOUT_DATE}" = "X" ] ; then
+    echo "CHECKOUT_DATE not defined"
+    exit 1
+fi
+
+
 if [ "X${GIT_DEST}" = "X" ] ; then
     echo "GIT_DEST not defined"
     exit 1
@@ -60,6 +68,6 @@ export BUILD_SRC
 
 cd ${ORIGINALDIR}
 
-SRC_VERSION=$(echo $GIT_TAG_LAST | sed -e "s/${GIT_TAG_FILTER}//")rc${BUILD_NUMBER}
+SRC_VERSION=$(echo $GIT_TAG_LAST | sed -e "s/${GIT_TAG_FILTER}//")rc${CHECKOUT_DATE}
 export SRC_VERSION
 

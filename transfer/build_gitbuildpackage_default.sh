@@ -35,13 +35,13 @@ cd build
 
 if [ "X${RELEASE}" = "Xdevelopment" ] ; then
 version=`awk '{gsub("[()]", ""); print $2; exit}' debian/changelog`
-dch --force-distribution  -v "${version}+${DIST}${BUILD_NUMBER}${ARCH}" "Yokel ${DIST} build #${BUILD_NUMBER}" --distribution $DIST
+dch --force-distribution  -v "${version}+${DIST}${CHECKOUT_DATE}${ARCH}" "Yokel ${DIST} build #${CHECKOUT_DATE}" --distribution $DIST
 #dch --distribution ${DIST}
 git commit -m"changing dist" debian/changelog
 fi
 if [ "X${RELEASE}" = "Xproduction" ] ; then
 version=`awk '{gsub("[()]", ""); print $2; exit}' debian/changelog`
-dch --force-distribution  -v "${version}" "Yokel ${DIST} build #${BUILD_NUMBER}" --distribution $DIST
+dch --force-distribution  -v "${version}" "Yokel ${DIST} build #${CHECKOUT_DATE}" --distribution $DIST
 #dch --distribution ${DIST}
 git commit -m"changing dist" debian/changelog
 fi

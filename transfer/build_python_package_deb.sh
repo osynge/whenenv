@@ -21,7 +21,7 @@ rsync -ltgoDv * ${DIR_ART_DPKG}/
 
 
 #python setup.py bdist_rpm \
-#    --release rc${BUILD_NUMBER} \
+#    --release rc${CHECKOUT_DATE} \
 #    --requires  "${RPM_DEPENDS}"
 
 #if [ "X${DIR_ART_SRPMS}" != "X" ] ; then

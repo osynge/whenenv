@@ -12,6 +12,7 @@
             ]
     },
     "depends" : [
+        "checkout_date",
         "autotools_version_build",
         "autotools_version_bootstrap",
         "autotools_configure",

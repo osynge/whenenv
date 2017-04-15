@@ -4,5 +4,6 @@
     "script" : "build_python_bdist_rename_development.sh",
     "variables" : {
         "require_values" : { "RELEASE" : "development", "BUILD_TYPE" : "disttools"}
-    }
+    },
+    "depends" : ["checkout_date"]
 }

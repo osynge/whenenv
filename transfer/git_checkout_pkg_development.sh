@@ -1,10 +1,18 @@
 echo "GIT_PKG_SRC=${GIT_PKG_SRC}"
 echo "GIT_PKG_DEST=${GIT_PKG_DEST}"
 
-if [  "X${GIT_PKG_SRC}" = "XX" ] ; then
+if [  "X${GIT_PKG_SRC}" = "X" ] ; then
     echo "GIT_PKG_SRC not defined"
     exit 1
 fi
+
+
+if [  "X${CHECKOUT_DATE}" = "X" ] ; then
+    echo "CHECKOUT_DATE not defined"
+    exit 1
+fi
+
+
 if [ "X${GIT_PKG_DEST}" = "X" ] ; then
     echo "GIT_PKG_DEST not defined"
     exit 1
@@ -58,6 +66,6 @@ GIT_PKG_TAG_LAST=$(git tag | grep "${GIT_PKG_TAG_FILTER}" | tail -n 1)
 
 cd ${ORIGINALDIR}
 
-SRC_VERSION=$(echo $GIT_PKG_TAG_LAST | sed -e "s/${GIT_PKG_TAG_FILTER}//")rc${BUILD_NUMBER}
+SRC_VERSION=$(echo $GIT_PKG_TAG_LAST | sed -e "s/${GIT_PKG_TAG_FILTER}//")rc${CHECKOUT_DATE}
 export SRC_VERSION
 

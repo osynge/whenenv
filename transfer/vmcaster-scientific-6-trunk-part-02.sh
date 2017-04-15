@@ -1,4 +1,9 @@
-pwd
+if [  "X${CHECKOUT_DATE}" = "X" ] ; then
+    echo "CHECKOUT_DATE not defined"
+    sleep 4
+    exit 1
+fi
+
 
 #chroot ${CHROOT}
 CHROOT_SCRIPT=${CHROOT}/script
@@ -27,18 +32,18 @@ cd build
 python setup.py sdist
 for src in \$(ls dist/*\\.tar\\.gz | grep -v \\.src\\.tar\\.gz )
 do
-newname=\$( echo \${src} | sed -e "s/tar\.gz/rc${BUILD_NUMBER}\.src\.tar\.gz/")
+newname=\$( echo \${src} | sed -e "s/tar\.gz/rc${CHECKOUT_DATE}\.src\.tar\.gz/")
 echo newname=\${newname}
 mv \$src \$newname
 done
 python setup.py bdist_rpm \
-    --release rc${BUILD_NUMBER} \
+    --release rc${CHECKOUT_DATE} \
     --requires  "python-sqlalchemy m2crypto python-magic"
 python setup.py bdist
 architecture=\$(arch)
 for src in \$(ls dist/*.tar.gz | grep \$architecture )
 do
-newname=\$( echo \${src} | sed -e "s/tar\.gz/rc${BUILD_NUMBER}\.bin\.tar\.gz/")
+newname=\$( echo \${src} | sed -e "s/tar\.gz/rc${CHECKOUT_DATE}\.bin\.tar\.gz/")
 echo \$src \$newname
 mv \$src \$newname
 done
