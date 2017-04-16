@@ -1,12 +1,13 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.34
+
+    * Fix bugs in python disttools bdist and sdist archives twice.
+
 whenenv-0.0.33
 
-    * Migrate to CHECKOUT_DATE from BUILD_NUMBER
-      - BUILD_NUMBER is a jenkins variable so should be avoided
-      - BUILD_NUMBER is tied to a jenkisn job, so making it dificult to manage
-        migration between development jobs and main jobs.
+    * Dont rename python disttools bdist and sdist archives twice.
 
 whenenv-0.0.32
 
