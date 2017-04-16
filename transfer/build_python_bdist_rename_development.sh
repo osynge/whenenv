@@ -14,7 +14,7 @@ fi
 
 cd $BUILD_SRC
 architecture=$(arch)
-for src in $(ls dist/*.tar.gz | grep $architecture )
+for src in $(ls dist/*.tar.gz | grep $architecture | grep -v ${CHECKOUT_DATE} )
 do
 newname=$( echo ${src} | sed -e "s/tar\.gz/rc${CHECKOUT_DATE}\.bin\.tar\.gz/")
 mv $src $newname

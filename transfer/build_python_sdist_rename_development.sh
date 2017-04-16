@@ -3,7 +3,7 @@ if [ "X${BUILD_SRC}" = "X" ] ; then
     exit 1
 fi
 cd $BUILD_SRC
-for src in $(ls dist/*.tar.gz | grep -v .src.tar.gz )
+for src in $(ls dist/*.tar.gz | grep -v .src.tar.gz | grep -v ${CHECKOUT_DATE} )
 do
 newname=$( echo ${src} | sed -e "s/tar\.gz/rc${CHECKOUT_DATE}\.src\.tar\.gz/")
 mv $src $newname
