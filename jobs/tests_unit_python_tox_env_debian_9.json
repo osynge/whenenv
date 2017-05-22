@@ -1,0 +1,13 @@
+{
+	"name": "tests_unit_python_tox_env_debian_9",
+	"provides": ["unit_tests_python_tox_env"],
+	"script": "tests_unit_python_tox_env_debian_9.sh",
+	"variables": {
+		"require_values": {
+			"PY_OS": "debian",
+			"PY_OS_VER_MAJ": "9"
+		},
+		"require_keys": [],
+		"provides_keys": ["TOXCMD"]
+	}
+}
