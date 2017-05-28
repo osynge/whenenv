@@ -1,9 +1,0 @@
-{
-    "name" : "chroot_teardown_scientific",
-    "provides" : ["chroot_teardown"],
-    "script" : "chroot-scientific-6-teardown.sh",
-    "variables" : {
-        "require_values" : {},
-        "require_keys" : [ "CHROOT" ]
-    }
-}
