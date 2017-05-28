@@ -1,6 +1,10 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.36
+
+    * Remove unneeded legacy scripts
+
 whenenv-0.0.35
 
     * Add tox support for debian 9.
