@@ -3,12 +3,7 @@ cat > ${CHROOT_SCRIPT} <<-EOF
 export http_proxy=http://squid:3128
 apt-get update -y
 apt-get upgrade -y
-apt-get install git \
-    python \
-    make \
-    swig \
-    gcc \
-    ntp \
+apt-get install ${BUILD_DEPS_DPKG} \
     -y
 
 EOF
