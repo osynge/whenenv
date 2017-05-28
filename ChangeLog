@@ -1,6 +1,10 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.37
+
+    * Fix debian chroot package install.
+
 whenenv-0.0.36
 
     * Remove unneeded legacy scripts
