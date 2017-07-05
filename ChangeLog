@@ -1,6 +1,11 @@
 Changelog
 ~~~~~~~~~~
 
+
+whenenv-0.0.38
+
+    * Remove gitbuildpackage
+
 whenenv-0.0.37
 
     * Fix debian chroot package install.
