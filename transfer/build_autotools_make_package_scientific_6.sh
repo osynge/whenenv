@@ -31,7 +31,7 @@ done
 fi
 
 set +e
-files_art_src=$(ls rpm/SRPM/*)
+files_art_src=$(ls rpm/SRPMS/*)
 set -e
 if [ "X${files_art_src}" != "X" ] ; then
 for art_src in $files_art_src
