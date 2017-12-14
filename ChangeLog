@@ -1,6 +1,10 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.40
+
+    * Change rpm default directories
+
 whenenv-0.0.39
 
     * Remove gitbuildpackage
