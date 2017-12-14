@@ -21,7 +21,7 @@ cd $BUILD_SRC
 make rpm
 
 set +e
-files_art_src=$(ls RPMS/x86_64/*)
+files_art_src=$(ls rpm/RPMS/x86_64/*)
 set -e
 if [ "X${files_art_src}" != "X" ] ; then
 for art_src in $files_art_src
@@ -31,7 +31,7 @@ done
 fi
 
 set +e
-files_art_src=$(ls ${DIR_ART_SRC}/*.src.tar.gz)
+files_art_src=$(ls rpm/SRPM/*)
 set -e
 if [ "X${files_art_src}" != "X" ] ; then
 for art_src in $files_art_src
