@@ -1,6 +1,10 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.41
+
+    * Remove depenedency on OPERATING_SYSTEM variable
+
 whenenv-0.0.40
 
     * Change rpm default directories
