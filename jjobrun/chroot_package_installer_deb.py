@@ -1,6 +1,4 @@
 import logging
-import watcher
-
 import time
 import json
 import datetime
@@ -10,20 +8,27 @@ import base64
 import string
 import pexpect
 import re
-import prompts
+import time
+import json
+import datetime
+import sys
+from . import chroot_package_installer_base
+from . import watcher
+from . import prompts
 
-transtbl = string.maketrans(
+
+transtbl = None
+if sys.version_info < (3,):
+    transtbl = string.maketrans(
           'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
           'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
         )
 
-
-import watcher
-
-import time
-import json
-import datetime
-import chroot_package_installer_base
+if sys.version_info > (3,):
+    transtbl = str.maketrans(
+          'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
+          'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
+        )
 
 syncDelay = datetime.timedelta(seconds=100)
 timeoutDelay = datetime.timedelta(seconds=500)
@@ -90,7 +95,7 @@ class ChrootPackageInstallerDebian2(chroot_package_installer_base.ChrootPackageI
             
             if fred["Status"] ==  'install ok installed':
                 if fred["Package"] == "rpm":
-                    print "adding rpm",fred["Status"]
+                    print ("adding rpm",fred["Status"])
                 foundpackages.add(str(fred["Package"]))
                 continue
             if fred["Status"] ==  u'deinstall ok config-files':
