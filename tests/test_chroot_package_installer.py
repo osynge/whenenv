@@ -11,14 +11,14 @@ def t1():
     foo = ChrootPackageInstallerDebian(command="/bin/bash")
     foo.initialise()
     output = foo.updatePackages()
-    print len(output)
+    print (len(output))
 
 
 def t2():
     foo = runnershell("/bin/bash",{})
     foo.initialise()
     script = "transfer/GenChroot.SL-6X.sh"
-    print foo.getEnv()
+    print (foo.getEnv())
     foo.p.send("echo PS1\n")
     foo.runscript("test.sh")
 
@@ -86,7 +86,7 @@ def t3():
         counter += 1
         if counter > 400:
             exit (0)
-    print shell.returncode()
+    print (shell.returncode())
 
 
 def t4():
@@ -94,7 +94,7 @@ def t4():
     foo.initialise()
     foo.setEnv({ 'tang' : 'ssss'})
     script = "transfer/GenChroot.SL-6X.sh"
-    print foo.getEnv()
+    print (foo.getEnv())
     foo.runscript(script)
     
 def t5():
