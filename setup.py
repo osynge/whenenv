@@ -22,8 +22,8 @@ def determine_path ():
             root = os.path.realpath (root)
         return os.path.dirname (os.path.abspath (root))
     except:
-        print "I'm sorry, but something is wrong."
-        print "There is no __file__ variable. Please contact the author."
+        print("I'm sorry, but something is wrong.")
+        print("There is no __file__ variable. Please contact the author.")
         sys.exit ()
 
 setup_args = {
@@ -35,8 +35,14 @@ setup_args = {
     "license" : 'Apache Sytle License (2.0)',
     "install_requires" : [
        "nose >= 1.1.0",
+       "pexpect",
         ],
     "test_suite" : 'nose.collector',
+    "tests_require" : [
+        'coverage >= 3.0',
+        'pexpect',
+        'mock',
+        ],
     "url" : 'https://github.com/osynge/whenenv.git',
     "packages" : ['jjobrun'],
     "classifiers" : [
@@ -82,7 +88,6 @@ if needs_jobs or needs_scripts or needs_docs:
         installdir_jobs = '/usr/share/lib/%s/jobs' % (Application)
         jobsIncludeList = []
         for job in os.listdir(jobsPath):
-            print job
             newPath = "%s/%s" % (jobsPath,job)
             jobsIncludeList.append(newPath)
         if len(jobsIncludeList) > 0:
