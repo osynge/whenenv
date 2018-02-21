@@ -4,6 +4,7 @@ Changelog
 whenenv-0.0.42
 
     * Add tox based testing.
+    * Support python3
 
 whenenv-0.0.41
 
