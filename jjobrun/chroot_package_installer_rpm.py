@@ -1,5 +1,4 @@
 import logging
-import watcher
 
 import time
 import json
@@ -10,21 +9,32 @@ import base64
 import string
 import pexpect
 import re
-import prompts
 
-transtbl = string.maketrans(
-          'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
-          'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
-        )
+import sys
 
 
-import watcher
+from . import watcher
+from . import prompts
 
 import time
 import json
 import datetime
 
-import chroot_package_installer_base
+from . import chroot_package_installer_base
+
+transtbl = None
+if sys.version_info < (3,):
+    transtbl = string.maketrans(
+          'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
+          'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
+        )
+
+if sys.version_info > (3,):
+    transtbl = str.maketrans(
+          'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
+          'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
+        )
+
 
 syncDelay = datetime.timedelta(seconds=100)
 timeoutDelay = datetime.timedelta(seconds=500)
@@ -84,7 +94,6 @@ class ChrootPackageInstallerRedhat(chroot_package_installer_base.ChrootPackageIn
                 if matches != None:
                     self.waitingOnPromptPkgCatUpdateStart = False
                     self.waitingOnPromptPkgCatUpdateEnd = True
-                    print "hereh"
                     continue
             if not cleanline[:15] == '{ "Package" : "':
                continue
