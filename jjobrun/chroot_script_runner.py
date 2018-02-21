@@ -2,14 +2,24 @@ import logging
 import uuid
 import base64
 import string
-import watcher
-import prompts
 import re
-import observable
 import time
 import datetime
+import sys
 
-transtbl = string.maketrans(
+from . import observable
+from . import watcher
+from . import prompts
+
+transtbl = None
+if sys.version_info < (3,):
+    transtbl = string.maketrans(
+          'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
+          'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
+        )
+
+if sys.version_info > (3,):
+    transtbl = str.maketrans(
           'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
           'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
         )

@@ -1,8 +1,17 @@
 import uuid
 import base64
 import string
+import sys
 
-transtbl = string.maketrans(
+transtbl = None
+if sys.version_info < (3,):
+    transtbl = string.maketrans(
+          'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
+          'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
+        )
+
+if sys.version_info > (3,):
+    transtbl = str.maketrans(
           'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
           'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
         )

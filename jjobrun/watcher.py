@@ -1,15 +1,13 @@
-import observable
-
 import logging
-import observable
 import uuid
 import base64
-import prompts
 import subprocess
 import fcntl
 import os
 import time
 import select
+from . import observable
+from . import prompts
 
 def subphandling(cmd,timeout = 10):   
     log = logging.getLogger("sub")
