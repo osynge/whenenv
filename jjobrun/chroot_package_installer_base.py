@@ -1,6 +1,4 @@
 import logging
-import watcher
-
 import time
 import json
 import datetime
@@ -10,20 +8,25 @@ import base64
 import string
 import pexpect
 import re
-import prompts
+import time
+import json
+import datetime
+import sys
+from . import watcher
+from . import prompts
 
-transtbl = string.maketrans(
+transtbl = None
+if sys.version_info < (3,):
+    transtbl = string.maketrans(
           'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
           'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
         )
 
-
-import watcher
-
-import time
-import json
-import datetime
-
+if sys.version_info > (3,):
+    transtbl = str.maketrans(
+          'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
+          'ABCEGHJKLMNPRSTVWXYZabcdefghijkl'
+        )
 
 syncDelay = datetime.timedelta(seconds=100)
 timeoutDelay = datetime.timedelta(seconds=500)
@@ -78,7 +81,7 @@ class ChrootPackageInstallerBase(object):
         insalledPkg = self.updatePackages()
         for pack in packages:
             if pack in insalledPkg:
-                print pack, pack in insalledPkg
+                print (pack, pack in insalledPkg)
                 continue
             notinstalled.add(pack)
         
