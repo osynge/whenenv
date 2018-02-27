@@ -9,6 +9,7 @@
 	"depends": [
 		"build_env_os",
 		"build_env_release",
-        "build_env_flavor"
+        "build_env_flavor",
+        "export_directories_root"
 	]
 }
