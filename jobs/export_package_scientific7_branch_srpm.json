@@ -5,5 +5,6 @@
     "variables" : {
         "require_values" : { "RELEASE" : "development", "OPERATING_SYSTEM" : "Scientific7"},
         "require_keys" : []
-    }
+    },
+    "depends" : [ "build_env_discover", "export_directories_root"]
 }

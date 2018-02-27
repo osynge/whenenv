@@ -1,13 +1,7 @@
-if [ "X${ROOTDIR}" = "X" ] ; then
-    echo "ROOTDIR not defined"
-    ROOTDIR="/export/jenkins_matrix_build/repo"
-    #exit 1
-    if [ "X${REPOSITORY_TYPE}" = "Xpublic" ] ; then
-        ROOTDIR="/export/jenkins_matrix_build/public_repo"
-    fi
-    if [ "X${REPOSITORY_TYPE}" = "Xprivate" ] ; then
-        ROOTDIR="/export/jenkins_matrix_build/private_repo"
-    fi
+if [ "X${DIR_EXPORT_ROOT}" = "X" ] ; then
+    echo "DIR_EXPORT_ROOT not defined"
+    sleep 10
+    exit 1
 fi
 
 
@@ -80,16 +74,16 @@ fi
 
 
 if [ "X${DIR_EXPORT_TGZ}" = "X" ] ; then
-DIR_EXPORT_TGZ="${ROOTDIR}/${RELEASE_FLAVOR}/${RELEASE_ENV}/src/tgz"
+DIR_EXPORT_TGZ="${DIR_EXPORT_ROOT}/${RELEASE_FLAVOR}/${RELEASE_ENV}/src/tgz"
 fi
 if [ "X${DIR_EXPORT_BTGZ}" = "X" ] ; then
-DIR_EXPORT_BTGZ="${ROOTDIR}/${RELEASE_FLAVOR}/${RELEASE_ENV}/${PLATFORM}/tgz"
+DIR_EXPORT_BTGZ="${DIR_EXPORT_ROOT}/${RELEASE_FLAVOR}/${RELEASE_ENV}/${PLATFORM}/tgz"
 fi
 if [ "X${DIR_EXPORT_SRPM}" = "X" ] ; then
-DIR_EXPORT_SRPM="${ROOTDIR}/${RELEASE_FLAVOR}/${RELEASE_ENV}/src/srpm"
+DIR_EXPORT_SRPM="${DIR_EXPORT_ROOT}/${RELEASE_FLAVOR}/${RELEASE_ENV}/src/srpm"
 fi
 if [ "X${DIR_EXPORT_RPM}" = "X" ] ; then
-DIR_EXPORT_RPM="${ROOTDIR}/${RELEASE_FLAVOR}/${RELEASE_ENV}/${PLATFORM}/rpm"
+DIR_EXPORT_RPM="${DIR_EXPORT_ROOT}/${RELEASE_FLAVOR}/${RELEASE_ENV}/${PLATFORM}/rpm"
 fi
 
 export DIR_EXPORT_TGZ

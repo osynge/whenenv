@@ -1,0 +1,11 @@
+{
+    "name" : "export_directories_root",
+    "provides" : [ "export_directories_root" ],
+    "script" : "export_directories_root.sh",
+    "variables" : {
+        "require_values" : {},
+        "require_keys" : [],
+        "provides_keys" : [ "DIR_EXPORT_ROOT" ]
+    },
+    "depends" : [ "build_env_discover" ]
+}

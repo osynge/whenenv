@@ -9,5 +9,6 @@
             "BUILD_TYPE" : "disttools"
             },
         "require_keys" : []
-    }
+    },
+    "depends" : [ "build_env_discover", "export_directories_root"]
 }

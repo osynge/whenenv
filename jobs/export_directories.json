@@ -7,6 +7,6 @@
         "require_keys" : [ "RELEASE" ],
         "provides_keys" : [ "DIR_EXPORT_TGZ", "DIR_EXPORT_BTGZ", "DIR_EXPORT_SRPM", "DIR_EXPORT_RPM" ]
     },
-    "depends" : [ "build_env_discover" ]
+    "depends" : [ "build_env_discover", "export_directories_root"]
 
 }

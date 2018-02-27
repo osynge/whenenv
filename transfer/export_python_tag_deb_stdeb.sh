@@ -1,17 +1,7 @@
-pwd
-if [ "X${REPOSITORY_TYPE}" = "Xprivate" ] ; then
-ROOTDIR="/tmp/private_repo"
-fi
-if [ "X${ROOTDIR}" = "X" ] ; then
-    echo "ROOTDIR not defined"
-    ROOTDIR="/export/jenkins_matrix_build/repo"
-    #exit 1
-    if [ "X${REPOSITORY_TYPE}" = "Xpublic" ] ; then
-        ROOTDIR="/export/jenkins_matrix_build/public_repo"
-    fi
-    if [ "X${REPOSITORY_TYPE}" = "Xprivate" ] ; then
-        ROOTDIR="/export/jenkins_matrix_build/private_repo"
-    fi
+if [ "X${DIR_EXPORT_ROOT}" = "X" ] ; then
+    echo "DIR_EXPORT_ROOT not defined"
+    sleep 10
+    exit 1
 fi
 tar -zxvf artifacts.tgz
 rm -f artifacts.tgz
@@ -25,10 +15,10 @@ fi
 
 PLATFORM="x86_64"
 FLAVOR="debian/7"
-mkdir -p ${ROOTDIR}
-dir_tgz="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/src/tgz"
-dir_btgz="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/tgz"
-dir_deb="${ROOTDIR}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/deb"
+mkdir -p ${DIR_EXPORT_ROOT}
+dir_tgz="${DIR_EXPORT_ROOT}/${FLAVOR}/${RELEASE_TYPE}/src/tgz"
+dir_btgz="${DIR_EXPORT_ROOT}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/tgz"
+dir_deb="${DIR_EXPORT_ROOT}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/deb"
 mkdir -p ${dir_tgz}
 mkdir -p ${dir_btgz}
 mkdir -p ${dir_deb}

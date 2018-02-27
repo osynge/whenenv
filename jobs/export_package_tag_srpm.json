@@ -8,5 +8,6 @@
             "RELEASE" : "production",
             "OPERATING_SYSTEM" : "Scientific"},
         "require_keys" : []
-    }
+    },
+    "depends" : [ "build_env_discover", "export_directories_root"]
 }
