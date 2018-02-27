@@ -1,7 +1,8 @@
 #!/bin/bash
 
 
-function py_os_var {
+py_os_var()
+{
 PY_ACTION="$1" python - <<END
 import platform
 import re
