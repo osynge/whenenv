@@ -1,6 +1,11 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.45
+
+    * Use generated RELEASE_FLAVOR to set export flavor, fixes bug on debian testing.
+    * Use generated DIR_EXPORT_ROOT to set export root, reducing duplicate code.
+
 whenenv-0.0.44
 
     * Fixed syntax bug in python shell
