@@ -43,27 +43,27 @@ echo "PLATFORM not defined"
 PLATFORM=`arch`
 fi
 
-if [ "X${FLAVOR}" = "X" ] ; then
-echo "FLAVOR not defined"
+if [ "X${RELEASE_FLAVOR}" = "X" ] ; then
+echo "RELEASE_FLAVOR not defined"
 PY_OS=`python -c "import platform; import sys; sys.stdout.write(platform.linux_distribution()[0].strip())"`
 PY_OS_VER_MAJ=`python -c "import platform; import sys; sys.stdout.write(platform.linux_distribution()[1].split('.')[0])"`
 if [ "X${PY_OS}" = "Xdebian" ] ; then
-FLAVOR="debian/${PY_OS_VER_MAJ}"
+RELEASE_FLAVOR="debian/${PY_OS_VER_MAJ}"
 fi
 if [ "X${PY_OS}" = "XScientific Linux" ] ; then
-FLAVOR="scientific/${PY_OS_VER_MAJ}"
+RELEASE_FLAVOR="scientific/${PY_OS_VER_MAJ}"
 fi
 if [ "X${PY_OS}" = "XopenSUSE" ] ; then
-FLAVOR="openSUSE/${PY_OS_VER_MAJ}"
+RELEASE_FLAVOR="openSUSE/${PY_OS_VER_MAJ}"
 fi
 if [ "X${PY_OS}" = "XFedora" ] ; then
-FLAVOR="Fedora/${PY_OS_VER_MAJ}"
+RELEASE_FLAVOR="Fedora/${PY_OS_VER_MAJ}"
 fi
 
 fi
-if [ "X${FLAVOR}" = "X" ] ; then
+if [ "X${RELEASE_FLAVOR}" = "X" ] ; then
 echo "No flavour defined"
-FLAVOR="${PY_OS}/${PY_OS_VER_MAJ}"
+RELEASE_FLAVOR="${PY_OS}/${PY_OS_VER_MAJ}"
 fi
 
 if [ "X${RELEASE_TYPE}" = "X" ] ; then
@@ -74,13 +74,13 @@ fi
 
 
 if [ "X${DIR_EXPORT_TGZ}" = "X" ] ; then
-DIR_EXPORT_TGZ="${DIR_EXPORT_ROOT}/${FLAVOR}/${RELEASE_TYPE}/src/tgz"
+DIR_EXPORT_TGZ="${DIR_EXPORT_ROOT}/${RELEASE_FLAVOR}/${RELEASE_TYPE}/src/tgz"
 fi
 if [ "X${DIR_EXPORT_BTGZ}" = "X" ] ; then
-DIR_EXPORT_BTGZ="${DIR_EXPORT_ROOT}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/tgz"
+DIR_EXPORT_BTGZ="${DIR_EXPORT_ROOT}/${RELEASE_FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/tgz"
 fi
 if [ "X${DIR_EXPORT_DPKG}" = "X" ] ; then
-DIR_EXPORT_DPKG="${DIR_EXPORT_ROOT}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/dpkg"
+DIR_EXPORT_DPKG="${DIR_EXPORT_ROOT}/${RELEASE_FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/dpkg"
 fi
 
 export DIR_EXPORT_TGZ

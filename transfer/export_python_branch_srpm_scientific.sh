@@ -3,16 +3,20 @@ if [ "X${DIR_EXPORT_ROOT}" = "X" ] ; then
     sleep 10
     exit 1
 fi
+if [ "X${RELEASE_FLAVOR}" = "X" ] ; then
+    echo "RELEASE_FLAVOR not defined"
+    sleep 10
+    exit 1
+fi
 tar -zxvf artifacts.tgz
 rm -f artifacts.tgz
 RELEASE_TYPE="development"
 PLATFORM="x86_64"
-FLAVOR="scientific/6"
 mkdir -p ${DIR_EXPORT_ROOT}
-dir_tgz="${DIR_EXPORT_ROOT}/${FLAVOR}/${RELEASE_TYPE}/src/tgz"
-dir_btgz="${DIR_EXPORT_ROOT}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/tgz"
-dir_srpm="${DIR_EXPORT_ROOT}/${FLAVOR}/${RELEASE_TYPE}/src/srpm"
-dir_rpm="${DIR_EXPORT_ROOT}/${FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/rpm"
+dir_tgz="${DIR_EXPORT_ROOT}/${RELEASE_FLAVOR}/${RELEASE_TYPE}/src/tgz"
+dir_btgz="${DIR_EXPORT_ROOT}/${RELEASE_FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/tgz"
+dir_srpm="${DIR_EXPORT_ROOT}/${RELEASE_FLAVOR}/${RELEASE_TYPE}/src/srpm"
+dir_rpm="${DIR_EXPORT_ROOT}/${RELEASE_FLAVOR}/${RELEASE_TYPE}/${PLATFORM}/rpm"
 mkdir -p ${dir_tgz}
 mkdir -p ${dir_btgz}
 mkdir -p ${dir_srpm}

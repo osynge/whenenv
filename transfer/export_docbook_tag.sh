@@ -13,8 +13,6 @@ fi
 tar -zxvf artifacts.tgz
 rm -f artifacts.tgz
 RELEASE_TYPE="release"
-PLATFORM="x86_64"
-FLAVOR="scientific/6"
 mkdir -p ${DIR_EXPORT_ROOT}
 dir_pdf_a4="${DIR_EXPORT_ROOT}/${RELEASE_TYPE}/pdf/a4"
 dir_pdf_letter="${DIR_EXPORT_ROOT}/${RELEASE_TYPE}/pdf/letter"
