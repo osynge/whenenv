@@ -1,6 +1,11 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.46
+
+    * Bugfix add dependency on export_directories_root on job build_env_discover.
+    * Strip python vairables so openSUSE does not have trailing whitespace.
+
 whenenv-0.0.45
 
     * Use generated RELEASE_FLAVOR to set export flavor, fixes bug on debian testing.
