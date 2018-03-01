@@ -1,6 +1,10 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.48
+
+    * Bugfix handle distributions with no minor version.
+
 whenenv-0.0.47
 
     * Bugfix type error with defaults for transfer/build_env_os.sh
