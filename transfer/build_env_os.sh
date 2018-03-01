@@ -13,8 +13,9 @@ py_os = platform.linux_distribution()[0].strip()
 py_os_ver_maj = '0'
 py_os_ver_min = '0'
 version_raw_split = re.split('[.\/]', platform.linux_distribution()[1])
-if len(version_raw_split) >= 2:
+if len(version_raw_split) >= 1
     py_os_ver_maj =  version_raw_split[0].strip()
+if len(version_raw_split) >= 2:
     py_os_ver_min =  version_raw_split[1].strip()
 if action == "py_os":
     sys.stdout.write(py_os)
