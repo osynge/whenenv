@@ -31,6 +31,8 @@ if [ "X${files_art_bin}" != "X" ] ; then
     done
     if [ "X${changed}" != "X0" ] ; then
         # Publish packages
-        dpkg-scanpackages ${DIR_EXPORT_DPKG} | gzip > ${DIR_EXPORT_DPKG}/Packages.gz
+        pushd ${DIR_EXPORT_DPKG}
+        dpkg-scanpackages . | gzip > Packages.gz
+        popd
     fi
 fi
