@@ -1,6 +1,10 @@
 Changelog
 ~~~~~~~~~~
 
+whenenv-0.0.52
+
+    * With tox add --sitepackages
+
 whenenv-0.0.51
 
     * Fix to transfer/artifact_export_pkg_deb.sh
