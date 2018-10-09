@@ -1,2 +1,2 @@
-TOXCMD="tox"
+TOXCMD="tox --sitepackages"
 export TOXCMD

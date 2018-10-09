@@ -2,7 +2,6 @@ if [ "X${BUILD_SRC}" = "X" ] ; then
     echo "BUILD_SRC not defined"
     exit 1
 fi
-tox_path=`which tox`
 
 TOXDIR_PREFIX=/workspace/tox
 
@@ -16,14 +15,10 @@ if [ "X${TOXCMD}" = "X" ] ; then
     exit 3
 fi
 
-
-
 rm -rf ${TOXDIR}
 mkdir -p ${TOXDIR}
 cp -r ${BUILD_SRC}/* ${TOXDIR}
 
-
-echo found tox at $tox_path
 ORIGINALDIR=`pwd`
 cd ${TOXDIR}
 # this is not cross platform
