@@ -1,2 +1,2 @@
-TOXCMD="tox --sitepackages -e py27"
+TOXCMD="tox -e py27"
 export TOXCMD
